@@ -302,7 +302,7 @@ final List<Onboard> demoData = [
       description:
           'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
   Onboard(
-      image: 'assets/intro/intro2.png',
+      image: 'assets/intro/intro3.png',
       title: 'Share Posts',
       description:
           'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),

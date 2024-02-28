@@ -44,6 +44,9 @@ dependencies:
   image_cropper: ^1.5.1
   flutter_launcher_icons: ^0.13.1
   introduction_screen: ^3.1.12
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.2
+  percent_indicator: ^4.2.3
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -61,7 +64,6 @@ flutter_native_splash:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  shared_preferences: ^2.2.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,6 +89,19 @@ flutter:
     - assets/profile_default.png
     - assets/intro/intro1.png
     - assets/intro/intro2.png
+    - assets/intro/intro3.png
+    - assets/home/no_posts.png
+    - assets/home/navbar/home.svg
+    - assets/home/navbar/schedule.svg
+    - assets/home/navbar/profile.svg
+    - assets/posts/main.png
+    - assets/posts/other1.jpg
+    - assets/posts/other2.jpg
+    - assets/posts/other3.jpg
+    - assets/posts/Vectorleft.svg
+    - assets/posts/Vectorright.svg
+    - assets/posts/Vectormid.svg
+    - assets/posts/Vectorcal.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,10 +1,10 @@
+import 'package:all_social_app/screens/create_posts/create_post_screen_step_1.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MaterialApp(home: SignUpScreen()));
+  runApp(MaterialApp(home: CreatePostScreenStep1()));
 }
 
 class SplashScreen extends StatelessWidget {

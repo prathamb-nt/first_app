@@ -1,10 +1,16 @@
+import 'package:all_social_app/SQLLite/sqlite.dart';
+import 'package:all_social_app/models/users.dart';
+import 'package:all_social_app/screens/home_screen.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uuid/uuid.dart';
+
+import 'intro_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -17,25 +23,40 @@ class LoginScreen extends StatefulWidget {
 
 final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
-final _nameController = TextEditingController();
+
+
+
 TextStyle txtstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16));
 
 class _LoginScreenState extends State<LoginScreen> {
-  void _onSubmit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setString('email', _emailController.text);
-    prefs.setString('password', _passwordController.text);
-  }
 
-  Future<String?> _onShow() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    String? email = prefs.getString('email');
-    String? password = prefs.getString('password');
-    print(email);
-    print(password);
+  bool isLoginTrue = false;
+
+  final db = DatabaseHelper();
+
+  login() async {
+    var response = await db.login(Users(userPassword: _passwordController.text, userEmail: _emailController.text));
+    if(response == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const OnBoardingScreen()),
+      );
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid Login!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      setState(() {
+        print("invalid login");
+        isLoginTrue = true;
+      });
+    }
   }
 
   @override
@@ -46,56 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
           child: Column(
             children: [
-              // const Text(
-              //   'Sign in!',
-              //   style: TextStyle(fontSize: 50, fontWeight: FontWeight.w900),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 20),
-              //   child: TextFormField(
-              //     controller: _emailController,
-              //     keyboardType: TextInputType.emailAddress,
-              //     decoration: const InputDecoration(
-              //       labelText: 'Email',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 20),
-              //   child: TextFormField(
-              //     controller: _passwordController,
-              //     obscureText: true,
-              //     decoration: const InputDecoration(
-              //       labelText: 'Password',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(20.0),
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         setState(() {
-              //           _onSubmit();
-              //           print(_emailController.text);
-              //           print(_passwordController.text);
-              //           Navigator.of(context).push(MaterialPageRoute(
-              //               builder: (context) => const HomeScreen()));
-              //         });
-              //       },
-              //       child: const Text('Sign Up')),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(20.0),
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         setState(() {
-              //           _onShow();
-              //         });
-              //       },
-              //       child: const Text('show')),
-              // )
 
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 120, 0, 80),
@@ -169,25 +140,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),),
               ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 90, 0, 100),
-                child: Container(
-                  height: 40,
-                  width: 342,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6),
+              GestureDetector(
+                onTap: () {
+                  login();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 90, 0, 95),
+                  child: Container(
+                    height: 40,
+                    width: 342,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                      color: Color(0xffED4D86),
                     ),
-                    color: Color(0xffED4D86),
-                  ),
-                  child: Center(
-                    child: Text('Login',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffFFFFFC)),
-                        )),
+                    child: Center(
+                      child: Text('Login',
+                          style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Color(0xffFFFFFC)),
+                          )),
+                    ),
                   ),
                 ),
               ),

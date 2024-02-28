@@ -1,3 +1,4 @@
+import 'package:all_social_app/SQLLite/sqlite.dart';
 import 'package:all_social_app/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
@@ -7,9 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:uuid/uuid.dart';
+import '../models/users.dart';
 
-import 'home_screen.dart';
+bool isIncorrect = true;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({
@@ -23,30 +24,17 @@ class SignUpScreen extends StatefulWidget {
 File? pickedImage;
 bool isPicked = false;
 
-bool passwordVisible = false;
+bool passwordVisible = true;
 final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 final _nameController = TextEditingController();
-TextStyle txtstyle = GoogleFonts.montserrat(
-    textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16));
+TextStyle textstyle = GoogleFonts.montserrat(
+    textStyle: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        color: isIncorrect ? Color(0xff353535) : Colors.red));
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  void _onSubmit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString('email', _emailController.text);
-    prefs.setString('password', _passwordController.text);
-  }
-
-  Future<String?> _onShow() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    String? email = prefs.getString('email');
-    String? password = prefs.getString('password');
-    print(email);
-    print(password);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,15 +70,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Border.all(color: const Color(0xffCDCDCD), width: 2)),
                   child: isPicked
                       ? ClipRRect(
-                    borderRadius: BorderRadius. circular(300.0) ,
-                        child: Image.file(
-                          pickedImage!,
-
-                          fit: BoxFit.fill,
-                          height: 100,
-                          width: 100,
-                        ),
-                      )
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Image.file(
+                            pickedImage!,
+                            fit: BoxFit.fill,
+                            height: 100,
+                            width: 100,
+                          ),
+                        )
                       : Image.asset(
                           "assets/profile_default.png",
                           fit: BoxFit.fill,
@@ -124,12 +111,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Name is required";
+                        }
+                      },
                       controller: _nameController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
                         labelText: 'Enter Your Name',
-                        labelStyle: txtstyle,
+                        labelStyle: textstyle,
                         border: const OutlineInputBorder(),
                       ),
                     ),
@@ -148,12 +140,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Email is required";
+                        }
+                      },
                       controller: _emailController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
                         labelText: 'Enter Your Email',
-                        labelStyle: txtstyle,
+                        labelStyle: textstyle,
                         border: const OutlineInputBorder(),
                       ),
                     ),
@@ -172,16 +169,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Password is required";
+                        }
+                      },
                       obscureText: passwordVisible,
                       controller: _passwordController,
                       decoration: InputDecoration(
                         suffixIconColor: passwordVisible
-                            ? const Color(0xffED4D86)
-                            : Colors.grey,
+                            ?  Colors.grey
+                            : Color(0xffED4D86),
                         suffixIcon: IconButton(
                           icon: Icon(passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                           onPressed: () {
                             setState(
                               () {
@@ -194,7 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         isDense: true,
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         labelText: 'Enter Your Password',
-                        labelStyle: txtstyle,
+                        labelStyle: textstyle,
                         border: const OutlineInputBorder(),
                       ),
                     ),
@@ -202,16 +204,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 46, 0, 80),
+                padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _onSubmit();
-                      print(_emailController.text);
-                      print(_passwordController.text);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
-                    });
+                    if (_nameController.text.isEmpty) {
+                      setState(() {
+                        isIncorrect = !isIncorrect;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Name is Empty!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (_emailController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email is Empty!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else if (_passwordController.text.isEmpty) {
+                      setState(() {
+                        isIncorrect = !isIncorrect;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Password is Empty!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      SignUp(context);
+                    }
                   },
                   child: Container(
                     height: 40,
@@ -268,5 +293,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void SignUp(BuildContext context) {
+    print('pressed');
+    final db = DatabaseHelper();
+    db
+        .signUp(Users(
+            userEmail: _emailController.text,
+            userPassword: _passwordController.text,
+            userName: _nameController.text))
+        .whenComplete(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    });
   }
 }
