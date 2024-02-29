@@ -19,7 +19,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   int _index = 0;
   late PageController _pagecontroller;
   List<Widget> widgets = [
-    const HomeWidget(),
+    HomeWidget(),
     const Settings(),
     const Account(),
   ];
@@ -44,7 +44,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
         child: BottomNavigationBar(
           selectedLabelStyle: labelText,
           unselectedLabelStyle: labelText,
-          selectedItemColor: Color(0xffED4D86),
+          selectedItemColor: const Color(0xffED4D86),
           type: BottomNavigationBarType.fixed,
           elevation: 5,
           unselectedItemColor: Colors.black54,
@@ -53,15 +53,15 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              icon: SvgPicture.asset("assets/home/navbar/home.svg"),
+              icon: SvgPicture.asset("assets/ic_home.svg"),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              icon: SvgPicture.asset("assets/home/navbar/schedule.svg"),
+              icon: SvgPicture.asset("assets/ic_schedule.svg"),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              icon: SvgPicture.asset("assets/home/navbar/profile.svg"),
+              icon: SvgPicture.asset("assets/ic_profile.svg"),
             ),
           ],
         ),
@@ -90,7 +90,6 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
     });
   }
 }
-
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -129,7 +128,7 @@ class Login extends StatelessWidget {
 }
 
 class Modal extends StatelessWidget {
-  const Modal({Key? key}) : super(key: key);
+  const Modal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -153,4 +152,3 @@ class Modal extends StatelessWidget {
         ));
   }
 }
-

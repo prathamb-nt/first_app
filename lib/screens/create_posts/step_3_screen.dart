@@ -1,12 +1,12 @@
+import 'package:all_social_app/screens/create_posts/step_4_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import 'create_post_screen_step_4.dart';
-
 class CreatePostScreenStep3 extends StatefulWidget {
-  const CreatePostScreenStep3({super.key});
+  final String displayImage;
+  const CreatePostScreenStep3({super.key, required this.displayImage});
 
   @override
   State<CreatePostScreenStep3> createState() => _CreatePostScreenStep3State();
@@ -14,20 +14,24 @@ class CreatePostScreenStep3 extends StatefulWidget {
 
 class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
   int selectedIndex = 0;
+  String displayImageUrl = "assets/default_post_image.svg";
 
-  String displayImageUrl = "assets/posts/main.png";
   TextAlign? alignText;
   final _textController = TextEditingController(
       text:
           "Lorem ipsum dolor sit amet consectetur. Senectus eleifend purus viverra placerat pellentesque ac et commodo. Viverra tellus risus arcu integer justo malesuada in urna enim.");
   TextStyle textstyle = GoogleFonts.montserrat(
-      textStyle: const TextStyle(
-          fontWeight: FontWeight.w400, fontSize: 16, color: Color(0xff353535)));
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+      color: Color(0xff353535),
+    ),
+  );
 
   final List<String> svgUrl = [
-    "assets/posts/Vectorleft.svg",
-    "assets/posts/Vectormid.svg",
-    "assets/posts/Vectorright.svg"
+    "assets/ic_left_align.svg",
+    "assets/ic_middle_align.svg",
+    "assets/ic_right_align.svg"
   ];
   final List<TextAlign> textAlignment = [
     TextAlign.start,
@@ -68,9 +72,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                   'Step 3',
                   style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Color(0xff1C1C1C)),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Color(0xff1C1C1C),
+                    ),
                   ),
                 ),
               ),
@@ -80,9 +85,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                   'Enter your caption.',
                   style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: Color(0xff1C1C1C)),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: Color(0xff1C1C1C),
+                    ),
                   ),
                 ),
               ),
@@ -92,6 +98,9 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                   height: 120,
                   width: 342,
                   child: TextFormField(
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                     onChanged: (text) {
                       setState(() {
                         text = _textController.text;
@@ -103,7 +112,9 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                     controller: _textController,
                     decoration: const InputDecoration(
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffED4D86)),
+                        borderSide: BorderSide(
+                          color: Color(0xffED4D86),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -129,7 +140,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                         width: 342,
                         child: Stack(
                           children: [
-                            Image.asset(displayImageUrl),
+                            SvgPicture.asset(displayImageUrl),
                             Center(
                               child: SizedBox(
                                 height: 220,
@@ -154,9 +165,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                                           _textController.text,
                                           style: GoogleFonts.montserrat(
                                             textStyle: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16,
-                                                color: Color(0xff1C1C1C)),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color: Color(0xff1C1C1C),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -187,9 +199,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                             'Select text alignment',
                             style: GoogleFonts.montserrat(
                               textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                  color: Color(0xff1C1C1C)),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Color(0xff1C1C1C),
+                              ),
                             ),
                           ),
                         ),
@@ -213,7 +226,8 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreatePostScreenStep4()),
+                        builder: (context) => const CreatePostScreenStep4(),
+                      ),
                     );
                   },
                   child: Container(
@@ -230,9 +244,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                         'Next',
                         style: GoogleFonts.montserrat(
                           textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffFFFFFC)),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Color(0xffFFFFFC),
+                          ),
                         ),
                       ),
                     ),
@@ -262,13 +277,16 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
           height: 46,
           width: 46,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(
-                  color: selectedIndex == index
-                      ? Color(0xffED4D86)
-                      : Color(0xffE6E6E6),
-                  width: 1)),
-          child: Center(child: SvgPicture.asset(svgUrl[index])),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+                color: selectedIndex == index
+                    ? const Color(0xffED4D86)
+                    : const Color(0xffE6E6E6),
+                width: 1),
+          ),
+          child: Center(
+            child: SvgPicture.asset(svgUrl[index]),
+          ),
         ),
       ),
     );

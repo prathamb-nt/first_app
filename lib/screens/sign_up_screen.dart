@@ -1,21 +1,18 @@
-import 'package:all_social_app/SQLLite/sqlite.dart';
-import 'package:all_social_app/screens/login_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
+
+import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
+import 'package:all_social_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../models/users.dart';
 
 bool isIncorrect = true;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -29,10 +26,11 @@ final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 final _nameController = TextEditingController();
 TextStyle textstyle = GoogleFonts.montserrat(
-    textStyle: TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 16,
-        color: isIncorrect ? Color(0xff353535) : Colors.red));
+  textStyle: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+      color: isIncorrect ? const Color(0xff353535) : Colors.red),
+);
 
 class _SignUpScreenState extends State<SignUpScreen> {
   @override
@@ -45,11 +43,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 41),
-                child: Text("Sign up",
-                    style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 32),
-                    )),
+                child: Text(
+                  "Sign up",
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 32),
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: () async {
@@ -60,14 +60,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     pickedImage = File(image.path);
                     setState(() {
                       isPicked = true;
+                      print(pickedImage);
                     });
                   }
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border:
-                          Border.all(color: const Color(0xffCDCDCD), width: 2)),
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(color: const Color(0xffCDCDCD), width: 2),
+                  ),
                   child: isPicked
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(300.0),
@@ -88,11 +90,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                child: Text("Add your photo",
-                    style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 16),
-                    )),
+                child: Text(
+                  "Add your photo",
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,10 +115,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      onTapOutside: (event) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Name is required";
                         }
+                        return null;
                       },
                       controller: _nameController,
                       decoration: InputDecoration(
@@ -140,10 +148,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      onTapOutside: (event) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Email is required";
                         }
+                        return null;
                       },
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -169,17 +181,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
+                      onTapOutside: (event) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Password is required";
                         }
+                        return null;
                       },
                       obscureText: passwordVisible,
                       controller: _passwordController,
                       decoration: InputDecoration(
                         suffixIconColor: passwordVisible
-                            ?  Colors.grey
-                            : Color(0xffED4D86),
+                            ? Colors.grey
+                            : const Color(0xffED4D86),
                         suffixIcon: IconButton(
                           icon: Icon(passwordVisible
                               ? Icons.visibility_off
@@ -248,13 +264,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       color: Color(0xffED4D86),
                     ),
                     child: Center(
-                      child: Text('Sign Up',
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Color(0xffFFFFFC)),
-                          )),
+                      child: Text(
+                        'Sign Up',
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Color(0xffFFFFFC),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -263,28 +282,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Already have an account?',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Color(0xff1C1C1C)),
-                      )),
+                  Text(
+                    'Already have an account?',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: Color(0xff1C1C1C),
+                      ),
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                          builder: (context) => const LoginScreen(),
+                        ),
                       );
                     },
-                    child: Text(' Login',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffED4D86)),
-                        )),
+                    child: Text(
+                      ' Login',
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Color(0xffED4D86),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -299,14 +325,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     print('pressed');
     final db = DatabaseHelper();
     db
-        .signUp(Users(
-            userEmail: _emailController.text,
-            userPassword: _passwordController.text,
-            userName: _nameController.text))
+        .signUp(
+      Users(
+        userEmail: _emailController.text,
+        userPassword: _passwordController.text,
+        userName: _nameController.text,
+      ),
+    )
         .whenComplete(() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
       );
     });
   }

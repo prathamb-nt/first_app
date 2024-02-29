@@ -1,5 +1,6 @@
-import 'package:all_social_app/screens/create_posts/create_post_screen_step_3.dart';
+import 'package:all_social_app/screens/create_posts/step_3_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -21,19 +22,23 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
   }
 
   final List<String> imageUrl = [
-    'assets/posts/main.png',
-    'assets/posts/other1.jpg',
-    'assets/posts/other2.jpg',
-    'assets/posts/other3.jpg',
+    'assets/default_post_image.svg',
+    'assets/waterfall_image.svg',
+    'assets/lake_image.svg',
+    'assets/sunset_image.svg',
   ];
   void populateData() {
     list = [];
     for (int i = 0; i < imageUrl.length; i++) {
-      list.add(ListItem<String>(imageUrl[i].toString()));
+      list.add(
+        ListItem<String>(
+          imageUrl[i].toString(),
+        ),
+      );
     }
   }
 
-  String displayImageUrl = "assets/posts/main.png";
+  String displayImageUrl = "assets/default_post_image.svg";
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +72,10 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                 'Step 2',
                 style: GoogleFonts.montserrat(
                   textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xff1C1C1C)),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Color(0xff1C1C1C),
+                  ),
                 ),
               ),
             ),
@@ -81,9 +87,10 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                   'Select your post background image.',
                   style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: Color(0xff1C1C1C)),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: Color(0xff1C1C1C),
+                    ),
                   ),
                 ),
               ),
@@ -94,10 +101,10 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
               child: Container(
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 342,
                       width: 342,
-                      child: Image.asset(displayImageUrl),
+                      child: SvgPicture.asset(displayImageUrl),
                     ),
                     const Spacer()
                   ],
@@ -106,13 +113,14 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 42, 0, 55),
-              child: Container(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: imageUrl.length,
-                    itemBuilder: _getListItemTile,
-                  )),
+              child: SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageUrl.length,
+                  itemBuilder: _getListItemTile,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -121,7 +129,9 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CreatePostScreenStep3(),
+                      builder: (context) => CreatePostScreenStep3(
+                        displayImage: displayImageUrl,
+                      ),
                     ),
                   );
                 },
@@ -135,13 +145,16 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                     color: Color(0xffED4D86),
                   ),
                   child: Center(
-                    child: Text('Next',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffFFFFFC)),
-                        )),
+                    child: Text(
+                      'Next',
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Color(0xffFFFFFC),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -158,7 +171,9 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
         setState(() {
           selectedIndex = index;
           displayImageUrl = imageUrl[index].toString();
-          print(imageUrl[index].toString());
+          print(
+            imageUrl[index].toString(),
+          );
         });
       },
       child: Padding(
@@ -167,10 +182,14 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
           height: 100,
           width: 100,
           decoration: BoxDecoration(
-              border: selectedIndex == index
-                  ? Border.all(width: 2, color: const Color(0xffED4D86))
-                  : Border.all(width: 2, color: Colors.transparent)),
-          child: Image.asset(
+            border: selectedIndex == index
+                ? Border.all(
+                    width: 2,
+                    color: const Color(0xffED4D86),
+                  )
+                : Border.all(width: 2, color: Colors.transparent),
+          ),
+          child: SvgPicture.asset(
             imageUrl[index],
             fit: BoxFit.fill,
           ),

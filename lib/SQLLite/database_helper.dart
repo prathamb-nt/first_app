@@ -1,7 +1,6 @@
+import 'package:all_social_app/models/users.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../models/users.dart';
 
 class DatabaseHelper {
   final databaseName = "app.db";
@@ -13,7 +12,6 @@ class DatabaseHelper {
 
     return openDatabase(path, version: 1, onCreate: (db, version) async {
       await db.execute(users);
-
     });
   }
 
@@ -27,15 +25,11 @@ class DatabaseHelper {
     } else {
       return false;
     }
-
   }
 
   Future<int> signUp(Users users) async {
     final Database db = await initDB();
 
     return db.insert('users', users.toMap());
-
   }
-
-
 }

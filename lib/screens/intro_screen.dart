@@ -1,7 +1,6 @@
 import 'package:all_social_app/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -34,29 +33,34 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         child: Column(
           children: [
             Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(305, 40, 0, 40),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()),
-                        );
-                      },
-                      child: Text("Skip",
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Color(0xff1C1C1C)),
-                          )),
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(305, 40, 0, 40),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Skip",
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Color(0xff1C1C1C),
+                        ),
+                      ),
                     ),
                   ),
-                ]),
+                ),
+              ],
+            ),
             Expanded(
               child: PageView.builder(
                 itemCount: demoData.length,
@@ -80,11 +84,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...List.generate(
-                      demoData.length,
-                      (index) => Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: DotIndicator(isActive: index == _pageIndex),
-                          ))
+                    demoData.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: DotIndicator(isActive: index == _pageIndex),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -123,7 +128,9 @@ class NextButton extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
               );
             },
             child: Container(
@@ -136,13 +143,16 @@ class NextButton extends StatelessWidget {
                 color: Color(0xffED4D86),
               ),
               child: Center(
-                child: Text('Finished',
-                    style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Color(0xffFFFFFC)),
-                    )),
+                child: Text(
+                  'Finished',
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Color(0xffFFFFFC),
+                    ),
+                  ),
+                ),
               ),
             ),
           );
@@ -164,13 +174,16 @@ class NextButton extends StatelessWidget {
               color: Color(0xffED4D86),
             ),
             child: Center(
-              child: Text('Next',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Color(0xffFFFFFC)),
-                  )),
+              child: Text(
+                'Next',
+                style: GoogleFonts.montserrat(
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Color(0xffFFFFFC),
+                  ),
+                ),
+              ),
             ),
           ),
         );
@@ -215,13 +228,16 @@ class BackButton extends StatelessWidget {
                   ),
                   duration: const Duration(milliseconds: 300),
                   child: Center(
-                    child: Text('Back',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffED4D86)),
-                        )),
+                    child: Text(
+                      'Back',
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Color(0xffED4D86),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -242,13 +258,16 @@ class BackButton extends StatelessWidget {
                 ),
                 duration: const Duration(milliseconds: 300),
                 child: Center(
-                  child: Text('Back',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC)),
-                      )),
+                  child: Text(
+                    'Back',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Color(0xffFFFFFC),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -260,7 +279,7 @@ class BackButton extends StatelessWidget {
 }
 
 class DotIndicator extends StatelessWidget {
-  DotIndicator({
+  const DotIndicator({
     super.key,
     this.isActive = false,
   });
@@ -274,7 +293,9 @@ class DotIndicator extends StatelessWidget {
       width: 12,
       decoration: BoxDecoration(
         color: isActive ? const Color(0xffED4D86) : const Color(0xffFCE6EE),
-        borderRadius: const BorderRadius.all(Radius.circular(100)),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(100),
+        ),
       ),
     );
   }
@@ -292,17 +313,17 @@ class Onboard {
 
 final List<Onboard> demoData = [
   Onboard(
-      image: 'assets/intro/intro1.png',
+      image: 'assets/intro_create_posts_image.svg',
       title: 'Create Posts',
       description:
           'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
   Onboard(
-      image: 'assets/intro/intro2.png',
+      image: 'assets/intro_schedule_posts_image.svg',
       title: 'Schedule Posts',
       description:
           'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
   Onboard(
-      image: 'assets/intro/intro3.png',
+      image: 'assets/intro_share_posts_image.svg',
       title: 'Share Posts',
       description:
           'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
@@ -320,30 +341,36 @@ class OnBoardingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.asset(
+        SvgPicture.asset(
           image,
           height: 342,
           width: 342,
         ),
         const Spacer(),
-        Text(title,
-            style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Color(0xff1C1C1C)),
-            )),
+        Text(
+          title,
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+              color: Color(0xff1C1C1C),
+            ),
+          ),
+        ),
         const SizedBox(
           height: 16,
         ),
-        Text(description,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Color(0xff1C1C1C)),
-            )),
+        Text(
+          description,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+              color: Color(0xff1C1C1C),
+            ),
+          ),
+        ),
         const Spacer(),
       ],
     );

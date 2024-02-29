@@ -1,4 +1,5 @@
-import 'package:all_social_app/screens/create_posts/create_post_screen_step_2.dart';
+import 'package:all_social_app/screens/create_posts/class/frame_class.dart';
+import 'package:all_social_app/screens/create_posts/step_2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -58,9 +59,10 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                 'Step 1',
                 style: GoogleFonts.montserrat(
                   textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xff1C1C1C)),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Color(0xff1C1C1C),
+                  ),
                 ),
               ),
             ),
@@ -72,9 +74,10 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                   'Select your post frame.',
                   style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: Color(0xff1C1C1C)),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: Color(0xff1C1C1C),
+                    ),
                   ),
                 ),
               ),
@@ -90,7 +93,9 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                     _pageIndex = index;
                     print(_pageIndex);
                     print(frames[index].frameType);
-                    print(frames[index].frameContainer.toString());
+                    print(
+                      frames[index].frameContainer.toString(),
+                    );
                   });
                 },
                 itemBuilder: (context, index) => FrameContent(
@@ -104,39 +109,42 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: () {
-                        _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Color(0xffED4D86),
-                      )),
+                    onPressed: () {
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Color(0xffED4D86),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       frames[idx].frameType,
                       style: GoogleFonts.montserrat(
                         textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color(0xff1C1C1C)),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Color(0xff1C1C1C),
+                        ),
                       ),
                     ),
                   ),
                   IconButton(
-                      onPressed: () {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Color(0xffED4D86),
-                      ))
+                    onPressed: () {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Color(0xffED4D86),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -147,7 +155,8 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const CreatePostScreenStep2()),
+                      builder: (context) => const CreatePostScreenStep2(),
+                    ),
                   );
                 },
                 child: Container(
@@ -160,90 +169,22 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                     color: Color(0xffED4D86),
                   ),
                   child: Center(
-                    child: Text('Next',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Color(0xffFFFFFC)),
-                        )),
+                    child: Text(
+                      'Next',
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Color(0xffFFFFFC),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Frame {
-  final String frameType;
-  final Widget frameContainer;
-
-  Frame({required this.frameType, required this.frameContainer});
-}
-
-final List<Frame> frames = [
-  Frame(
-    frameType: 'Square',
-    frameContainer: Container(
-      height: 342,
-      width: 342,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2,
-          color: const Color(0xffE6E6E6),
-        ),
-      ),
-    ),
-  ),
-  Frame(
-    frameType: 'Vertical',
-    frameContainer: SizedBox(
-      height: 420,
-      width: 342,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: const Color(0xffE6E6E6),
-          ),
-        ),
-      ),
-    ),
-  ),
-  Frame(
-    frameType: 'Horizontal',
-    frameContainer: SizedBox(
-      height: 200,
-      width: 342,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: const Color(0xffE6E6E6),
-          ),
-        ),
-      ),
-    ),
-  ),
-];
-
-class FrameContent extends StatelessWidget {
-  const FrameContent({
-    super.key,
-    required this.frameType,
-    required this.frameContainer,
-  });
-  final String frameType;
-  final Widget frameContainer;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [frameContainer, const Spacer()],
       ),
     );
   }

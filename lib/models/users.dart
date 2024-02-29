@@ -9,21 +9,19 @@ class Users {
     this.userName,
     required this.userEmail,
     required this.userPassword,
-});
+  });
 
   factory Users.fromMap(Map<String, dynamic> json) => Users(
-    userId: json["userId"],
-    userName: json["userName"],
-    userEmail: json["userEmail"],
-
-    userPassword: json["userPassword"],
-
-  );
+        userId: json["userId"],
+        userName: json["userName"],
+        userEmail: json["userEmail"],
+        userPassword: json["userPassword"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "userId":userId,
-    "userName" : userName,
-    "userEmail" : userEmail,
-    "userPassword": userPassword,
-  };
+        "userId": userId,
+        "userName": userName,
+        "userEmail": userEmail,
+        "userPassword": userPassword,
+      };
 }
