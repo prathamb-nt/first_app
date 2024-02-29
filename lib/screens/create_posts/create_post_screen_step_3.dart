@@ -88,7 +88,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Container(
+                child: SizedBox(
                   height: 120,
                   width: 342,
                   child: TextFormField(
@@ -124,14 +124,14 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                 child: Container(
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 342,
                         width: 342,
                         child: Stack(
                           children: [
                             Image.asset(displayImageUrl),
                             Center(
-                              child: Container(
+                              child: SizedBox(
                                 height: 220,
                                 width: 237,
                                 child: LimitedBox(
@@ -175,7 +175,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                child: Container(
+                child: SizedBox(
                   height: 100,
                   child: Column(
                     children: [
@@ -194,7 +194,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: 46,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
