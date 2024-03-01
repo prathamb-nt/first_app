@@ -1,4 +1,4 @@
-import 'package:all_social_app/screens/sign_up_screen.dart';
+import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,10 +18,21 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
   const HomeWidget({
     super.key,
   });
+
+  @override
+  State<HomeWidget> createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  @override
+  void initState() {
+    super.initState();
+    DatabaseHelper().fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +63,8 @@ class HomeWidget extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Image.asset(
-                  pickedImage.toString(),
+                  //pickedImage.toString(),
+                  "assets/profile_default.png",
                   fit: BoxFit.fill,
                   height: 100,
                   width: 100,
@@ -63,7 +75,7 @@ class HomeWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
             child: SvgPicture.asset(
-              "assets/no_posts_default_image.png",
+              "assets/no_posts_default_image.svg",
               height: 342,
               width: 342,
             ),

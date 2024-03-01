@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 bool isIncorrect = true;
 
 class SignUpScreen extends StatefulWidget {
+  
   const SignUpScreen({
     super.key,
   });
@@ -333,6 +334,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     )
         .whenComplete(() {
+
+
+
       Navigator.push(
         context,
         MaterialPageRoute(

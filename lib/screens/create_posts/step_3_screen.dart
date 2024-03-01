@@ -14,7 +14,7 @@ class CreatePostScreenStep3 extends StatefulWidget {
 
 class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
   int selectedIndex = 0;
-  String displayImageUrl = "assets/default_post_image.svg";
+  String displayImageUrl = "assets/default_post_image.png";
 
   TextAlign? alignText;
   final _textController = TextEditingController(
@@ -140,7 +140,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                         width: 342,
                         child: Stack(
                           children: [
-                            SvgPicture.asset(displayImageUrl),
+                            Image.asset(displayImageUrl),
                             Center(
                               child: SizedBox(
                                 height: 220,

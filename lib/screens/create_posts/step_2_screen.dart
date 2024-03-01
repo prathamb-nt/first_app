@@ -22,10 +22,10 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
   }
 
   final List<String> imageUrl = [
-    'assets/default_post_image.svg',
-    'assets/waterfall_image.svg',
-    'assets/lake_image.svg',
-    'assets/sunset_image.svg',
+    'assets/default_post_image.png',
+    'assets/waterfall_image.png',
+    'assets/lake_image.png',
+    'assets/sunset_image.png',
   ];
   void populateData() {
     list = [];
@@ -38,8 +38,8 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
     }
   }
 
-  String displayImageUrl = "assets/default_post_image.svg";
-
+  String displayImageUrl = "assets/default_post_image.png";
+  late String nextImageUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +104,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                     SizedBox(
                       height: 342,
                       width: 342,
-                      child: SvgPicture.asset(displayImageUrl),
+                      child: Image.asset(displayImageUrl),
                     ),
                     const Spacer()
                   ],
@@ -126,11 +126,16 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: GestureDetector(
                 onTap: () {
+                  setState(() {
+                    nextImageUrl = displayImageUrl;
+                  });
+
+                  print(nextImageUrl);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CreatePostScreenStep3(
-                        displayImage: displayImageUrl,
+                        displayImage: nextImageUrl,
                       ),
                     ),
                   );
@@ -171,9 +176,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
         setState(() {
           selectedIndex = index;
           displayImageUrl = imageUrl[index].toString();
-          print(
-            imageUrl[index].toString(),
-          );
+          print(displayImageUrl);
         });
       },
       child: Padding(
@@ -189,7 +192,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                   )
                 : Border.all(width: 2, color: Colors.transparent),
           ),
-          child: SvgPicture.asset(
+          child: Image.asset(
             imageUrl[index],
             fit: BoxFit.fill,
           ),
@@ -200,7 +203,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
 }
 
 class ListItem<T> {
-  int? selectedIndex; //Selection property to highlight or not
-  T data; //Data of the user
-  ListItem(this.data); //Constructor to assign the data
+  int? selectedIndex;
+  T data;
+  ListItem(this.data);
 }
