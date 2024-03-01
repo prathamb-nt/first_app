@@ -1,3 +1,4 @@
+import 'package:all_social_app/screens/account_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   List<Widget> widgets = [
     HomeWidget(),
     const Settings(),
-    const Account(),
+    const AccountScreen(),
   ];
 
   @override
