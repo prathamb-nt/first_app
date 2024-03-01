@@ -6,7 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 TextStyle labelText = GoogleFonts.montserrat(
   textStyle: const TextStyle(
-      fontWeight: FontWeight.w500, fontSize: 14, color: Color(0xff1C1C1C)),
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: Color(0xff1C1C1C),
+  ),
 );
 
 class BottomAppBarExample extends StatefulWidget {
@@ -20,9 +23,11 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   int _index = 0;
   late PageController _pagecontroller;
   List<Widget> widgets = [
-    HomeWidget(),
+    const HomeWidget(),
     const Settings(),
-    const AccountScreen(),
+    AccountWidget(
+      userId: 5,
+    ),
   ];
 
   @override
@@ -36,6 +41,8 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
     _pagecontroller.dispose();
     super.dispose();
   }
+
+  int selectedIcon = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +61,21 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              icon: SvgPicture.asset("assets/ic_home.svg"),
+              icon: selectedIcon == 0
+                  ? SvgPicture.asset("assets/ic_home_selected.svg")
+                  : SvgPicture.asset("assets/ic_home.svg"),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              icon: SvgPicture.asset("assets/ic_schedule.svg"),
+              icon: selectedIcon == 1
+                  ? SvgPicture.asset("assets/ic_schedule_selected.svg")
+                  : SvgPicture.asset("assets/ic_schedule.svg"),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              icon: SvgPicture.asset("assets/ic_profile.svg"),
+              icon: selectedIcon == 2
+                  ? SvgPicture.asset("assets/ic_profile_selected.svg")
+                  : SvgPicture.asset("assets/ic_profile.svg"),
             ),
           ],
         ),
@@ -81,13 +94,14 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
 
   void _itemTapped(int index) {
     setState(() {
-      print(widgets[index]);
       _index = index;
+      selectedIcon = index;
       _pagecontroller.animateToPage(
         index,
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
+      print(widgets[index]);
     });
   }
 }

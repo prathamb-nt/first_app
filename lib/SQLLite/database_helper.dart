@@ -1,4 +1,4 @@
-import 'package:all_social_app/models/usersbar.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,7 +21,8 @@ class DatabaseHelper {
     var result = await db.rawQuery(
         "select * from users where userEmail = '${users.userEmail}' AND userPassword = '${users.userPassword}'");
     if (result.isNotEmpty) {
-      final currentUserId = users.userId;
+      print(result);
+      // var currentUserId = result[users.userId!];
       return true;
     } else {
       return false;
@@ -31,7 +32,10 @@ class DatabaseHelper {
   Future<int> signUp(Users users) async {
     final Database db = await initDB();
 
-    return db.insert('users', users.toMap());
+    return db.insert(
+      'users',
+      users.toMap(),
+    );
   }
 
   Future<int> updateUser(Users users) async {

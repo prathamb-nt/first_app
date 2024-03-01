@@ -13,7 +13,7 @@ class AccountScreen extends StatelessWidget {
     return const Scaffold(
       bottomNavigationBar: BottomAppBarExample(),
       body: AccountWidget(
-        userId: 2,
+        userId: 4,
       ),
     );
   }
@@ -67,8 +67,8 @@ class _AccountWidgetState extends State<AccountWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: DatabaseHelper().fetchData(),
-          builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
+          future: DatabaseHelper().getUserById(widget.userId),
+          builder: (BuildContext context, AsyncSnapshot<Users> snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Padding(
@@ -78,7 +78,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 41),
                         child: Text(
-                          "Sign up",
+                          "Profile",
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 32),
@@ -244,7 +244,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                 ),
               );
             } else {
-              return Center(child: Text('nodata'));
+              return const Center(child: Text('nodata'));
             }
           }),
     );

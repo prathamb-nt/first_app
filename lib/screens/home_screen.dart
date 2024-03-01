@@ -30,7 +30,6 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     DatabaseHelper().fetchData();
   }
