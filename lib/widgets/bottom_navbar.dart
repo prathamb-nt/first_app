@@ -25,7 +25,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   List<Widget> widgets = [
     const HomeWidget(),
     const Settings(),
-    AccountWidget(
+    const AccountWidget(
       userId: 5,
     ),
   ];
@@ -125,7 +125,9 @@ class Account extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 139),
-      body: Center(child: Text('Account')),
+      body: Center(
+        child: Text('Account'),
+      ),
     );
   }
 }
@@ -137,7 +139,9 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 236, 168),
-      body: Center(child: Text('Messages')),
+      body: Center(
+        child: Text('Messages'),
+      ),
     );
   }
 }
@@ -148,22 +152,23 @@ class Modal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 600,
-        width: 400,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 1),
-              child: Container(
-                height: 5,
-                width: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadiusDirectional.circular(20),
-                  color: Colors.grey,
-                ),
+      height: 600,
+      width: 400,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 1),
+            child: Container(
+              height: 5,
+              width: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.circular(20),
+                color: Colors.grey,
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
