@@ -6,21 +6,34 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'create_posts/step_1_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final String currentUser;
+  const HomeScreen({super.key, required this.currentUser});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      bottomNavigationBar: BottomAppBarExample(),
-      body: HomeWidget(),
+    return Scaffold(
+      bottomNavigationBar: BottomAppBarExample(
+        currentUser: widget.currentUser,
+      ),
+      body: HomeWidget(
+        currentUser: widget.currentUser,
+      ),
     );
   }
 }
 
 class HomeWidget extends StatefulWidget {
+  final String currentUser;
+
   const HomeWidget({
     super.key,
+    required this.currentUser,
   });
 
   @override
@@ -110,7 +123,9 @@ class _HomeWidgetState extends State<HomeWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CreatePostScreenStep1(),
+                  builder: (context) => CreatePostScreenStep1(
+                    currentUser: widget.currentUser,
+                  ),
                 ),
               );
             },

@@ -15,15 +15,15 @@ class DatabaseHelper {
     });
   }
 
-  Future<bool> login(Users users) async {
+  Future<Object> login(Users users) async {
     final Database db = await initDB();
 
     var result = await db.rawQuery(
         "select * from users where userEmail = '${users.userEmail}' AND userPassword = '${users.userPassword}'");
     if (result.isNotEmpty) {
-      print(result);
-      // var currentUserId = result[users.userId!];
-      return true;
+      String currentUser = result.first['userId'].toString();
+      print(currentUser);
+      return currentUser;
     } else {
       return false;
     }

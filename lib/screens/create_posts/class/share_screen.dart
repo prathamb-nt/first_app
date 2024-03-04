@@ -10,13 +10,15 @@ import 'package:path_provider/path_provider.dart';
 class ShareScreen extends StatefulWidget {
   final String selectedDate, selectedTime, selectedPlatform;
   late Uint8List postBytes;
+  final String currentUser;
 
   ShareScreen(
       {super.key,
       required this.selectedDate,
       required this.selectedTime,
       required this.selectedPlatform,
-      required this.postBytes});
+      required this.postBytes,
+      required this.currentUser});
 
   @override
   State<ShareScreen> createState() => _ShareScreenState();
@@ -271,7 +273,9 @@ class _ShareScreenState extends State<ShareScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => HomeScreen(
+                          currentUser: widget.currentUser,
+                        ),
                       ),
                     );
                   },

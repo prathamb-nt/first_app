@@ -9,8 +9,10 @@ import 'package:screenshot/screenshot.dart';
 
 class CreatePostScreenStep3 extends StatefulWidget {
   final String displayImage;
+  final String currentUser;
 
-  CreatePostScreenStep3({required this.displayImage});
+  CreatePostScreenStep3(
+      {required this.displayImage, required this.currentUser});
 
   @override
   _CreatePostScreenStep3State createState() => _CreatePostScreenStep3State();
@@ -187,6 +189,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                       MaterialPageRoute(
                         builder: (context) => CreatePostScreenStep4(
                           postBytes: bytes,
+                          currentUser: widget.currentUser,
                         ),
                       ),
                     );

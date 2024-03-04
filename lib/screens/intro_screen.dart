@@ -4,7 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+  final String currentUser;
+  const OnBoardingScreen({super.key, required this.currentUser});
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
@@ -43,7 +44,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
+                          builder: (context) => HomeScreen(
+                            currentUser: widget.currentUser,
+                          ),
                         ),
                       );
                     },
@@ -96,6 +99,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             NextButton(
               pageController: _pageController,
               pageIndex: _pageIndex,
+              currentUser: widget.currentUser,
             ),
             BackButton(
               pageIndex: _pageIndex,
@@ -108,28 +112,37 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 }
 
-class NextButton extends StatelessWidget {
+class NextButton extends StatefulWidget {
+  final String currentUser;
   final int pageIndex;
 
   const NextButton({
     super.key,
     required PageController pageController,
     required this.pageIndex,
+    required this.currentUser,
   }) : _pageController = pageController;
 
   final PageController _pageController;
 
   @override
+  State<NextButton> createState() => _NextButtonState();
+}
+
+class _NextButtonState extends State<NextButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: Builder(builder: (context) {
-        if (pageIndex == 2) {
+        if (widget.pageIndex == 2) {
           return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
+                  builder: (context) => HomeScreen(
+                    currentUser: widget.currentUser,
+                  ),
                 ),
               );
             },
@@ -159,7 +172,7 @@ class NextButton extends StatelessWidget {
         }
         return GestureDetector(
           onTap: () {
-            _pageController.nextPage(
+            widget._pageController.nextPage(
               duration: const Duration(milliseconds: 300),
               curve: Curves.ease,
             );

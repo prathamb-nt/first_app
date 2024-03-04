@@ -1,29 +1,16 @@
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
-import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      bottomNavigationBar: BottomAppBarExample(),
-      body: AccountWidget(
-        userId: 4,
-      ),
-    );
-  }
-}
-
 class AccountWidget extends StatefulWidget {
+  final String currentUser;
   final int userId;
   const AccountWidget({
     super.key,
     required this.userId,
+    required this.currentUser,
   });
 
   @override
@@ -33,25 +20,17 @@ class AccountWidget extends StatefulWidget {
 class _AccountWidgetState extends State<AccountWidget> {
   @override
   void initState() {
-    _loadUser();
     super.initState();
   }
 
-  _loadUser() async {
-    users = await DatabaseHelper().getUserById(widget.userId);
-    setState(() {
-      name = users.userName!;
-      email = users.userEmail;
-      password = users.userPassword;
-    });
-  }
+  late int currentUserId = int.parse(widget.currentUser);
 
-  late final _emailController = TextEditingController(text: users.userEmail);
+  late final _emailController = TextEditingController(text: users!.userEmail);
   late final _passwordController =
-      TextEditingController(text: users.userPassword);
-  late final _nameController = TextEditingController(text: users.userName);
+      TextEditingController(text: users!.userPassword);
+  late final _nameController = TextEditingController(text: users!.userName);
 
-  late Users users;
+  Users? users;
   late String name;
   late String email;
   late String password;
@@ -66,10 +45,18 @@ class _AccountWidgetState extends State<AccountWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-          future: DatabaseHelper().getUserById(widget.userId),
-          builder: (BuildContext context, AsyncSnapshot<Users> snapshot) {
-            if (snapshot.hasData) {
+      body: FutureBuilder<Users?>(
+          future: DatabaseHelper().getUserById(currentUserId),
+          builder: (BuildContext context, AsyncSnapshot<Users?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              users = snapshot.data!;
+              name = users!.userName!;
+              email = users!.userEmail;
+              password = users!.userPassword;
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),

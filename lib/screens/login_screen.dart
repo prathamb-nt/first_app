@@ -34,12 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
         userEmail: _emailController.text,
       ),
     );
-    if (response == true) {
-      
+    if (response is String) {
+      String currentUser = response;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const OnBoardingScreen(),
+          builder: (context) => OnBoardingScreen(
+            currentUser: currentUser,
+          ),
         ),
       );
     } else {

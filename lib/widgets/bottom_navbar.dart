@@ -13,7 +13,8 @@ TextStyle labelText = GoogleFonts.montserrat(
 );
 
 class BottomAppBarExample extends StatefulWidget {
-  const BottomAppBarExample({super.key});
+  final String currentUser;
+  const BottomAppBarExample({super.key, required this.currentUser});
 
   @override
   State<BottomAppBarExample> createState() => _BottomAppBarExampleState();
@@ -22,11 +23,14 @@ class BottomAppBarExample extends StatefulWidget {
 class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   int _index = 0;
   late PageController _pagecontroller;
-  List<Widget> widgets = [
-    const HomeWidget(),
+  late List<Widget> widgets = [
+    HomeWidget(
+      currentUser: widget.currentUser,
+    ),
     const Settings(),
-    const AccountWidget(
+    AccountWidget(
       userId: 5,
+      currentUser: widget.currentUser,
     ),
   ];
 
