@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +9,8 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CreatePostScreenStep4 extends StatefulWidget {
-  const CreatePostScreenStep4({super.key});
+  Uint8List? postBytes;
+  CreatePostScreenStep4({super.key, required this.postBytes});
 
   @override
   State<CreatePostScreenStep4> createState() => _CreatePostScreenStep4State();
@@ -127,16 +130,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                 ),
               ),
               GestureDetector(
-                // onTap: () {
-                //   setState(() {
-                //     if (isTimeSelected == true) {
-                //       isTimeSelected = !isTimeSelected;
-                //     }
-
-                //     isDateSelected = !isDateSelected;
-                //   });
-                // },
-
                 onTap: () {
                   setState(() {
                     if (isDateSelected == false) {
@@ -145,7 +138,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     isTimeSelectionVisible = false;
                   });
                 },
-
                 child: Container(
                   height: 40,
                   width: 342,
@@ -197,14 +189,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                 ),
               ),
               GestureDetector(
-                // onTap: () {
-                //   setState(() {
-                //     if (isDateSelected == true) {
-                //       isDateSelected = !isDateSelected;
-                //     }
-                //     isTimeSelected = !isTimeSelected;
-                //   });
-                // },
                 onTap: () {
                   setState(() {
                     if (isDateSelected == true) {
@@ -215,7 +199,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                         '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
                   });
                 },
-
                 child: Container(
                   height: 40,
                   width: 342,
@@ -253,15 +236,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                 child: Column(
-                  // children: [
-                  //   buildDateContainer(),
-                  //   Visibility(
-                  //     visible: isTimeSelected,
-                  //     child: buildTimeContainer(),
-                  //   ),
-
-                  // ],
-
                   children: [
                     Visibility(
                       visible: !isTimeSelectionVisible,
@@ -278,15 +252,18 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: GestureDetector(
                   onTap: () {
+                    print(widget.postBytes);
                     selectedDate != 'Select date' &&
                             selectedTime != 'Select time'
                         ? Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ShareScreen(
-                                  selectedDate: selectedDate,
-                                  selectedTime: selectedTime,
-                                  selectedPlatform: selectedPlatform),
+                                selectedDate: selectedDate,
+                                selectedTime: selectedTime,
+                                selectedPlatform: selectedPlatform,
+                                postBytes: widget.postBytes!,
+                              ),
                             ),
                           )
                         : {};
@@ -370,9 +347,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               selectionRadius: 4,
               onSelectionChanged: (dateRangePickerSelectionChangedArgs) {
                 setState(() {
-                  print(DateFormat.yMMMd().format(
-                      dateRangePickerSelectionChangedArgs.value as DateTime));
-
                   selectedDate = DateFormat.yMMMd().format(
                       dateRangePickerSelectionChangedArgs.value as DateTime);
                 });

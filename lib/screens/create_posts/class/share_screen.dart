@@ -1,34 +1,28 @@
-import 'package:all_social_app/screens/create_posts/step_2_screen.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ShareScreen extends StatefulWidget {
   final String selectedDate, selectedTime, selectedPlatform;
+  late Uint8List postBytes;
 
-  const ShareScreen(
+  ShareScreen(
       {super.key,
       required this.selectedDate,
       required this.selectedTime,
-      required this.selectedPlatform});
+      required this.selectedPlatform,
+      required this.postBytes});
 
   @override
   State<ShareScreen> createState() => _ShareScreenState();
 }
 
 class _ShareScreenState extends State<ShareScreen> {
-  DateTime now = DateTime.now();
-
-  late String hour = now.hour.toString();
-  late String minute = now.minute.toString();
-
-  String selectedDate = 'Select date';
-  String selectedTime = 'Select time';
-  String selectedPlatform = 'Instagram';
-
   bool isTimeSelectionVisible = false;
 
   bool isDateSelected = true;
@@ -42,8 +36,6 @@ class _ShareScreenState extends State<ShareScreen> {
 
   String displayImageUrl = "assets/default_post_image.svg";
   TextAlign? alignText;
-  late final _hourController = TextEditingController(text: hour);
-  late final _minuteController = TextEditingController(text: minute);
 
   TextStyle textStyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
@@ -53,6 +45,14 @@ class _ShareScreenState extends State<ShareScreen> {
     ),
   );
 
+  Uint8List? bytes;
+
+  @override
+  void initState() {
+    loadImage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,57 +61,23 @@ class _ShareScreenState extends State<ShareScreen> {
           padding: const EdgeInsets.fromLTRB(24, 40, 24, 15),
           child: Column(
             children: [
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                tween: Tween<double>(
-                  begin: 0.50,
-                  end: 1,
-                ),
-                builder: (context, value, _) => LinearPercentIndicator(
-                  animation: true,
-                  animationDuration: 300,
-                  animateFromLastPercent: true,
-                  width: 342.0,
-                  lineHeight: 8.0,
-                  percent: 1,
-                  barRadius: const Radius.circular(20),
-                  progressColor: const Color(0xffED4D86),
-                  backgroundColor: const Color(0xffE6E6E6),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
-                child: Text(
-                  'Step 4',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xff1C1C1C),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Schedule your post.',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                      color: Color(0xff1C1C1C),
-                    ),
-                  ),
-                ),
+              Container(
+                width: 342,
+                height: 342,
+                child: widget.postBytes == null
+                    ? Container(
+                        width: 342,
+                        height: 342,
+                        color: Colors.red,
+                      )
+                    : Image.memory(widget.postBytes!),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Select post date',
+                    'Post Schedule',
                     style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.w400,
@@ -123,16 +89,6 @@ class _ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               GestureDetector(
-                // onTap: () {
-                //   setState(() {
-                //     if (isTimeSelected == true) {
-                //       isTimeSelected = !isTimeSelected;
-                //     }
-
-                //     isDateSelected = !isDateSelected;
-                //   });
-                // },
-
                 onTap: () {
                   setState(() {
                     if (isDateSelected == false) {
@@ -141,16 +97,13 @@ class _ShareScreenState extends State<ShareScreen> {
                     isTimeSelectionVisible = false;
                   });
                 },
-
                 child: Container(
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: isDateSelected
-                          ? const Color(0xffED4D86)
-                          : const Color(0xffE6E6E6),
+                      color: const Color(0xffED4D86),
                       width: 1,
                     ),
                   ),
@@ -161,7 +114,7 @@ class _ShareScreenState extends State<ShareScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          selectedDate,
+                          widget.selectedDate,
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                               fontWeight: FontWeight.w400,
@@ -177,50 +130,14 @@ class _ShareScreenState extends State<ShareScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Select post time',
-                    style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: Color(0xff1C1C1C),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                // onTap: () {
-                //   setState(() {
-                //     if (isDateSelected == true) {
-                //       isDateSelected = !isDateSelected;
-                //     }
-                //     isTimeSelected = !isTimeSelected;
-                //   });
-                // },
-                onTap: () {
-                  setState(() {
-                    if (isDateSelected == true) {
-                      isDateSelected = !isDateSelected;
-                    }
-                    isTimeSelectionVisible = true;
-                    selectedTime =
-                        '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
-                  });
-                },
-
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Container(
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: isDateSelected
-                          ? const Color(0xffE6E6E6)
-                          : const Color(0xffED4D86),
+                      color: const Color(0xffED4D86),
                       width: 1,
                     ),
                   ),
@@ -231,7 +148,7 @@ class _ShareScreenState extends State<ShareScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          selectedTime,
+                          widget.selectedTime,
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                               fontWeight: FontWeight.w400,
@@ -246,27 +163,104 @@ class _ShareScreenState extends State<ShareScreen> {
                   ),
                 ),
               ),
+              Container(
+                height: 40,
+                width: 342,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: const Color(0xffED4D86),
+                    width: 1,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.selectedPlatform,
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                            color: Color(0xff1C1C1C),
+                          ),
+                        ),
+                      ),
+                      SvgPicture.asset("assets/ic_platform.svg")
+                    ],
+                  ),
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                child: Column(
-                  // children: [
-                  //   buildDateContainer(),
-                  //   Visibility(
-                  //     visible: isTimeSelected,
-                  //     child: buildTimeContainer(),
-                  //   ),
-
-                  // ],
-
+                padding: const EdgeInsets.fromLTRB(0, 33, 0, 83),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Visibility(
-                      visible: !isTimeSelectionVisible,
-                      child: buildDateContainer(),
+                    Container(
+                      height: 40,
+                      width: 155,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: const Color(0xffED4D86),
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/ic_download.svg"),
+                            Text(
+                              "Download",
+                              style: GoogleFonts.montserrat(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                  color: Color(0xff1C1C1C),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Visibility(
-                      visible: isTimeSelectionVisible,
-                      child: buildTimeContainer(),
-                    ),
+                    Container(
+                      height: 40,
+                      width: 155,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: const Color(0xffED4D86),
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/ic_download.svg"),
+                            Text(
+                              "Share",
+                              style: GoogleFonts.montserrat(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                  color: Color(0xff1C1C1C),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -274,32 +268,24 @@ class _ShareScreenState extends State<ShareScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: GestureDetector(
                   onTap: () {
-                    selectedDate != 'Select date' &&
-                            selectedTime != 'Select time'
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const CreatePostScreenStep2(),
-                            ),
-                          )
-                        : {};
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
                   },
                   child: Container(
                     height: 40,
                     width: 342,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                      color: selectedDate != 'Select date' &&
-                              selectedTime != 'Select time'
-                          ? const Color(0xffED4D86)
-                          : const Color(0xffB3B3B3),
-                    ),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(6),
+                        ),
+                        color: Color(0xffED4D86)),
                     child: Center(
                       child: Text(
-                        'Next',
+                        'Go to home',
                         style: GoogleFonts.montserrat(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
@@ -319,327 +305,12 @@ class _ShareScreenState extends State<ShareScreen> {
     );
   }
 
-  Container buildDateContainer() {
-    return Container(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
-              child: Text(
-                'Select Date',
-                style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xff1C1C1C),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 310,
-            width: 342,
-            child: SfDateRangePicker(
-              allowViewNavigation: false,
-              selectionMode: DateRangePickerSelectionMode.single,
-              enablePastDates: false,
-              headerStyle: DateRangePickerHeaderStyle(
-                textStyle: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Color(0xff353535),
-                  ),
-                ),
-              ),
-              navigationMode: DateRangePickerNavigationMode.snap,
-              showNavigationArrow: true,
-              monthViewSettings:
-                  const DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-              selectionColor: const Color(0xffED4D86),
-              selectionShape: DateRangePickerSelectionShape.rectangle,
-              selectionRadius: 4,
-              onSelectionChanged: (dateRangePickerSelectionChangedArgs) {
-                setState(() {
-                  print(DateFormat.yMMMd().format(
-                      dateRangePickerSelectionChangedArgs.value as DateTime));
-
-                  selectedDate = DateFormat.yMMMd().format(
-                      dateRangePickerSelectionChangedArgs.value as DateTime);
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container buildTimeContainer() {
-    return Container(
-      height: 381,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
-              child: Text(
-                'Select Time',
-                style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xff1C1C1C),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              SizedBox(
-                height: 66,
-                width: 66,
-                child: Center(
-                  child: TextFormField(
-                    onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    textAlign: TextAlign.center,
-                    onChanged: (text) {
-                      setState(() {
-                        text = _hourController.text;
-                        selectedTime =
-                            '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
-                      });
-                    },
-                    minLines: 1,
-                    maxLines: 1,
-                    keyboardType: TextInputType.datetime,
-                    style: textStyle,
-                    controller: _hourController,
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffED4D86),
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffE6E6E6),
-                          width: 1.0,
-                        ),
-                      ),
-                      alignLabelWithHint: false,
-                      contentPadding: EdgeInsetsDirectional.all(15),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Text(
-                  ':',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24,
-                      color: Color(0xff1C1C1C),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 66,
-                width: 66,
-                child: Center(
-                  child: TextFormField(
-                    onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    textAlign: TextAlign.center,
-                    onChanged: (text) {
-                      setState(() {
-                        text = _minuteController.text;
-                        selectedTime =
-                            '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
-                      });
-                    },
-                    minLines: 1,
-                    maxLines: 1,
-                    keyboardType: TextInputType.datetime,
-                    style: textStyle,
-                    controller: _minuteController,
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffED4D86),
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffE6E6E6),
-                          width: 1.0,
-                        ),
-                      ),
-                      alignLabelWithHint: false,
-                      contentPadding: EdgeInsetsDirectional.all(15),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isAMSelected = !isAMSelected;
-                    selectedTime =
-                        '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Container(
-                    height: 40,
-                    width: 47,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: isAMSelected
-                            ? const Color(0xffED4D86)
-                            : const Color(0xffE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'AM',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Color(0xff1C1C1C),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isAMSelected = !isAMSelected;
-                    selectedTime =
-                        '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 47,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: isAMSelected
-                          ? const Color(0xffE6E6E6)
-                          : const Color(0xffED4D86),
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'PM',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Color(0xff1C1C1C),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Select Platform',
-                style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xff1C1C1C),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isInstagramSelected = !isInstagramSelected;
-                    selectedPlatform = 'Instagram';
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 40.0),
-                  child: Container(
-                    height: 66,
-                    width: 66,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: isInstagramSelected
-                            ? const Color(0xffE6E6E6)
-                            : const Color(0xffED4D86),
-                        width: 1,
-                      ),
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset("assets/ic_instagram_logo.svg"),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isInstagramSelected = !isInstagramSelected;
-                    selectedPlatform = 'Facebook';
-                  });
-                },
-                child: Container(
-                  height: 66,
-                  width: 66,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: isInstagramSelected
-                          ? const Color(0xffED4D86)
-                          : const Color(0xffE6E6E6),
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset("assets/ic_facebook_logo.svg"),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+  Future loadImage() async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/image.png');
+    if (file.existsSync()) {
+      final bytes = await file.readAsBytes();
+      setState(() => this.bytes = bytes);
+    }
   }
 }

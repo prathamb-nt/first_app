@@ -1,6 +1,5 @@
 import 'package:all_social_app/screens/create_posts/step_3_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -18,7 +17,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
   @override
   void initState() {
     super.initState();
-    populateData();
+    postImages();
   }
 
   final List<String> imageUrl = [
@@ -27,7 +26,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
     'assets/lake_image.png',
     'assets/sunset_image.png',
   ];
-  void populateData() {
+  void postImages() {
     list = [];
     for (int i = 0; i < imageUrl.length; i++) {
       list.add(
@@ -126,19 +125,20 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: GestureDetector(
                 onTap: () {
-  setState(() {
-    nextImageUrl = displayImageUrl;
-  });
+                  setState(() {
+                    nextImageUrl = displayImageUrl;
+                  });
 
-  print(nextImageUrl);
+                  print(nextImageUrl);
 
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => CreatePostScreenStep3(displayImage: nextImageUrl),
-    ),
-  );
-},
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CreatePostScreenStep3(displayImage: nextImageUrl),
+                    ),
+                  );
+                },
                 child: Container(
                   height: 40,
                   width: 342,

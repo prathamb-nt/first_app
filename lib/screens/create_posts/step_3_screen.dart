@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:all_social_app/screens/create_posts/step_4_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:screenshot/screenshot.dart';
 
 class CreatePostScreenStep3 extends StatefulWidget {
   final String displayImage;
@@ -38,6 +41,8 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
     TextAlign.center,
     TextAlign.end,
   ];
+
+  Uint8List? bytes;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
+                child: Container(
                   height: 120,
                   width: 342,
                   child: TextFormField(
@@ -129,63 +134,10 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 342,
-                width: 342,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 342,
-                      width: 342,
-                      child: Stack(
-                        children: [
-                          Image.asset(widget.displayImage),
-                          Center(
-                            child: SizedBox(
-                              height: 220,
-                              width: 237,
-                              child: LimitedBox(
-                                maxHeight: 220,
-                                child: Center(
-                                  child: Container(
-                                    width: 237,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffFFFFFC),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: const Color(0xffE6E6E6),
-                                          width: 1),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Text(
-                                        maxLines: 20,
-                                        textAlign: alignText,
-                                        _textController.text,
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            color: Color(0xff1C1C1C),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-              ),
+              buildPostImage(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                child: SizedBox(
+                child: Container(
                   height: 100,
                   child: Column(
                     children: [
@@ -205,7 +157,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         height: 46,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -220,11 +172,22 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    final controller = ScreenshotController();
+                    final bytes = await controller.captureFromWidget(
+                      Material(
+                        child: buildPostImage(),
+                      ),
+                    );
+
+                    setState(() => this.bytes = bytes);
+                    print(bytes);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreatePostScreenStep4(),
+                        builder: (context) => CreatePostScreenStep4(
+                          postBytes: bytes,
+                        ),
                       ),
                     );
                   },
@@ -255,6 +218,62 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  SizedBox buildPostImage() {
+    return SizedBox(
+      height: 342,
+      width: 342,
+      child: Column(
+        children: [
+          Container(
+            height: 342,
+            width: 342,
+            child: Stack(
+              children: [
+                Image.asset(widget.displayImage),
+                Center(
+                  child: Container(
+                    height: 220,
+                    width: 237,
+                    child: LimitedBox(
+                      maxHeight: 220,
+                      child: Center(
+                        child: Container(
+                          width: 237,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFFFFFC),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: const Color(0xffE6E6E6), width: 1),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              maxLines: 20,
+                              textAlign: alignText,
+                              _textController.text,
+                              style: GoogleFonts.montserrat(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  color: Color(0xff1C1C1C),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const Spacer(),
+        ],
       ),
     );
   }
