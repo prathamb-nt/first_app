@@ -126,20 +126,19 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    nextImageUrl = displayImageUrl;
-                  });
+  setState(() {
+    nextImageUrl = displayImageUrl;
+  });
 
-                  print(nextImageUrl);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreatePostScreenStep3(
-                        displayImage: nextImageUrl,
-                      ),
-                    ),
-                  );
-                },
+  print(nextImageUrl);
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CreatePostScreenStep3(displayImage: nextImageUrl),
+    ),
+  );
+},
                 child: Container(
                   height: 40,
                   width: 342,

@@ -6,15 +6,15 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class CreatePostScreenStep3 extends StatefulWidget {
   final String displayImage;
-  const CreatePostScreenStep3({super.key, required this.displayImage});
+
+  CreatePostScreenStep3({required this.displayImage});
 
   @override
-  State<CreatePostScreenStep3> createState() => _CreatePostScreenStep3State();
+  _CreatePostScreenStep3State createState() => _CreatePostScreenStep3State();
 }
 
 class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
   int selectedIndex = 0;
-  String displayImageUrl = "assets/default_post_image.png";
 
   TextAlign? alignText;
   final _textController = TextEditingController(
@@ -132,43 +132,41 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               SizedBox(
                 height: 342,
                 width: 342,
-                child: Container(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 342,
-                        width: 342,
-                        child: Stack(
-                          children: [
-                            Image.asset(displayImageUrl),
-                            Center(
-                              child: SizedBox(
-                                height: 220,
-                                width: 237,
-                                child: LimitedBox(
-                                  maxHeight: 220,
-                                  child: Center(
-                                    child: Container(
-                                      width: 237,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffFFFFFC),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: const Color(0xffE6E6E6),
-                                            width: 1),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Text(
-                                          maxLines: 20,
-                                          textAlign: alignText,
-                                          _textController.text,
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              color: Color(0xff1C1C1C),
-                                            ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 342,
+                      width: 342,
+                      child: Stack(
+                        children: [
+                          Image.asset(widget.displayImage),
+                          Center(
+                            child: SizedBox(
+                              height: 220,
+                              width: 237,
+                              child: LimitedBox(
+                                maxHeight: 220,
+                                child: Center(
+                                  child: Container(
+                                    width: 237,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffFFFFFC),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                          color: const Color(0xffE6E6E6),
+                                          width: 1),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Text(
+                                        maxLines: 20,
+                                        textAlign: alignText,
+                                        _textController.text,
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            color: Color(0xff1C1C1C),
                                           ),
                                         ),
                                       ),
@@ -176,13 +174,13 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
-                      const Spacer(),
-                    ],
-                  ),
+                    ),
+                    const Spacer(),
+                  ],
                 ),
               ),
               Padding(

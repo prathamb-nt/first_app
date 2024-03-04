@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.19.0
 
   path: any
+  syncfusion_flutter_datepicker: ^24.2.8
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

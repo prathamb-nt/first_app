@@ -1,4 +1,4 @@
-import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
+import 'package:all_social_app/screens/create_posts/step_2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,14 +6,20 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class CreatePostScreenStep4 extends StatefulWidget {
-  const CreatePostScreenStep4({super.key});
+class ShareScreen extends StatefulWidget {
+  final String selectedDate, selectedTime, selectedPlatform;
+
+  const ShareScreen(
+      {super.key,
+      required this.selectedDate,
+      required this.selectedTime,
+      required this.selectedPlatform});
 
   @override
-  State<CreatePostScreenStep4> createState() => _CreatePostScreenStep4State();
+  State<ShareScreen> createState() => _ShareScreenState();
 }
 
-class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
+class _ShareScreenState extends State<ShareScreen> {
   DateTime now = DateTime.now();
 
   late String hour = now.hour.toString();
@@ -47,16 +53,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
     ),
   );
 
-  final List<String> svgUrl = [
-    "assets/ic_left_align.svg",
-    "assets/ic_middle_align.svg",
-    "assets/ic_right_align.svg"
-  ];
-  final List<TextAlign> textAlignment = [
-    TextAlign.start,
-    TextAlign.center,
-    TextAlign.end,
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -283,10 +279,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                         ? Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ShareScreen(
-                                  selectedDate: selectedDate,
-                                  selectedTime: selectedTime,
-                                  selectedPlatform: selectedPlatform),
+                              builder: (context) =>
+                                  const CreatePostScreenStep2(),
                             ),
                           )
                         : {};
