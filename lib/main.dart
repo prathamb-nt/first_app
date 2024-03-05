@@ -4,7 +4,7 @@ import 'app.dart';
 
 void main() {
   runApp(
-     MaterialApp(
+     const MaterialApp(
       home: MyApp(),
     ),
   );

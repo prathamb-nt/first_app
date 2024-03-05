@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AccountWidget extends StatefulWidget {
   final String currentUser;
@@ -24,6 +27,8 @@ class _AccountWidgetState extends State<AccountWidget> {
   }
 
   late int currentUserId = int.parse(widget.currentUser);
+
+  late String pickedImage = users!.userImage;
 
   late final _emailController = TextEditingController(text: users!.userEmail);
   late final _passwordController =
@@ -72,17 +77,38 @@ class _AccountWidgetState extends State<AccountWidget> {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: const Color(0xffCDCDCD), width: 2),
+                      GestureDetector(
+                        onTap: () async {
+                          final ImagePicker picker = ImagePicker();
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (image != null) {
+                            pickedImage = File(image.path) as String;
+                            setState(() {
+                              isPicked = true;
+                              print(pickedImage);
+                            });
+                          }
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(300.0),
+                            child: Image.file(
+                              File(pickedImage),
+                              fit: BoxFit.fill,
+                              height: 100,
+                              width: 100,
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                         child: Text(
-                          "Add your photo",
+                          "Change your photo",
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 16),
@@ -197,35 +223,36 @@ class _AccountWidgetState extends State<AccountWidget> {
                           ),
                         ],
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Already have an account?',
-                            style: GoogleFonts.montserrat(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color(0xff1C1C1C),
+                      GestureDetector(
+                        onTap: () {
+                          updateUser();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 66),
+                          child: Container(
+                            height: 40,
+                            width: 342,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
+                              color: Color(0xffED4D86),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              ' Login',
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: Color(0xffED4D86),
+                            child: Center(
+                              child: Text(
+                                'Update',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color(0xffFFFFFC),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -235,5 +262,40 @@ class _AccountWidgetState extends State<AccountWidget> {
             }
           }),
     );
+  }
+
+  // void update(BuildContext context) {
+  //   print('pressed');
+  //   final db = DatabaseHelper();
+  //   db
+  //       .updateUser(
+  //     Users(
+  //       userEmail: _emailController.text,
+  //       userPassword: _passwordController.text,
+  //       userName: _nameController.text,
+  //     ),
+  //   )
+  //       .whenComplete(() {
+  //     print('UPDATED');
+  //   });
+  // }
+  void updateUser() async {
+    final db = DatabaseHelper();
+
+    String updatedName = _nameController.text;
+    String updatedEmail = _emailController.text;
+    String updatedPassword = _passwordController.text;
+
+    await db.updateUser(
+      Users(
+        userId: currentUserId,
+        userName: updatedName,
+        userEmail: updatedEmail,
+        userPassword: updatedPassword,
+        userImage: pickedImage,
+      ),
+    );
+
+    print("$currentUserId to value $updatedName");
   }
 }

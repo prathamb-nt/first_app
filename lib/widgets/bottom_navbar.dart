@@ -1,3 +1,5 @@
+import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/account_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,13 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
     ),
   ];
 
+  late Future<List<Posts>> _postsFuture;
+
   @override
   void initState() {
     super.initState();
     _pagecontroller = PageController(initialPage: _index);
+    _postsFuture = DatabaseHelper().fetchPosts();
   }
 
   @override

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,47 +50,77 @@ class _HomeWidgetState extends State<HomeWidget> {
     DatabaseHelper().fetchData();
   }
 
+  late int currentUserId = int.parse(widget.currentUser);
+
+  late String pickedImage = users!.userImage;
+
+  Users? users;
+  late String name;
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'Good Morning!\nJane Cooper',
-                style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Color(0xff1C1C1C),
+    return FutureBuilder<Users?>(
+      future: DatabaseHelper().getUserById(currentUserId),
+      builder: (BuildContext context, AsyncSnapshot<Users?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          users = snapshot.data!;
+          name = users!.userName!;
+          email = users!.userEmail;
+          password = users!.userPassword;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good Morning!\n$name',
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 24,
+                            color: Color(0xff1C1C1C),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 113,
+                      ),
+                      Container(
+                        height: 46,
+                        width: 46,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Image.file(
+                            File(pickedImage),
+                            fit: BoxFit.fill,
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                  buildNoPosts(context),
+                ],
               ),
-              const SizedBox(
-                width: 113,
-              ),
-              Container(
-                height: 46,
-                width: 46,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  //pickedImage.toString(),
-                  "assets/profile_default.png",
-                  fit: BoxFit.fill,
-                  height: 100,
-                  width: 100,
-                ),
-              ),
-            ],
-          ),
-          //buildNoPosts(context),
-        ],
-      ),
+            ),
+          );
+        } else {
+          return const Center(child: Text('nodata'));
+        }
+      },
     );
   }
 

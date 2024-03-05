@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -144,6 +146,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
+                    color: isDateSelected ? Color(0xffFCE6EE) : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -205,6 +208,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
+                    color: isDateSelected ? Colors.white : Color(0xffFCE6EE),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -252,24 +256,29 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: GestureDetector(
+                child:
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     print(widget.postBytes);
+                    //     selectedDate != 'Select date' &&
+                    //             selectedTime != 'Select time'
+                    //         ? Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //               builder: (context) => ShareScreen(
+                    //                 selectedDate: selectedDate,
+                    //                 selectedTime: selectedTime,
+                    //                 selectedPlatform: selectedPlatform,
+                    //                 postBytes: widget.postBytes!,
+                    //                 currentUser: widget.currentUser,
+                    //               ),
+                    //             ),
+                    //           )
+                    //         : {};
+                    //   },
+                    GestureDetector(
                   onTap: () {
-                    print(widget.postBytes);
-                    selectedDate != 'Select date' &&
-                            selectedTime != 'Select time'
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShareScreen(
-                                selectedDate: selectedDate,
-                                selectedTime: selectedTime,
-                                selectedPlatform: selectedPlatform,
-                                postBytes: widget.postBytes!,
-                                currentUser: widget.currentUser,
-                              ),
-                            ),
-                          )
-                        : {};
+                    navigate();
                   },
                   child: Container(
                     height: 40,
@@ -345,6 +354,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               showNavigationArrow: true,
               monthViewSettings:
                   const DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
+              todayHighlightColor: const Color(0xffED4D86),
               selectionColor: const Color(0xffED4D86),
               selectionShape: DateRangePickerSelectionShape.rectangle,
               selectionRadius: 4,
@@ -491,6 +501,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     height: 40,
                     width: 47,
                     decoration: BoxDecoration(
+                      color:
+                          isAMSelected ? const Color(0xffFCE6EE) : Colors.white,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: isAMSelected
@@ -526,6 +538,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 47,
                   decoration: BoxDecoration(
+                    color:
+                        isAMSelected ? Colors.white : const Color(0xffFCE6EE),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isAMSelected
@@ -581,6 +595,9 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     height: 66,
                     width: 66,
                     decoration: BoxDecoration(
+                      color: isInstagramSelected
+                          ? Colors.white
+                          : const Color(0xffFCE6EE),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: isInstagramSelected
@@ -606,6 +623,9 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 66,
                   width: 66,
                   decoration: BoxDecoration(
+                    color: isInstagramSelected
+                        ? const Color(0xffFCE6EE)
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isInstagramSelected
@@ -625,4 +645,68 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
       ),
     );
   }
+
+  void navigate() async {
+    // Navigate to the next screen with the new postId
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ShareScreen(
+          selectedDate: selectedDate,
+          selectedTime: selectedTime,
+          selectedPlatform: selectedPlatform,
+          postBytes: widget.postBytes!,
+          currentUser: widget.currentUser,
+        ),
+      ),
+    );
+  }
+
+//   void savePost() async {
+//   // Save the post to the database
+//   final db = DatabaseHelper();
+//   final int postId = await db.savePost(
+//     Posts(
+//       userId: currentUserId,
+//       post: widget.postBytes!,
+//       postDate: selectedDate,
+//       postTime: selectedTime,
+//       postPlatform: selectedPlatform,
+//       postId: ,
+//     ),
+//   );
+
+//   // Navigate to the next screen with the new postId
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (_) => ShareScreen(
+//         selectedDate: selectedDate,
+//         selectedTime: selectedTime,
+//         selectedPlatform: selectedPlatform,
+//         postBytes: widget.postBytes!,
+//         currentUser: widget.currentUser,
+//         postId: postId,
+//       ),
+//     ),
+//   );
+// }
+
+  // void savePost() async {
+  //   // Save the post bytes, selected date, and selected time to the database
+  //    final db = DatabaseHelper();
+
+  //   final post = Posts(
+  //     userId: currentUserId,
+  //     post: widget.postBytes,
+  //     postDate: selectedDate,
+  //     postTime: selectedTime,
+  //     postPlatform: 'Instagram',
+  //     postId: null,
+  //   );
+  //   await DatabaseHelper.instance.savePost(post);
+
+  //   // Navigate to the next screen
+
+  // }
 }

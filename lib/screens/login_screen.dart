@@ -19,44 +19,16 @@ final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 
 TextStyle textStyle = GoogleFonts.montserrat(
-  textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+  textStyle: const TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+  ),
 );
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoginTrue = false;
 
   final db = DatabaseHelper();
-
-  login() async {
-    var response = await db.login(
-      Users(
-        userPassword: _passwordController.text,
-        userEmail: _emailController.text,
-      ),
-    );
-    if (response is String) {
-      String currentUser = response;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OnBoardingScreen(
-            currentUser: currentUser,
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid Login!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      setState(() {
-        print("invalid login");
-        isLoginTrue = true;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +70,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       controller: _emailController,
                       decoration: InputDecoration(
+                        focusColor: Color(0xffED4D86),
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
-                        labelText: 'Enter Your Email',
-                        labelStyle: textStyle,
-                        border: const OutlineInputBorder(),
+                        hintText: 'Enter Your Email',
+                        hintStyle: textStyle,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffED4D86),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -124,12 +104,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         FocusManager.instance.primaryFocus?.unfocus();
                       },
                       controller: _passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
+                        focusColor: Color(0xffED4D86),
                         isDense: true,
                         contentPadding: const EdgeInsetsDirectional.all(10),
-                        labelText: 'Enter Your Password',
-                        labelStyle: textStyle,
-                        border: const OutlineInputBorder(),
+                        hintText: 'Enter Your Password',
+                        hintStyle: textStyle,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffED4D86),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -216,5 +205,37 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  login() async {
+    var response = await db.login(
+      Users(
+        userPassword: _passwordController.text,
+        userEmail: _emailController.text,
+        userImage: '',
+      ),
+    );
+    if (response is String) {
+      String currentUser = response;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OnBoardingScreen(
+            currentUser: currentUser,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid Login!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      setState(() {
+        print("invalid login");
+        isLoginTrue = true;
+      });
+    }
   }
 }
