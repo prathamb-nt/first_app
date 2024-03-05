@@ -5,7 +5,9 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   final databaseName = "app.db";
   String users =
-      "CREATE TABLE users (userId INTEGER PRIMARY KEY AUTOINCREMENT, userName TEXT UNIQUE, userEmail TEXT NOT NULL, userPassword TEXT)";
+      "CREATE TABLE users (userId INTEGER PRIMARY KEY AUTOINCREMENT, userName TEXT UNIQUE, userEmail TEXT NOT NULL, userPassword TEXT, userImage TEXT)";
+
+      
   Future<Database> initDB() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, databaseName);

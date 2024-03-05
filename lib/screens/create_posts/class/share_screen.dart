@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ShareScreen extends StatefulWidget {
@@ -54,6 +57,8 @@ class _ShareScreenState extends State<ShareScreen> {
     loadImage();
     super.initState();
   }
+
+  final GlobalKey _globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -201,34 +206,37 @@ class _ShareScreenState extends State<ShareScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      height: 40,
-                      width: 155,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: const Color(0xffED4D86),
-                          width: 1,
+                    GestureDetector(
+                      onTap: () => _saveLocalImage(),
+                      child: Container(
+                        height: 40,
+                        width: 155,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: const Color(0xffED4D86),
+                            width: 1,
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset("assets/ic_download.svg"),
-                            Text(
-                              "Download",
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                  color: Color(0xff1C1C1C),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset("assets/ic_download.svg"),
+                              Text(
+                                "Download",
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Color(0xff1C1C1C),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -315,6 +323,21 @@ class _ShareScreenState extends State<ShareScreen> {
     if (file.existsSync()) {
       final bytes = await file.readAsBytes();
       setState(() => this.bytes = bytes);
+    }
+  }
+
+  _saveLocalImage() async {
+    if (_globalKey.currentContext != null) {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage();
+      ByteData? byteData =
+          await (image.toByteData(format: ui.ImageByteFormat.png));
+      if (byteData != null) {
+        final result =
+            await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+        print(result);
+      }
     }
   }
 }

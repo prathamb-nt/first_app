@@ -54,6 +54,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^24.2.8
   screenshot: ^2.1.0
   path_provider: ^2.1.2
+  image_gallery_saver: ^2.0.3
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

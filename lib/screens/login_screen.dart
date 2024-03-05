@@ -27,37 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final db = DatabaseHelper();
 
-  login() async {
-    var response = await db.login(
-      Users(
-        userPassword: _passwordController.text,
-        userEmail: _emailController.text,
-      ),
-    );
-    if (response is String) {
-      String currentUser = response;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OnBoardingScreen(
-            currentUser: currentUser,
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid Login!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      setState(() {
-        print("invalid login");
-        isLoginTrue = true;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,5 +185,37 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  login() async {
+    var response = await db.login(
+      Users(
+        userPassword: _passwordController.text,
+        userEmail: _emailController.text,
+        userImage: '',
+      ),
+    );
+    if (response is String) {
+      String currentUser = response;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OnBoardingScreen(
+            currentUser: currentUser,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid Login!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      setState(() {
+        print("invalid login");
+        isLoginTrue = true;
+      });
+    }
   }
 }
