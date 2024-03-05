@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +25,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
 
   late String hour = now.hour.toString();
   late String minute = now.minute.toString();
+
+  late int currentUserId = int.parse(widget.currentUser);
 
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
@@ -252,24 +256,29 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: GestureDetector(
+                child:
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     print(widget.postBytes);
+                    //     selectedDate != 'Select date' &&
+                    //             selectedTime != 'Select time'
+                    //         ? Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //               builder: (context) => ShareScreen(
+                    //                 selectedDate: selectedDate,
+                    //                 selectedTime: selectedTime,
+                    //                 selectedPlatform: selectedPlatform,
+                    //                 postBytes: widget.postBytes!,
+                    //                 currentUser: widget.currentUser,
+                    //               ),
+                    //             ),
+                    //           )
+                    //         : {};
+                    //   },
+                    GestureDetector(
                   onTap: () {
-                    print(widget.postBytes);
-                    selectedDate != 'Select date' &&
-                            selectedTime != 'Select time'
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShareScreen(
-                                selectedDate: selectedDate,
-                                selectedTime: selectedTime,
-                                selectedPlatform: selectedPlatform,
-                                postBytes: widget.postBytes!,
-                                currentUser: widget.currentUser,
-                              ),
-                            ),
-                          )
-                        : {};
+                    savePost();
                   },
                   child: Container(
                     height: 40,
@@ -625,4 +634,55 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
       ),
     );
   }
+
+  void savePost() async {
+    final db = DatabaseHelper();
+    // Assuming you have the updated user data in these variables
+    int userId = currentUserId;
+    Uint8List post = widget.postBytes!;
+    String postDate = selectedDate;
+    String postTime = selectedTime;
+    String postPlatform = 'Instagram';
+    int postId = 0;
+
+    await db.savePost(Posts(
+      userId: currentUserId,
+      post: widget.postBytes!.toList(),
+      postDate: selectedDate,
+      postTime: selectedTime,
+      postPlatform: 'Instagram',
+      postId: 0,
+    ));
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ShareScreen(
+          selectedDate: selectedDate,
+          selectedTime: selectedTime,
+          selectedPlatform: 'Instagram', // or whichever platform is selected
+          postBytes: widget.postBytes!,
+          currentUser: widget.currentUser,
+        ),
+      ),
+    );
+  }
+
+  // void savePost() async {
+  //   // Save the post bytes, selected date, and selected time to the database
+  //    final db = DatabaseHelper();
+
+  //   final post = Posts(
+  //     userId: currentUserId,
+  //     post: widget.postBytes,
+  //     postDate: selectedDate,
+  //     postTime: selectedTime,
+  //     postPlatform: 'Instagram',
+  //     postId: null,
+  //   );
+  //   await DatabaseHelper.instance.savePost(post);
+
+  //   // Navigate to the next screen
+
+  // }
 }

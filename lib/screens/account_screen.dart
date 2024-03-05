@@ -28,6 +28,8 @@ class _AccountWidgetState extends State<AccountWidget> {
 
   late int currentUserId = int.parse(widget.currentUser);
 
+  late String pickedImage = users!.userImage;
+
   late final _emailController = TextEditingController(text: users!.userEmail);
   late final _passwordController =
       TextEditingController(text: users!.userPassword);
@@ -81,7 +83,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                           final XFile? image = await picker.pickImage(
                               source: ImageSource.gallery);
                           if (image != null) {
-                            pickedImage = File(image.path);
+                            pickedImage = File(image.path) as String;
                             setState(() {
                               isPicked = true;
                               print(pickedImage);
@@ -95,7 +97,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(300.0),
                             child: Image.file(
-                              pickedImage!,
+                              File(pickedImage),
                               fit: BoxFit.fill,
                               height: 100,
                               width: 100,
@@ -290,7 +292,8 @@ class _AccountWidgetState extends State<AccountWidget> {
         userId: currentUserId, // You need to set the userId for the user
         userName: updatedName,
         userEmail: updatedEmail,
-        userPassword: updatedPassword, userImage: pickedImage!.path,
+        userPassword: updatedPassword,
+        userImage: pickedImage,
       ),
     );
 

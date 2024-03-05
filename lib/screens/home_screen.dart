@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
-import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,6 +52,8 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   late int currentUserId = int.parse(widget.currentUser);
 
+  late String pickedImage = users!.userImage;
+
   Users? users;
   late String name;
   late String email;
@@ -100,7 +103,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(300.0),
                           child: Image.file(
-                            pickedImage!,
+                            File(pickedImage as String),
                             fit: BoxFit.fill,
                             height: 100,
                             width: 100,

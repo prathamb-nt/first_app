@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Users {
   final int? userId;
   final String? userName;
@@ -26,5 +28,41 @@ class Users {
         "userEmail": userEmail,
         "userPassword": userPassword,
         "userImage": userImage,
+      };
+}
+
+class Posts {
+  final int postId;
+  final int userId;
+  final List<int> post;
+  final String postDate;
+  final String postTime;
+  final String postPlatform;
+
+  Posts({
+    required this.postId,
+    required this.userId,
+    required this.post,
+    required this.postDate,
+    required this.postTime,
+    required this.postPlatform,
+  });
+
+  factory Posts.fromMap(Map<String, dynamic> json) => Posts(
+        postId: json["postId"],
+        userId: json["userId"],
+        post: base64Decode(json["post"]),
+        postDate: json["postDate"],
+        postTime: json["postTime"],
+        postPlatform: json["postPlatform"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "postId": postId,
+        "userId": userId,
+        "post": base64Encode(post),
+        "postDate": postDate,
+        "postTime": postTime,
+        "postPlatform": postPlatform,
       };
 }
