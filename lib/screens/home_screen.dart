@@ -103,7 +103,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(300.0),
                           child: Image.file(
-                            File(pickedImage as String),
+                            File(pickedImage),
                             fit: BoxFit.fill,
                             height: 100,
                             width: 100,

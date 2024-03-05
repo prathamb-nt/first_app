@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:all_social_app/screens/create_posts/step_4_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -11,8 +13,8 @@ class CreatePostScreenStep3 extends StatefulWidget {
   final String displayImage;
   final String currentUser;
 
-  CreatePostScreenStep3(
-      {required this.displayImage, required this.currentUser});
+  const CreatePostScreenStep3(
+      {super.key, required this.displayImage, required this.currentUser});
 
   @override
   _CreatePostScreenStep3State createState() => _CreatePostScreenStep3State();
@@ -101,7 +103,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Container(
+                child: SizedBox(
                   height: 120,
                   width: 342,
                   child: TextFormField(
@@ -139,7 +141,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
               buildPostImage(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                child: Container(
+                child: SizedBox(
                   height: 100,
                   child: Column(
                     children: [
@@ -159,7 +161,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: 46,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -183,7 +185,8 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                     );
 
                     setState(() => this.bytes = bytes);
-                    print(bytes);
+                    saveImage(bytes);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -231,14 +234,14 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
       width: 342,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: 342,
             width: 342,
             child: Stack(
               children: [
                 Image.asset(widget.displayImage),
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     height: 220,
                     width: 237,
                     child: LimitedBox(
@@ -297,6 +300,8 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
           height: 46,
           width: 46,
           decoration: BoxDecoration(
+            color:
+                selectedIndex == index ? const Color(0xffFCE6EE) : Colors.white,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
                 color: selectedIndex == index
@@ -310,5 +315,12 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
         ),
       ),
     );
+  }
+
+  Future saveImage(Uint8List bytes) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/image.png');
+    file.writeAsBytes(bytes);
+    print("took screenshot of the image");
   }
 }

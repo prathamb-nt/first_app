@@ -32,17 +32,17 @@ class Users {
 }
 
 class Posts {
-  final int postId;
   final int userId;
   final List<int> post;
   final String postDate;
   final String postTime;
   final String postPlatform;
+  final int postId;
 
   Posts({
-    required this.postId,
     required this.userId,
     required this.post,
+    required this.postId,
     required this.postDate,
     required this.postTime,
     required this.postPlatform,
@@ -58,7 +58,6 @@ class Posts {
       );
 
   Map<String, dynamic> toMap() => {
-        "postId": postId,
         "userId": userId,
         "post": base64Encode(post),
         "postDate": postDate,

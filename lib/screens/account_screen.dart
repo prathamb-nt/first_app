@@ -108,7 +108,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                         child: Text(
-                          "Add your photo",
+                          "Change your photo",
                           style: GoogleFonts.montserrat(
                             textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 16),
@@ -228,7 +228,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                           updateUser();
                         },
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 95),
+                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 66),
                           child: Container(
                             height: 40,
                             width: 342,
@@ -281,15 +281,14 @@ class _AccountWidgetState extends State<AccountWidget> {
   // }
   void updateUser() async {
     final db = DatabaseHelper();
-    // Assuming you have the updated user data in these variables
+
     String updatedName = _nameController.text;
     String updatedEmail = _emailController.text;
     String updatedPassword = _passwordController.text;
 
-    // Call the updateUser method from DatabaseHelper
     await db.updateUser(
       Users(
-        userId: currentUserId, // You need to set the userId for the user
+        userId: currentUserId,
         userName: updatedName,
         userEmail: updatedEmail,
         userPassword: updatedPassword,
@@ -298,6 +297,5 @@ class _AccountWidgetState extends State<AccountWidget> {
     );
 
     print("$currentUserId to value $updatedName");
-    // Handle the result or show a success message
   }
 }

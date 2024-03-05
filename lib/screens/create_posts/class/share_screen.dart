@@ -1,27 +1,25 @@
-import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 
+import 'package:all_social_app/SQLLite/database_helper.dart';
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ShareScreen extends StatefulWidget {
   final String selectedDate, selectedTime, selectedPlatform;
   late Uint8List postBytes;
   final String currentUser;
 
-  ShareScreen(
-      {super.key,
-      required this.selectedDate,
-      required this.selectedTime,
-      required this.selectedPlatform,
-      required this.postBytes,
-      required this.currentUser});
+  ShareScreen({
+    super.key,
+    required this.selectedDate,
+    required this.selectedTime,
+    required this.selectedPlatform,
+    required this.postBytes,
+    required this.currentUser,
+  });
 
   @override
   State<ShareScreen> createState() => _ShareScreenState();
@@ -33,6 +31,8 @@ class _ShareScreenState extends State<ShareScreen> {
   bool isDateSelected = true;
 
   bool isTimeSelected = false;
+
+  late int currentUserId = int.parse(widget.currentUser);
 
   bool isAMSelected = true;
   bool isInstagramSelected = true;
@@ -52,14 +52,13 @@ class _ShareScreenState extends State<ShareScreen> {
 
   Uint8List? bytes;
 
-  @override
-  void initState() {
-    loadImage();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   loadImage();
+  //   super.initState();
+  // }
 
   final GlobalKey _globalKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +67,7 @@ class _ShareScreenState extends State<ShareScreen> {
           padding: const EdgeInsets.fromLTRB(24, 40, 24, 15),
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: 342,
                 height: 342,
                 child: widget.postBytes == null
@@ -77,7 +76,7 @@ class _ShareScreenState extends State<ShareScreen> {
                         height: 342,
                         color: Colors.red,
                       )
-                    : Image.memory(widget.postBytes!),
+                    : Image.memory(widget.postBytes),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
@@ -207,7 +206,7 @@ class _ShareScreenState extends State<ShareScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => _saveLocalImage(),
+                      onTap: () => {},
                       child: Container(
                         height: 40,
                         width: 155,
@@ -286,6 +285,7 @@ class _ShareScreenState extends State<ShareScreen> {
                         ),
                       ),
                     );
+                    print("go to home pushed");
                   },
                   child: Container(
                     height: 40,
@@ -317,27 +317,42 @@ class _ShareScreenState extends State<ShareScreen> {
     );
   }
 
-  Future loadImage() async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File('${appStorage.path}/image.png');
-    if (file.existsSync()) {
-      final bytes = await file.readAsBytes();
-      setState(() => this.bytes = bytes);
-    }
-  }
+  // Future loadImage() async {
+  //   print("loading image");
+  //   final appStorage = await getApplicationDocumentsDirectory();
+  //   final file = File('${appStorage.path}/image.png');
+  //   if (file.existsSync()) {
+  //     final bytes = await file.readAsBytes();
+  //     setState(() => this.bytes = bytes);
+  //   }
+  // }
 
-  _saveLocalImage() async {
-    if (_globalKey.currentContext != null) {
-      RenderRepaintBoundary boundary = _globalKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage();
-      ByteData? byteData =
-          await (image.toByteData(format: ui.ImageByteFormat.png));
-      if (byteData != null) {
-        final result =
-            await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-        print(result);
-      }
-    }
+  static int _nextPostId = 0;
+
+  void savePost() async {
+    // Save the post to the database
+    final db = DatabaseHelper();
+    final int postId = _nextPostId++; // Increment the _nextPostId here
+    await db.savePost(
+      Posts(
+        userId: currentUserId,
+        post: widget.postBytes,
+        postDate: widget.selectedDate,
+        postTime: widget.selectedTime,
+        postPlatform: widget.selectedPlatform,
+        postId: postId,
+      ),
+    );
+
+    // Navigate to the next screen with the new postId
+
+    // Here you would typically add code to save the file path and other necessary data to your database.
+    // For example:
+    // final db = FirebaseFirestore.instance;
+    // await db.collection('posts').doc(postId.toString()).set({
+    //   'postBytes': fileName,
+    //   'userId': currentUser,
+    //   // Add other fields as necessary
+    // });
   }
 }

@@ -65,10 +65,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }
                 },
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    border:
-                        Border.all(color: const Color(0xffCDCDCD), width: 2),
                   ),
                   child: isPicked
                       ? ClipRRect(
@@ -128,9 +126,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
-                        labelText: 'Enter Your Name',
-                        labelStyle: textstyle,
-                        border: const OutlineInputBorder(),
+                        hintText: 'Enter Your Name',
+                        hintStyle: textstyle,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffED4D86),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -161,9 +166,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
-                        labelText: 'Enter Your Email',
-                        labelStyle: textstyle,
-                        border: const OutlineInputBorder(),
+                        hintText: 'Enter Your Email',
+                        hintStyle: textstyle,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffED4D86),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -208,12 +220,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             );
                           },
                         ),
-                        alignLabelWithHint: false,
                         isDense: true,
                         contentPadding: const EdgeInsetsDirectional.all(10),
-                        labelText: 'Enter Your Password',
-                        labelStyle: textstyle,
-                        border: const OutlineInputBorder(),
+                        hintText: 'Enter Your Password',
+                        hintStyle: textstyle,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xffED4D86),
+                          ),
+                        ),
                       ),
                     ),
                   ),

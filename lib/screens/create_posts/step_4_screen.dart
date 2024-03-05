@@ -26,8 +26,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
   late String hour = now.hour.toString();
   late String minute = now.minute.toString();
 
-  late int currentUserId = int.parse(widget.currentUser);
-
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
   String selectedPlatform = 'Instagram';
@@ -148,6 +146,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
+                    color: isDateSelected ? Color(0xffFCE6EE) : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -209,6 +208,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
+                    color: isDateSelected ? Colors.white : Color(0xffFCE6EE),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -278,7 +278,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     //   },
                     GestureDetector(
                   onTap: () {
-                    savePost();
+                    navigate();
                   },
                   child: Container(
                     height: 40,
@@ -354,6 +354,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               showNavigationArrow: true,
               monthViewSettings:
                   const DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
+              todayHighlightColor: const Color(0xffED4D86),
               selectionColor: const Color(0xffED4D86),
               selectionShape: DateRangePickerSelectionShape.rectangle,
               selectionRadius: 4,
@@ -500,6 +501,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     height: 40,
                     width: 47,
                     decoration: BoxDecoration(
+                      color:
+                          isAMSelected ? const Color(0xffFCE6EE) : Colors.white,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: isAMSelected
@@ -535,6 +538,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 47,
                   decoration: BoxDecoration(
+                    color:
+                        isAMSelected ? Colors.white : const Color(0xffFCE6EE),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isAMSelected
@@ -590,6 +595,9 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     height: 66,
                     width: 66,
                     decoration: BoxDecoration(
+                      color: isInstagramSelected
+                          ? Colors.white
+                          : const Color(0xffFCE6EE),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: isInstagramSelected
@@ -615,6 +623,9 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 66,
                   width: 66,
                   decoration: BoxDecoration(
+                    color: isInstagramSelected
+                        ? const Color(0xffFCE6EE)
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isInstagramSelected
@@ -635,38 +646,51 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
     );
   }
 
-  void savePost() async {
-    final db = DatabaseHelper();
-    // Assuming you have the updated user data in these variables
-    int userId = currentUserId;
-    Uint8List post = widget.postBytes!;
-    String postDate = selectedDate;
-    String postTime = selectedTime;
-    String postPlatform = 'Instagram';
-    int postId = 0;
-
-    await db.savePost(Posts(
-      userId: currentUserId,
-      post: widget.postBytes!.toList(),
-      postDate: selectedDate,
-      postTime: selectedTime,
-      postPlatform: 'Instagram',
-      postId: 0,
-    ));
-
+  void navigate() async {
+    // Navigate to the next screen with the new postId
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => ShareScreen(
           selectedDate: selectedDate,
           selectedTime: selectedTime,
-          selectedPlatform: 'Instagram', // or whichever platform is selected
+          selectedPlatform: selectedPlatform,
           postBytes: widget.postBytes!,
           currentUser: widget.currentUser,
         ),
       ),
     );
   }
+
+//   void savePost() async {
+//   // Save the post to the database
+//   final db = DatabaseHelper();
+//   final int postId = await db.savePost(
+//     Posts(
+//       userId: currentUserId,
+//       post: widget.postBytes!,
+//       postDate: selectedDate,
+//       postTime: selectedTime,
+//       postPlatform: selectedPlatform,
+//       postId: ,
+//     ),
+//   );
+
+//   // Navigate to the next screen with the new postId
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (_) => ShareScreen(
+//         selectedDate: selectedDate,
+//         selectedTime: selectedTime,
+//         selectedPlatform: selectedPlatform,
+//         postBytes: widget.postBytes!,
+//         currentUser: widget.currentUser,
+//         postId: postId,
+//       ),
+//     ),
+//   );
+// }
 
   // void savePost() async {
   //   // Save the post bytes, selected date, and selected time to the database
