@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+
 class Users {
   final int? userId;
   final String? userName;
@@ -33,7 +35,7 @@ class Users {
 
 class Posts {
   final int userId;
-  final List<int> post;
+  final Uint8List post;
   final String postDate;
   final String postTime;
   final String postPlatform;

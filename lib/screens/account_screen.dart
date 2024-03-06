@@ -9,10 +9,9 @@ import 'package:image_picker/image_picker.dart';
 
 class AccountWidget extends StatefulWidget {
   final String currentUser;
-  final int userId;
+
   const AccountWidget({
     super.key,
-    required this.userId,
     required this.currentUser,
   });
 
@@ -86,7 +85,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                             pickedImage = File(image.path) as String;
                             setState(() {
                               isPicked = true;
-                              print(pickedImage);
+                              debugPrint(pickedImage);
                             });
                           }
                         },
@@ -265,7 +264,7 @@ class _AccountWidgetState extends State<AccountWidget> {
   }
 
   // void update(BuildContext context) {
-  //   print('pressed');
+  //   debugPrint('pressed');
   //   final db = DatabaseHelper();
   //   db
   //       .updateUser(
@@ -276,7 +275,7 @@ class _AccountWidgetState extends State<AccountWidget> {
   //     ),
   //   )
   //       .whenComplete(() {
-  //     print('UPDATED');
+  //     debugPrint('UPDATED');
   //   });
   // }
   void updateUser() async {
@@ -296,6 +295,6 @@ class _AccountWidgetState extends State<AccountWidget> {
       ),
     );
 
-    print("$currentUserId to value $updatedName");
+    debugPrint("$currentUserId to value $updatedName");
   }
 }

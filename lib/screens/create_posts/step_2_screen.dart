@@ -130,7 +130,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                     nextImageUrl = displayImageUrl;
                   });
 
-                  print(nextImageUrl);
+                  debugPrint(nextImageUrl);
 
                   Navigator.push(
                     context,
@@ -178,7 +178,7 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
         setState(() {
           selectedIndex = index;
           displayImageUrl = imageUrl[index].toString();
-          print(displayImageUrl);
+          debugPrint(displayImageUrl);
         });
       },
       child: Padding(

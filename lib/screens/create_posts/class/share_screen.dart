@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ShareScreen extends StatefulWidget {
+  static int postIdCounter = 0;
   final String selectedDate, selectedTime, selectedPlatform;
   late Uint8List postBytes;
   final String currentUser;
@@ -277,6 +278,7 @@ class _ShareScreenState extends State<ShareScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: GestureDetector(
                   onTap: () {
+                    savePost();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -285,7 +287,7 @@ class _ShareScreenState extends State<ShareScreen> {
                         ),
                       ),
                     );
-                    print("go to home pushed");
+                    debugPrint("go to home pushed");
                   },
                   child: Container(
                     height: 40,
@@ -317,22 +319,26 @@ class _ShareScreenState extends State<ShareScreen> {
     );
   }
 
-  // Future loadImage() async {
-  //   print("loading image");
-  //   final appStorage = await getApplicationDocumentsDirectory();
-  //   final file = File('${appStorage.path}/image.png');
-  //   if (file.existsSync()) {
-  //     final bytes = await file.readAsBytes();
-  //     setState(() => this.bytes = bytes);
-  //   }
+  // void savePost() async {
+  //   // Save the post to the database
+  //   final db = DatabaseHelper();
+  //   static int postIdCounter = 0; // Add this line
+  //   final int postId = await db.savePost(
+  //     Posts(
+  //       userId: currentUserId,
+  //       post: widget.postBytes,
+  //       postDate: widget.selectedDate,
+  //       postTime: widget.selectedTime,
+  //       postPlatform: widget.selectedPlatform,
+  //       postId: 1,
+  //     ),
+  //   );
   // }
 
-  static int _nextPostId = 0;
-
   void savePost() async {
-    // Save the post to the database
     final db = DatabaseHelper();
-    final int postId = _nextPostId++; // Increment the _nextPostId here
+    final int postId = ShareScreen.postIdCounter++;
+    debugPrint("${widget.postBytes}");
     await db.savePost(
       Posts(
         userId: currentUserId,
@@ -343,16 +349,5 @@ class _ShareScreenState extends State<ShareScreen> {
         postId: postId,
       ),
     );
-
-    // Navigate to the next screen with the new postId
-
-    // Here you would typically add code to save the file path and other necessary data to your database.
-    // For example:
-    // final db = FirebaseFirestore.instance;
-    // await db.collection('posts').doc(postId.toString()).set({
-    //   'postBytes': fileName,
-    //   'userId': currentUser,
-    //   // Add other fields as necessary
-    // });
   }
 }

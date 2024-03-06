@@ -1,5 +1,3 @@
-import 'package:all_social_app/SQLLite/database_helper.dart';
-import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/account_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +14,7 @@ TextStyle labelText = GoogleFonts.montserrat(
 
 class BottomAppBarExample extends StatefulWidget {
   final String currentUser;
+
   const BottomAppBarExample({super.key, required this.currentUser});
 
   @override
@@ -24,30 +23,23 @@ class BottomAppBarExample extends StatefulWidget {
 
 class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   int _index = 0;
-  late PageController _pagecontroller;
+  late PageController _pageController;
   late List<Widget> widgets = [
-    HomeWidget(
-      currentUser: widget.currentUser,
-    ),
+    HomeWidget(currentUser: widget.currentUser),
     const Settings(),
-    AccountWidget(
-      userId: 5,
-      currentUser: widget.currentUser,
-    ),
+    AccountWidget(currentUser: widget.currentUser),
   ];
-
-  late Future<List<Posts>> _postsFuture;
 
   @override
   void initState() {
     super.initState();
-    _pagecontroller = PageController(initialPage: _index);
-    _postsFuture = DatabaseHelper().fetchPosts();
+    _pageController = PageController(initialPage: _index);
   }
 
   @override
   void dispose() {
-    _pagecontroller.dispose();
+    _pageController.dispose();
+
     super.dispose();
   }
 
@@ -90,7 +82,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
         ),
       ),
       body: PageView(
-        controller: _pagecontroller,
+        controller: _pageController,
         onPageChanged: (value) {
           setState(() {
             _index = value;
@@ -105,12 +97,12 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
     setState(() {
       _index = index;
       selectedIcon = index;
-      _pagecontroller.animateToPage(
+      _pageController.animateToPage(
         index,
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
-      print(widgets[index]);
+      debugPrint("${widgets[index]}");
     });
   }
 }

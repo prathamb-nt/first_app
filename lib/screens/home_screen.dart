@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
+import 'package:all_social_app/widgets/show_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,24 +41,27 @@ class HomeWidget extends StatefulWidget {
   });
 
   @override
-  State<HomeWidget> createState() => _HomeWidgetState();
+  _HomeWidgetState createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  late Future<List<Posts>> _postsFuture;
+
   @override
   void initState() {
     super.initState();
+    DatabaseHelper().fetchData();
+    _postsFuture = DatabaseHelper().getPosts(currentUserId);
     DatabaseHelper().fetchData();
   }
 
   late int currentUserId = int.parse(widget.currentUser);
 
   late String pickedImage = users!.userImage;
-
   Users? users;
   late String name;
-  late String email;
-  late String password;
+
+  bool isFabVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +75,14 @@ class _HomeWidgetState extends State<HomeWidget> {
         } else if (snapshot.hasData) {
           users = snapshot.data!;
           name = users!.userName!;
-          email = users!.userEmail;
-          password = users!.userPassword;
+
           return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Good Morning!\n$name',
@@ -90,9 +93,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                             color: Color(0xff1C1C1C),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 113,
                       ),
                       Container(
                         height: 46,
@@ -112,81 +112,130 @@ class _HomeWidgetState extends State<HomeWidget> {
                       ),
                     ],
                   ),
-                  buildNoPosts(context),
-                ],
-              ),
+                ),
+                Container(
+                  child: FutureBuilder<List<Posts>>(
+                    future: _postsFuture,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Posts>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else if (snapshot.hasData) {
+                        final List<Posts>? posts = snapshot.data;
+                        if (posts!.isEmpty) {
+                          return NoPosts(widget: widget);
+                        } else {
+                          return ShowPosts(posts: posts);
+                        }
+                      } else {
+                        return Container(
+                          color: Colors.red,
+                          height: 550,
+                          width: 500,
+                        );
+                      }
+                    },
+                  ),
+                )
+              ],
             ),
           );
         } else {
-          return const Center(child: Text('nodata'));
+          return const Center(
+            child: Text('nodata'),
+          );
         }
       },
     );
   }
 
-  Column buildNoPosts(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
-          child: SvgPicture.asset(
-            "assets/no_posts_default_image.svg",
-            height: 342,
-            width: 342,
+//   ListView buildPosts(List<Posts> posts) {
+//     return
+//   }
+//
+//   Column buildNoPosts(BuildContext context) {
+//     return
+//   }
+}
+
+class NoPosts extends StatelessWidget {
+  const NoPosts({
+    super.key,
+    required this.widget,
+  });
+
+  final HomeWidget widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
+            child: SvgPicture.asset(
+              "assets/no_posts_default_image.svg",
+              height: 342,
+              width: 342,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
-          child: Text(
-            "You don’t have create any posts. Please\ncreate a new post.",
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-                color: Color(0xff1C1C1C),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
+            child: Text(
+              "You don’t have create any posts. Please\ncreate a new post.",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Color(0xff1C1C1C),
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CreatePostScreenStep1(
-                    currentUser: widget.currentUser,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreatePostScreenStep1(
+                      currentUser: widget.currentUser,
+                    ),
                   ),
+                );
+              },
+              child: Container(
+                height: 40,
+                width: 342,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(6),
+                  ),
+                  color: Color(0xffED4D86),
                 ),
-              );
-            },
-            child: Container(
-              height: 40,
-              width: 342,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-                color: Color(0xffED4D86),
-              ),
-              child: Center(
-                child: Text(
-                  'Create Post',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xffFFFFFC),
+                child: Center(
+                  child: Text(
+                    'Create Post',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Color(0xffFFFFFC),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

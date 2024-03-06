@@ -259,7 +259,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                 child:
                     // GestureDetector(
                     //   onTap: () {
-                    //     print(widget.postBytes);
+                    //     debugPrint(widget.postBytes);
                     //     selectedDate != 'Select date' &&
                     //             selectedTime != 'Select time'
                     //         ? Navigator.push(
