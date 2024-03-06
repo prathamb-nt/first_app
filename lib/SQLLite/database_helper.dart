@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:all_social_app/models/users.dart';
 import 'package:path/path.dart';
@@ -79,19 +80,19 @@ class DatabaseHelper {
 
     // Generate a new postId
     final postId = await db.insert('posts', post.toMap());
-
+    print("Post Saved to database");
     return postId;
   }
 
-  // Future<List<Posts>> retrievePosts(int userId) async {
-  //   final Database db = await initDB();
-  //   final List<Map<String, dynamic>> maps = await db.query(
-  //     'posts',
-  //     where: 'userId = ?',
-  //     whereArgs: [userId],
-  //   );
-  //   return maps.map((e) => Posts.fromMap(e)).toList();
-  // }
+  Future<List<Posts>> retrievePosts(int userId) async {
+    final Database db = await initDB();
+    final List<Map<String, dynamic>> maps = await db.query(
+      'posts',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+    return maps.map((e) => Posts.fromMap(e)).toList();
+  }
 
   // Future<List<Posts>> fetchPosts() async {
   //   final Database db = await initDB();
@@ -109,21 +110,32 @@ class DatabaseHelper {
   //     );
   //   });
   // }
+
   Future<List<Posts>> fetchPosts() async {
     final Database db = await initDB();
 
     final List<Map<String, dynamic>> maps = await db.query('posts');
     inspect(maps);
-    return List.generate(maps.length, (i) {
-      String base64Image = base64Encode(maps[i]['post']);
-      return Posts(
-        postId: maps[i]['postId'],
-        userId: maps[i]['userId'],
-        post: base64Image as List<int>,
-        postDate: maps[i]['postDate'],
-        postTime: maps[i]['postTime'],
-        postPlatform: maps[i]['postPlatform'],
-      );
-    });
+    return List.generate(
+      maps.length,
+      (i) {
+        // String base64Image = base64Encode(maps[i]['post']);
+        return Posts(
+          postId: maps[i]['postId'],
+          userId: maps[i]['userId'],
+          post: maps[i]['post'] as Uint8List,
+          postDate: maps[i]['postDate'],
+          postTime: maps[i]['postTime'],
+          postPlatform: maps[i]['postPlatform'],
+        );
+      },
+    );
   }
+
+Future<List<Posts>> getPosts() async {
+  final Database db = await initDB();
+  final List<Map<String, dynamic>> maps = await db.query('posts');
+  return maps.map((e) => Posts.fromMap(e)).toList();
+}
+
 }

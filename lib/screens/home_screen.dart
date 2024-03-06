@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
@@ -40,85 +38,56 @@ class HomeWidget extends StatefulWidget {
   });
 
   @override
-  State<HomeWidget> createState() => _HomeWidgetState();
+  _HomeWidgetState createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  late Future<List<Posts>> _postsFuture;
+
   @override
   void initState() {
     super.initState();
-    DatabaseHelper().fetchData();
+    _postsFuture = DatabaseHelper().getPosts();
   }
 
   late int currentUserId = int.parse(widget.currentUser);
 
-  late String pickedImage = users!.userImage;
-
-  Users? users;
-  late String name;
-  late String email;
-  late String password;
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Users?>(
-      future: DatabaseHelper().getUserById(currentUserId),
-      builder: (BuildContext context, AsyncSnapshot<Users?> snapshot) {
+    return buildPosts();
+  }
+
+  FutureBuilder<List<Posts>> buildPosts() {
+    return FutureBuilder<List<Posts>>(
+      future: _postsFuture,
+      builder: (BuildContext context, AsyncSnapshot<List<Posts>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          users = snapshot.data!;
-          name = users!.userName!;
-          email = users!.userEmail;
-          password = users!.userPassword;
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+          final List<Posts>? posts = snapshot.data;
+          return ListView.builder(
+            itemCount: posts?.length,
+            itemBuilder: (BuildContext context, int index) {
+              final Posts post = posts![index];
+              return Card(
+                child: ListTile(
+                  title: Column(
                     children: [
-                      Text(
-                        'Good Morning!\n$name',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 24,
-                            color: Color(0xff1C1C1C),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 113,
-                      ),
-                      Container(
-                        height: 46,
-                        width: 46,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(300.0),
-                          child: Image.file(
-                            File(pickedImage),
-                            fit: BoxFit.fill,
-                            height: 100,
-                            width: 100,
-                          ),
-                        ),
-                      ),
+                      Image.memory(post.post),
+                      Text(post.postDate),
+                      Text("${post.postId}"),
+                      Text(post.postTime),
                     ],
                   ),
-                  buildNoPosts(context),
-                ],
-              ),
-            ),
+                  subtitle: Text("${post.userId}"),
+                ),
+              );
+            },
           );
         } else {
-          return const Center(child: Text('nodata'));
+          return buildNoPosts(context);
         }
       },
     );

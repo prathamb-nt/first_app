@@ -9,10 +9,9 @@ import 'package:image_picker/image_picker.dart';
 
 class AccountWidget extends StatefulWidget {
   final String currentUser;
-  final int userId;
+
   const AccountWidget({
     super.key,
-    required this.userId,
     required this.currentUser,
   });
 
