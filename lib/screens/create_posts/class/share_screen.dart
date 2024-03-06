@@ -287,7 +287,7 @@ class _ShareScreenState extends State<ShareScreen> {
                         ),
                       ),
                     );
-                    print("go to home pushed");
+                    debugPrint("go to home pushed");
                   },
                   child: Container(
                     height: 40,
@@ -338,11 +338,11 @@ class _ShareScreenState extends State<ShareScreen> {
   void savePost() async {
     final db = DatabaseHelper();
     final int postId = ShareScreen.postIdCounter++;
-    print(widget.postBytes);
+    debugPrint("${widget.postBytes}");
     await db.savePost(
       Posts(
         userId: currentUserId,
-        post: widget.postBytes ,
+        post: widget.postBytes,
         postDate: widget.selectedDate,
         postTime: widget.selectedTime,
         postPlatform: widget.selectedPlatform,

@@ -291,7 +291,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
           selectedIndex = index;
           alignText = textAlignment[index];
 
-          print(alignText);
+          debugPrint("${alignText}");
         });
       },
       child: Padding(
@@ -321,6 +321,6 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
     final appStorage = await getApplicationDocumentsDirectory();
     final file = File('${appStorage.path}/image.png');
     file.writeAsBytes(bytes);
-    print("took screenshot of the image");
+    debugPrint("took screenshot of the image");
   }
 }

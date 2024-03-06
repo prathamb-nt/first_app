@@ -102,7 +102,7 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
-      print(widgets[index]);
+      debugPrint("${widgets[index]}");
     });
   }
 }

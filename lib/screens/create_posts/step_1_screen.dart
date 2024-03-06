@@ -92,9 +92,9 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                 onPageChanged: (index) {
                   setState(() {
                     _pageIndex = index;
-                    print(_pageIndex);
-                    print(frames[index].frameType);
-                    print(
+                    debugPrint("$_pageIndex");
+                    debugPrint(frames[index].frameType);
+                    debugPrint(
                       frames[index].frameContainer.toString(),
                     );
                   });

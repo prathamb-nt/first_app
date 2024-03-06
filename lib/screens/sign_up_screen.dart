@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     pickedImage = File(image.path);
                     setState(() {
                       isPicked = true;
-                      print(pickedImage);
+                      debugPrint("$pickedImage");
                     });
                   }
                 },
@@ -340,7 +340,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void SignUp(BuildContext context) {
-    print('pressed');
+    debugPrint('pressed');
     final db = DatabaseHelper();
     db
         .signUp(
