@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:typed_data';
-
 import 'package:all_social_app/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -29,7 +26,7 @@ class DatabaseHelper {
         "select * from users where userEmail = '${users.userEmail}' AND userPassword = '${users.userPassword}'");
     if (result.isNotEmpty) {
       String currentUser = result.first['userId'].toString();
-      debugPrint("$currentUser");
+      debugPrint(currentUser);
       return currentUser;
     } else {
       return false;
@@ -86,26 +83,26 @@ class DatabaseHelper {
     return maps.map((e) => Posts.fromMap(e)).toList();
   }
 
-  Future<List<Posts>> fetchPosts() async {
-    final Database db = await initDB();
-
-    final List<Map<String, dynamic>> maps = await db.query('posts');
-    inspect(maps);
-    return List.generate(
-      maps.length,
-      (i) {
-        // String base64Image = base64Encode(maps[i]['post']);
-        return Posts(
-          postId: maps[i]['postId'],
-          userId: maps[i]['userId'],
-          post: maps[i]['post'] as Uint8List,
-          postDate: maps[i]['postDate'],
-          postTime: maps[i]['postTime'],
-          postPlatform: maps[i]['postPlatform'],
-        );
-      },
-    );
-  }
+  // Future<List<Posts>> fetchPosts() async {
+  //   final Database db = await initDB();
+  //
+  //   final List<Map<String, dynamic>> maps = await db.query('posts');
+  //   inspect(maps);
+  //   return List.generate(
+  //     maps.length,
+  //     (i) {
+  //       // String base64Image = base64Encode(maps[i]['post']);
+  //       return Posts(
+  //         postId: maps[i]['postId'],
+  //         userId: maps[i]['userId'],
+  //         post: maps[i]['post'] as Uint8List,
+  //         postDate: maps[i]['postDate'],
+  //         postTime: maps[i]['postTime'],
+  //         postPlatform: maps[i]['postPlatform'],
+  //       );
+  //     },
+  //   );
+  // }
 
 // Future<List<Posts>> getPosts() async {
 //   final Database db = await initDB();
