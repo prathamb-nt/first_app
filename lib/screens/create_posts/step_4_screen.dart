@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:all_social_app/SQLLite/database_helper.dart';
-import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,8 +21,11 @@ class CreatePostScreenStep4 extends StatefulWidget {
 class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
   DateTime now = DateTime.now();
 
-  late String hour = now.hour.toString();
-  late String minute = now.minute.toString();
+  // late String hour = now.hour.toString();
+  // late String minute = now.minute.toString();
+
+  late String paddedHour = now.hour.toString().padLeft(2, "0");
+  late String paddedMinute = now.minute.toString().padLeft(2, "0");
 
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
@@ -43,8 +44,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
 
   String displayImageUrl = "assets/default_post_image.svg";
   TextAlign? alignText;
-  late final _hourController = TextEditingController(text: hour);
-  late final _minuteController = TextEditingController(text: minute);
+  late final _hourController = TextEditingController(text: paddedHour);
+  late final _minuteController = TextEditingController(text: paddedMinute);
 
   TextStyle textStyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
@@ -278,7 +279,15 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                     //   },
                     GestureDetector(
                   onTap: () {
-                    navigate();
+                    selectedDate != 'Select date' &&
+                            selectedTime != 'Select time'
+                        ? navigate()
+                        : ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please select Date and Time!'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                   },
                   child: Container(
                     height: 40,
@@ -607,7 +616,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                       ),
                     ),
                     child: Center(
-                      child: SvgPicture.asset("assets/ic_instagram_logo.svg"),
+                      child: Image.asset("assets/ic_instagram_logo.png"),
                     ),
                   ),
                 ),
