@@ -1,5 +1,6 @@
 import 'package:all_social_app/screens/account_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
+import 'package:all_social_app/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +14,15 @@ TextStyle labelText = GoogleFonts.montserrat(
 );
 
 class BottomAppBarExample extends StatefulWidget {
+  final String displayImage;
+  final String imageText;
   final String currentUser;
 
-  const BottomAppBarExample({super.key, required this.currentUser});
+  const BottomAppBarExample(
+      {super.key,
+      required this.currentUser,
+      required this.displayImage,
+      required this.imageText});
 
   @override
   State<BottomAppBarExample> createState() => _BottomAppBarExampleState();
@@ -26,7 +33,11 @@ class _BottomAppBarExampleState extends State<BottomAppBarExample> {
   late PageController _pageController;
   late List<Widget> widgets = [
     HomeWidget(currentUser: widget.currentUser),
-    const Settings(),
+    ScheduleWidget(
+      currentUser: widget.currentUser,
+      displayImage: widget.displayImage,
+      imageText: widget.imageText,
+    ),
     AccountWidget(currentUser: widget.currentUser),
   ];
 

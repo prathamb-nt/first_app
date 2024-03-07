@@ -11,8 +11,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'create_posts/step_1_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String displayImage;
+  final String imageText;
   final String currentUser;
-  const HomeScreen({super.key, required this.currentUser});
+  const HomeScreen(
+      {super.key,
+      required this.currentUser,
+      required this.displayImage,
+      required this.imageText});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       bottomNavigationBar: BottomAppBarExample(
         currentUser: widget.currentUser,
+        displayImage: widget.displayImage,
+        imageText: widget.imageText,
       ),
       body: HomeWidget(
         currentUser: widget.currentUser,

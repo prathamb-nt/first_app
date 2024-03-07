@@ -46,6 +46,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         MaterialPageRoute(
                           builder: (context) => HomeScreen(
                             currentUser: widget.currentUser,
+                            displayImage: '',
+                            imageText: '',
                           ),
                         ),
                       );
@@ -142,6 +144,8 @@ class _NextButtonState extends State<NextButton> {
                 MaterialPageRoute(
                   builder: (context) => HomeScreen(
                     currentUser: widget.currentUser,
+                    displayImage: '',
+                    imageText: '',
                   ),
                 ),
               );

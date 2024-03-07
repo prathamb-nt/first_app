@@ -13,6 +13,9 @@ class ShareScreen extends StatefulWidget {
   late Uint8List postBytes;
   final String currentUser;
 
+  final String displayImage;
+  final String imageText;
+
   ShareScreen({
     super.key,
     required this.selectedDate,
@@ -20,6 +23,8 @@ class ShareScreen extends StatefulWidget {
     required this.selectedPlatform,
     required this.postBytes,
     required this.currentUser,
+    required this.displayImage,
+    required this.imageText,
   });
 
   @override
@@ -40,7 +45,6 @@ class _ShareScreenState extends State<ShareScreen> {
 
   int selectedIndex = 0;
 
-  String displayImageUrl = "assets/default_post_image.svg";
   TextAlign? alignText;
 
   TextStyle textStyle = GoogleFonts.montserrat(
@@ -290,6 +294,8 @@ class _ShareScreenState extends State<ShareScreen> {
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(
                           currentUser: widget.currentUser,
+                          displayImage: widget.displayImage,
+                          imageText: widget.imageText,
                         ),
                       ),
                     );
@@ -299,10 +305,11 @@ class _ShareScreenState extends State<ShareScreen> {
                     height: 40,
                     width: 342,
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(6),
-                        ),
-                        color: Color(0xffED4D86)),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                      color: Color(0xffED4D86),
+                    ),
                     child: Center(
                       child: Text(
                         'Go to home',

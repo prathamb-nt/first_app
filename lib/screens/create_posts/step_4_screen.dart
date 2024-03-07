@@ -11,8 +11,14 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 class CreatePostScreenStep4 extends StatefulWidget {
   Uint8List? postBytes;
   final String currentUser;
+  final String displayImage;
+  final String imageText;
   CreatePostScreenStep4(
-      {super.key, required this.postBytes, required this.currentUser});
+      {super.key,
+      required this.postBytes,
+      required this.currentUser,
+      required this.displayImage,
+      required this.imageText});
 
   @override
   State<CreatePostScreenStep4> createState() => _CreatePostScreenStep4State();
@@ -42,7 +48,6 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
 
   int selectedIndex = 0;
 
-  String displayImageUrl = "assets/default_post_image.svg";
   TextAlign? alignText;
   late final _hourController = TextEditingController(text: paddedHour);
   late final _minuteController = TextEditingController(text: paddedMinute);
@@ -666,6 +671,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
           selectedPlatform: selectedPlatform,
           postBytes: widget.postBytes!,
           currentUser: widget.currentUser,
+          displayImage: widget.displayImage,
+          imageText: widget.imageText,
         ),
       ),
     );

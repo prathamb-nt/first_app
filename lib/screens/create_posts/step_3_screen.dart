@@ -193,6 +193,8 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                         builder: (context) => CreatePostScreenStep4(
                           postBytes: bytes,
                           currentUser: widget.currentUser,
+                          displayImage: widget.displayImage,
+                          imageText: _textController.text,
                         ),
                       ),
                     );
