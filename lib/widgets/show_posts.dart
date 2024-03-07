@@ -61,9 +61,12 @@ class ShowPosts extends StatelessWidget {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 10),
-                              child: Image.memory(
-                                post.post,
-                                fit: BoxFit.fill,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4.0),
+                                child: Image.memory(
+                                  post.post,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),
@@ -71,10 +74,10 @@ class ShowPosts extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(

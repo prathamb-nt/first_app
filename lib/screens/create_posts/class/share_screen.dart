@@ -63,7 +63,6 @@ class _ShareScreenState extends State<ShareScreen> {
   //   super.initState();
   // }
 
-  final GlobalKey _globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -351,7 +350,7 @@ class _ShareScreenState extends State<ShareScreen> {
   void savePost() async {
     final db = DatabaseHelper();
     final int postId = ShareScreen.postIdCounter++;
-    debugPrint("${widget.postBytes}");
+
     await db.savePost(
       Posts(
         userId: currentUserId,

@@ -35,7 +35,7 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
 
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
-  String selectedPlatform = 'Instagram';
+  String selectedPlatform = 'Facebook';
 
   bool isTimeSelectionVisible = false;
 

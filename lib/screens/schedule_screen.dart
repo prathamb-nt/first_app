@@ -57,7 +57,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
             builder:
                 (BuildContext context, AsyncSnapshot<List<Posts>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -208,63 +208,63 @@ class _ShowSchedulePostsState extends State<ShowSchedulePosts> {
                 );
               },
               child: Card(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 110,
-                          width: 110,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4.0),
-                              child: Image.memory(
-                                post.post,
-                                fit: BoxFit.fill,
-                              ),
+                elevation: 12,
+                color: const Color(0xffFFFFFC),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 110,
+                        width: 110,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4.0),
+                            child: Image.memory(
+                              post.post,
+                              fit: BoxFit.fill,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Container(
-                              //   width: 206,
-                              //   child: Text(
-                              //     widget.imageText,
-                              //     softWrap: true,
-                              //     style: GoogleFonts.montserrat(
-                              //       textStyle: textstyle,
-                              //     ),
-                              //   ),
-                              // ),
-                              Text(
-                                post.postDate,
-                                style: textstyle,
-                              ),
-                              Text(
-                                post.postPlatform,
-                                style: textstyle,
-                              ),
-                              Text(
-                                post.postTime,
-                                style: textstyle,
-                              ),
-                            ],
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Container(
+                            //   width: 206,
+                            //   child: Text(
+                            //     widget.imageText,
+                            //     softWrap: true,
+                            //     style: GoogleFonts.montserrat(
+                            //       textStyle: textstyle,
+                            //     ),
+                            //   ),
+                            // ),
+                            Text(
+                              post.postDate,
+                              style: textstyle,
+                            ),
+                            Text(
+                              post.postPlatform,
+                              style: textstyle,
+                            ),
+                            Text(
+                              post.postTime,
+                              style: textstyle,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
