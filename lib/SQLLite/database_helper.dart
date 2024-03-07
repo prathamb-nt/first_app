@@ -115,4 +115,21 @@ class DatabaseHelper {
         .query('posts', where: 'userId = ?', whereArgs: [currentUserId]);
     return maps.map((e) => Posts.fromMap(e)).toList();
   }
+
+  Future<Posts> getPostById(int id, int currentUserId) async {
+    final Database db = await initDB();
+    var result = await db.query('posts',
+        where: 'postId = ? AND userId = ?', whereArgs: [id, currentUserId]);
+    // String editPostId = result.first['postId'].toString();
+    return Posts.fromMap(result.first);
+  }
+
+  Future<int> updatePost(Posts posts) async {
+    final Database db = await initDB();
+
+    return await db.update('posts', posts.toMap(),
+        where: 'postId = ?',
+        whereArgs: [posts.postId],
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
 }

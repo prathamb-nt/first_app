@@ -13,6 +13,9 @@ class ShareScreen extends StatefulWidget {
   late Uint8List postBytes;
   final String currentUser;
 
+  final String displayImage;
+  final String imageText;
+
   ShareScreen({
     super.key,
     required this.selectedDate,
@@ -20,6 +23,8 @@ class ShareScreen extends StatefulWidget {
     required this.selectedPlatform,
     required this.postBytes,
     required this.currentUser,
+    required this.displayImage,
+    required this.imageText,
   });
 
   @override
@@ -40,7 +45,6 @@ class _ShareScreenState extends State<ShareScreen> {
 
   int selectedIndex = 0;
 
-  String displayImageUrl = "assets/default_post_image.svg";
   TextAlign? alignText;
 
   TextStyle textStyle = GoogleFonts.montserrat(
@@ -59,7 +63,6 @@ class _ShareScreenState extends State<ShareScreen> {
   //   super.initState();
   // }
 
-  final GlobalKey _globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,17 +224,20 @@ class _ShareScreenState extends State<ShareScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SvgPicture.asset("assets/ic_download.svg"),
-                              Text(
-                                "Download",
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                    color: Color(0xff1C1C1C),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Text(
+                                  "Download",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Color(0xff1C1C1C),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -253,17 +259,20 @@ class _ShareScreenState extends State<ShareScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SvgPicture.asset("assets/ic_download.svg"),
-                            Text(
-                              "Share",
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                  color: Color(0xff1C1C1C),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "Share",
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Color(0xff1C1C1C),
+                                  ),
                                 ),
                               ),
                             ),
@@ -284,6 +293,8 @@ class _ShareScreenState extends State<ShareScreen> {
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(
                           currentUser: widget.currentUser,
+                          displayImage: widget.displayImage,
+                          imageText: widget.imageText,
                         ),
                       ),
                     );
@@ -293,10 +304,11 @@ class _ShareScreenState extends State<ShareScreen> {
                     height: 40,
                     width: 342,
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(6),
-                        ),
-                        color: Color(0xffED4D86)),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                      color: Color(0xffED4D86),
+                    ),
                     child: Center(
                       child: Text(
                         'Go to home',
@@ -338,7 +350,7 @@ class _ShareScreenState extends State<ShareScreen> {
   void savePost() async {
     final db = DatabaseHelper();
     final int postId = ShareScreen.postIdCounter++;
-    debugPrint("${widget.postBytes}");
+
     await db.savePost(
       Posts(
         userId: currentUserId,
