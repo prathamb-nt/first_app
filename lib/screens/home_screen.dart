@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomAppBarExample(
+      bottomNavigationBar: BottomAppBarWidget(
         currentUser: widget.currentUser,
         displayImage: widget.displayImage,
         imageText: widget.imageText,

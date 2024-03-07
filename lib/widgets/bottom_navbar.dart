@@ -13,22 +13,22 @@ TextStyle labelText = GoogleFonts.montserrat(
   ),
 );
 
-class BottomAppBarExample extends StatefulWidget {
+class BottomAppBarWidget extends StatefulWidget {
   final String displayImage;
   final String imageText;
   final String currentUser;
 
-  const BottomAppBarExample(
+  const BottomAppBarWidget(
       {super.key,
       required this.currentUser,
       required this.displayImage,
       required this.imageText});
 
   @override
-  State<BottomAppBarExample> createState() => _BottomAppBarExampleState();
+  State<BottomAppBarWidget> createState() => _BottomAppBarWidgetState();
 }
 
-class _BottomAppBarExampleState extends State<BottomAppBarExample> {
+class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   int _index = 0;
   late PageController _pageController;
   late List<Widget> widgets = [
