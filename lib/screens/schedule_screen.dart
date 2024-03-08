@@ -107,7 +107,7 @@ class ShowSchedulePosts extends StatefulWidget {
   final String imageText;
   final String currentUser;
 
-  ShowSchedulePosts({
+  const ShowSchedulePosts({
     super.key,
     required this.posts,
     required this.displayImage,
@@ -134,7 +134,7 @@ class _ShowSchedulePostsState extends State<ShowSchedulePosts> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
+          padding: const EdgeInsets.fromLTRB(24, 48, 24, 20),
           child: Text(
             "Schedule List",
             style: GoogleFonts.montserrat(
@@ -153,7 +153,6 @@ class _ShowSchedulePostsState extends State<ShowSchedulePosts> {
               return ListTile(
                 title: GestureDetector(
                   onTap: () {
-                    print(post.postId);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

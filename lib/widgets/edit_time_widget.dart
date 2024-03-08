@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class EditTimeWidget extends StatefulWidget {
   final String postTime;
 
-  const EditTimeWidget({Key? key, required this.postTime}) : super(key: key);
+  const EditTimeWidget({super.key, required this.postTime});
 
   @override
   State<EditTimeWidget> createState() => _EditTimeWidgetState();

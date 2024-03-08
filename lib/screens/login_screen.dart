@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       controller: _emailController,
                       decoration: InputDecoration(
-                        focusColor: Color(0xffED4D86),
+                        focusColor: const Color(0xffED4D86),
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         isDense: true,
                         hintText: 'Enter Your Email',
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        focusColor: Color(0xffED4D86),
+                        focusColor: const Color(0xffED4D86),
                         isDense: true,
                         contentPadding: const EdgeInsetsDirectional.all(10),
                         hintText: 'Enter Your Password',

@@ -17,7 +17,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController(
+      initialPage: 0,
+    );
   }
 
   @override
@@ -41,16 +43,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   padding: const EdgeInsets.fromLTRB(305, 40, 0, 40),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(
-                            currentUser: widget.currentUser,
-                            displayImage: '',
-                            imageText: '',
-                          ),
-                        ),
-                      );
+                      setState(() {
+                        _pageController.jumpToPage(2);
+                      });
                     },
                     child: Text(
                       "Skip",
