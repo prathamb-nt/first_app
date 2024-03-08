@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:all_social_app/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -113,6 +115,7 @@ class DatabaseHelper {
     final Database db = await initDB();
     final List<Map<String, dynamic>> maps = await db
         .query('posts', where: 'userId = ?', whereArgs: [currentUserId]);
+    inspect(maps);
     return maps.map((e) => Posts.fromMap(e)).toList();
   }
 
@@ -121,6 +124,7 @@ class DatabaseHelper {
     var result = await db.query('posts',
         where: 'postId = ? AND userId = ?', whereArgs: [id, currentUserId]);
     // String editPostId = result.first['postId'].toString();
+
     return Posts.fromMap(result.first);
   }
 
