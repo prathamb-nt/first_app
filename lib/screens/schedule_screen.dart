@@ -2,7 +2,6 @@ import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/edit_post_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleWidget extends StatefulWidget {
@@ -39,19 +38,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
-            child: Text(
-              "Schedule List",
-              style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 24,
-                  color: Color(0xff1C1C1C),
-                ),
-              ),
-            ),
-          ),
           FutureBuilder<List<Posts>>(
             future: _postsFuture,
             builder:
@@ -99,59 +85,19 @@ class NoSchedulePosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
-          child: SvgPicture.asset(
-            "assets/no_posts_default_image.svg",
-            height: 342,
-            width: 342,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
-          child: Text(
-            "You don’t have create any posts. Please\ncreate a new post.",
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-                color: Color(0xff1C1C1C),
-              ),
+    return SizedBox(
+      height: 800,
+      child: Center(
+        child: Text(
+          'No Posts Yet!',
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: 40,
-              width: 342,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-                color: Color(0xffED4D86),
-              ),
-              child: Center(
-                child: Text(
-                  'Create Post',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xffFFFFFC),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -161,7 +107,7 @@ class ShowSchedulePosts extends StatefulWidget {
   final String imageText;
   final String currentUser;
 
-  ShowSchedulePosts({
+  const ShowSchedulePosts({
     super.key,
     required this.posts,
     required this.displayImage,
@@ -186,92 +132,108 @@ class _ShowSchedulePostsState extends State<ShowSchedulePosts> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: widget.posts!.map<Widget>(
-        (Posts post) {
-          return ListTile(
-            title: GestureDetector(
-              onTap: () {
-                print(post.postId);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditPost(
-                      currentUser: widget.currentUser,
-                      postTime: post.postTime,
-                      displayImage: post.post,
-                      postDate: post.postDate,
-                      postPlatform: post.postPlatform,
-                      postId: post.postId,
-                    ),
-                  ),
-                );
-              },
-              child: Card(
-                elevation: 12,
-                color: const Color(0xffFFFFFC),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 110,
-                        width: 110,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4.0),
-                            child: Image.memory(
-                              post.post,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Container(
-                            //   width: 206,
-                            //   child: Text(
-                            //     widget.imageText,
-                            //     softWrap: true,
-                            //     style: GoogleFonts.montserrat(
-                            //       textStyle: textstyle,
-                            //     ),
-                            //   ),
-                            // ),
-                            Text(
-                              post.postDate,
-                              style: textstyle,
-                            ),
-                            Text(
-                              post.postPlatform,
-                              style: textstyle,
-                            ),
-                            Text(
-                              post.postTime,
-                              style: textstyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 48, 24, 20),
+          child: Text(
+            "Schedule List",
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 24,
+                color: Color(0xff1C1C1C),
               ),
             ),
-          );
-        },
-      ).toList(),
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widget.posts!.map<Widget>(
+            (Posts post) {
+              return ListTile(
+                title: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditPost(
+                          currentUser: widget.currentUser,
+                          postTime: post.postTime,
+                          displayImage: post.post,
+                          postDate: post.postDate,
+                          postPlatform: post.postPlatform,
+                          postId: post.postId,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 12,
+                    color: const Color(0xffFFFFFC),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 110,
+                            width: 110,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4.0),
+                                child: Image.memory(
+                                  post.post,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Container(
+                                //   width: 206,
+                                //   child: Text(
+                                //     widget.imageText,
+                                //     softWrap: true,
+                                //     style: GoogleFonts.montserrat(
+                                //       textStyle: textstyle,
+                                //     ),
+                                //   ),
+                                // ),
+                                Text(
+                                  post.postDate,
+                                  style: textstyle,
+                                ),
+                                Text(
+                                  post.postPlatform,
+                                  style: textstyle,
+                                ),
+                                Text(
+                                  post.postTime,
+                                  style: textstyle,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ).toList(),
+        ),
+      ],
     );
   }
 }

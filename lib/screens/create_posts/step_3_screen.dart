@@ -293,7 +293,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
           selectedIndex = index;
           alignText = textAlignment[index];
 
-          debugPrint("${alignText}");
+          debugPrint("$alignText");
         });
       },
       child: Padding(

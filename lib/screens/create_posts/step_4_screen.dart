@@ -152,7 +152,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
-                    color: isDateSelected ? Color(0xffFCE6EE) : Colors.white,
+                    color:
+                        isDateSelected ? const Color(0xffFCE6EE) : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -214,7 +215,8 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
                   height: 40,
                   width: 342,
                   decoration: BoxDecoration(
-                    color: isDateSelected ? Colors.white : Color(0xffFCE6EE),
+                    color:
+                        isDateSelected ? Colors.white : const Color(0xffFCE6EE),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isDateSelected
@@ -328,65 +330,63 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
     );
   }
 
-  Container buildDateContainer() {
-    return Container(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
-              child: Text(
-                'Select Date',
-                style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xff1C1C1C),
-                  ),
+  Column buildDateContainer() {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
+            child: Text(
+              'Select Date',
+              style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Color(0xff1C1C1C),
                 ),
               ),
             ),
           ),
-          SizedBox(
-            height: 310,
-            width: 342,
-            child: SfDateRangePicker(
-              allowViewNavigation: false,
-              selectionMode: DateRangePickerSelectionMode.single,
-              enablePastDates: false,
-              headerStyle: DateRangePickerHeaderStyle(
-                textStyle: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Color(0xff353535),
-                  ),
+        ),
+        SizedBox(
+          height: 310,
+          width: 342,
+          child: SfDateRangePicker(
+            allowViewNavigation: false,
+            selectionMode: DateRangePickerSelectionMode.single,
+            enablePastDates: false,
+            headerStyle: DateRangePickerHeaderStyle(
+              textStyle: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24,
+                  color: Color(0xff353535),
                 ),
               ),
-              navigationMode: DateRangePickerNavigationMode.snap,
-              showNavigationArrow: true,
-              monthViewSettings:
-                  const DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
-              todayHighlightColor: const Color(0xffED4D86),
-              selectionColor: const Color(0xffED4D86),
-              selectionShape: DateRangePickerSelectionShape.rectangle,
-              selectionRadius: 4,
-              onSelectionChanged: (dateRangePickerSelectionChangedArgs) {
-                setState(() {
-                  selectedDate = DateFormat.yMMMd().format(
-                      dateRangePickerSelectionChangedArgs.value as DateTime);
-                });
-              },
             ),
+            navigationMode: DateRangePickerNavigationMode.snap,
+            showNavigationArrow: true,
+            monthViewSettings:
+                const DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
+            todayHighlightColor: const Color(0xffED4D86),
+            selectionColor: const Color(0xffED4D86),
+            selectionShape: DateRangePickerSelectionShape.rectangle,
+            selectionRadius: 4,
+            onSelectionChanged: (dateRangePickerSelectionChangedArgs) {
+              setState(() {
+                selectedDate = DateFormat.yMMMd().format(
+                    dateRangePickerSelectionChangedArgs.value as DateTime);
+              });
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Container buildTimeContainer() {
-    return Container(
+  SizedBox buildTimeContainer() {
+    return SizedBox(
       height: 381,
       child: Column(
         children: [
