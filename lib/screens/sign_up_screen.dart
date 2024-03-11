@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:all_social_app/SQLLite/database_helper.dart';
-import 'package:all_social_app/models/users.dart';
+import 'package:all_social_app/screens/intro_screen.dart';
 import 'package:all_social_app/screens/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -241,36 +242,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
-                    if (_nameController.text.isEmpty) {
-                      setState(() {
-                        isIncorrect = !isIncorrect;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Name is Empty!'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    } else if (_emailController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email is Empty!'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    } else if (_passwordController.text.isEmpty) {
-                      setState(() {
-                        isIncorrect = !isIncorrect;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Password is Empty!'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    } else {
-                      SignUp(context);
-                    }
+                    signUp();
+                    // if (_nameController.text.isEmpty) {
+                    //   setState(() {
+                    //     isIncorrect = !isIncorrect;
+                    //   });
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('Name is Empty!'),
+                    //       duration: Duration(seconds: 2),
+                    //     ),
+                    //   );
+                    // } else if (_emailController.text.isEmpty) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('Email is Empty!'),
+                    //       duration: Duration(seconds: 2
+                    //     ),
+                    //   );
+                    // } else if (_passwordController.text.isEmpty) {
+                    //   setState(() {
+                    //     isIncorrect = !isIncorrect;
+                    //   });
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('Password is Empty!'),
+                    //       duration: Duration(seconds: 2),
+                    //     ),
+                    //   );
+                    // } else {
+                    //   SignUp(context);
+                    // }
                   },
                   child: Container(
                     height: 40,
@@ -339,27 +341,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void SignUp(BuildContext context) {
-    debugPrint('pressed');
-    final db = DatabaseHelper();
-    db
-        .signUp(
-      Users(
-        userEmail: _emailController.text,
-        userPassword: _passwordController.text,
-        userName: _nameController.text,
-        userImage: pickedImage!.path,
-      ),
-    )
-        .whenComplete(
-      () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
+  Future signUp() async {
+    final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text, password: _passwordController.text);
+
+    addUserDetails(_nameController.text, pickedImage!.path);
+    if (newUser != null) {
+      String? uId = newUser.user?.uid;
+
+      print(uId);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OnBoardingScreen(
+            currentUser: "1",
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
+  }
+
+  Future addUserDetails(String userName, String profileImage) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'userName': userName,
+      'profileImage': profileImage,
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    });
   }
 }
