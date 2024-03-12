@@ -70,6 +70,32 @@ class _AccountWidgetState extends State<AccountWidget> {
     }
   }
 
+  changeCred({oldEmail, newEmail, oldPassword, newPassword}) async {
+    var cred =
+        EmailAuthProvider.credential(email: oldEmail, password: oldPassword);
+
+    await FirebaseAuth.instance.currentUser
+        ?.reauthenticateWithCredential(cred)
+        .then((value) {
+      FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
+    }).catchError((error) {
+      print(
+        error.toString(),
+      );
+    });
+
+    await FirebaseAuth.instance.currentUser
+        ?.reauthenticateWithCredential(cred)
+        .then((value) {
+      FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
+    }).catchError((error) {
+      print(
+        error.toString(),
+      );
+    });
+    print("updated");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +135,6 @@ class _AccountWidgetState extends State<AccountWidget> {
                             pickedImage = image.path;
                             setState(() {
                               isPicked = true;
-                              debugPrint(pickedImage);
                             });
                           }
                         },
@@ -251,7 +276,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                           updateUser();
                         },
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 66),
+                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 0),
                           child: Container(
                             height: 40,
                             width: 342,
@@ -275,13 +300,45 @@ class _AccountWidgetState extends State<AccountWidget> {
                             ),
                           ),
                         ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Container(
+                            height: 40,
+                            width: 342,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                              color: Color(0xffED4D86),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Logout',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color(0xffFFFFFC),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   ),
                 ),
               );
             } else {
-              return const Center(child: Text('nodata'));
+              return const Center(
+                child: Text('nodata'),
+              );
             }
           }),
     );
@@ -309,6 +366,10 @@ class _AccountWidgetState extends State<AccountWidget> {
     String updatedEmail = _emailController.text;
     String updatedPassword = _passwordController.text;
 
+    // await FirebaseAuth.instance.currentUser?.updateEmail(_emailController.text);
+    // await FirebaseAuth.instance.currentUser
+    //     ?.updatePassword(_passwordController.text);
+
     await docUser.update({
       'userId': FirebaseAuth.instance.currentUser!.uid,
       'userName': _nameController.text,
@@ -316,7 +377,11 @@ class _AccountWidgetState extends State<AccountWidget> {
       'password': _passwordController.text,
       'email': _emailController.text
     });
-
+    await changeCred(
+        oldEmail: email,
+        newEmail: _emailController.text,
+        newPassword: _passwordController.text,
+        oldPassword: password);
     print("updated user");
   }
 }
