@@ -4,6 +4,8 @@ import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:all_social_app/widgets/show_posts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,11 +16,13 @@ class HomeScreen extends StatefulWidget {
   final String displayImage;
   final String imageText;
   final String currentUser;
+  final String? currentDocId;
   const HomeScreen(
       {super.key,
       required this.currentUser,
       required this.displayImage,
-      required this.imageText});
+      required this.imageText,
+      this.currentDocId});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -60,7 +64,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     DatabaseHelper().fetchData();
     _postsFuture = DatabaseHelper().getPosts(currentUserId);
-
+    readUser();
     _postsFuture.then((posts) {
       if (posts.isNotEmpty) {
         setState(() {
@@ -72,31 +76,63 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   late int currentUserId = int.parse(widget.currentUser);
 
-  late String pickedImage = users!.userImage;
   Users? users;
   late String name;
 
   bool isFabVisible = false;
 
   int hours = DateTime.now().hour;
+  late String docId = "docSnapshot.id";
+  Future<UserFire?> readUser() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+
+    final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
+
+    final snapshot = await docUser.get();
+
+    if (snapshot.exists) {
+      return UserFire.fromJson(snapshot.data()!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         SingleChildScrollView(
-          child: FutureBuilder<Users?>(
-            future: DatabaseHelper().getUserById(currentUserId),
-            builder: (BuildContext context, AsyncSnapshot<Users?> snapshot) {
+          child:
+              // FutureBuilder(
+              //     future: readUser(),
+              //     builder: (context, snapshot) {
+              //       if (snapshot.hasData) {
+              //         final user = snapshot.data;
+              //         return Text(user!.userName);
+              //       }
+              //       return const CircularProgressIndicator();
+              //     }),
+              FutureBuilder(
+            future: readUser(),
+            builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Center(child: Text('Error: ${snapshot.error}'));
               } else if (snapshot.hasData) {
-                users = snapshot.data!;
-                name = users!.userName!;
+                final userName = snapshot.data?.userName;
+                final image = snapshot.data?.profileImage;
 
                 return Column(
                   mainAxisSize: MainAxisSize.max,
@@ -108,12 +144,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                         children: [
                           Text(
                             hours >= 1 && hours <= 12
-                                ? 'Good Morning!\n$name'
+                                ? 'Good Morning!\n$userName'
                                 : hours >= 12 && hours <= 16
-                                    ? 'Good Afternoon!\n$name'
+                                    ? 'Good Afternoon!\n$userName'
                                     : hours >= 16 && hours <= 21
-                                        ? 'Good Evening!\n$name'
-                                        : 'Good Night!\n$name',
+                                        ? 'Good Evening!\n$userName'
+                                        : 'Good Night!\n$userName',
                             style: GoogleFonts.montserrat(
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -131,7 +167,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(300.0),
                               child: Image.file(
-                                File(pickedImage),
+                                File(image!),
                                 fit: BoxFit.fill,
                                 height: 100,
                                 width: 100,
@@ -224,7 +260,7 @@ class NoPosts extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
+          padding: const EdgeInsets.fromLTRB(24, 55, 24, 0),
           child: SvgPicture.asset(
             "assets/no_posts_default_image.svg",
             height: 342,

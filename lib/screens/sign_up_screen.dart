@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/intro_screen.dart';
 import 'package:all_social_app/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -242,6 +243,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
+                    // signUp();
+
                     signUp();
                     // if (_nameController.text.isEmpty) {
                     //   setState(() {
@@ -345,10 +348,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text, password: _passwordController.text);
 
-    addUserDetails(_nameController.text, pickedImage!.path);
     if (newUser != null) {
       String? uId = newUser.user?.uid;
-
+      createUser();
       print(uId);
       Navigator.push(
         context,
@@ -361,13 +363,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  Future addUserDetails(String userName, String profileImage) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'userName': userName,
-      'profileImage': profileImage,
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-      'email': _emailController.text,
-      'password': _passwordController.text,
-    });
+  Future createUser() async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc();
+
+    final user = UserFire(
+        userId: FirebaseAuth.instance.currentUser!.uid,
+        userName: _nameController.text,
+        profileImage: pickedImage!.path,
+        password: _passwordController.text,
+        email: _emailController.text);
+    final json = user.toJson();
+    await docUser.set(json);
+    print("created user");
   }
 }

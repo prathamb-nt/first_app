@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,17 +28,17 @@ class _AccountWidgetState extends State<AccountWidget> {
 
   late int currentUserId = int.parse(widget.currentUser);
 
-  late String pickedImage = users!.userImage;
+  late String pickedImage = image;
 
-  late final _emailController = TextEditingController(text: users!.userEmail);
-  late final _passwordController =
-      TextEditingController(text: users!.userPassword);
-  late final _nameController = TextEditingController(text: users!.userName);
+  late final _emailController = TextEditingController(text: email);
+  late final _passwordController = TextEditingController(text: password);
+  late final _nameController = TextEditingController(text: name);
 
   Users? users;
   late String name;
   late String email;
   late String password;
+  late String image;
 
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: TextStyle(
@@ -45,22 +46,71 @@ class _AccountWidgetState extends State<AccountWidget> {
         fontSize: 16,
         color: isIncorrect ? const Color(0xff353535) : Colors.red),
   );
+  late String docId = "docSnapshot.id";
+  Future<UserFire?> readUser() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+
+    final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
+
+    final snapshot = await docUser.get();
+
+    if (snapshot.exists) {
+      return UserFire.fromJson(snapshot.data()!);
+    }
+  }
+
+  changeCred({oldEmail, newEmail, oldPassword, newPassword}) async {
+    var cred =
+        EmailAuthProvider.credential(email: oldEmail, password: oldPassword);
+
+    await FirebaseAuth.instance.currentUser
+        ?.reauthenticateWithCredential(cred)
+        .then((value) {
+      FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
+    }).catchError((error) {
+      print(
+        error.toString(),
+      );
+    });
+
+    await FirebaseAuth.instance.currentUser
+        ?.reauthenticateWithCredential(cred)
+        .then((value) {
+      FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
+    }).catchError((error) {
+      print(
+        error.toString(),
+      );
+    });
+    print("updated");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Users?>(
-          future: DatabaseHelper().getUserById(currentUserId),
-          builder: (BuildContext context, AsyncSnapshot<Users?> snapshot) {
+      body: FutureBuilder(
+          future: readUser(),
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
-              users = snapshot.data!;
-              name = users!.userName!;
-              email = users!.userEmail;
-              password = users!.userPassword;
+              name = snapshot.data!.userName;
+              email = snapshot.data!.email;
+              password = snapshot.data!.password;
+              image = snapshot.data!.profileImage;
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
@@ -82,10 +132,9 @@ class _AccountWidgetState extends State<AccountWidget> {
                           final XFile? image = await picker.pickImage(
                               source: ImageSource.gallery);
                           if (image != null) {
-                            pickedImage = File(image.path) as String;
+                            pickedImage = image.path;
                             setState(() {
                               isPicked = true;
-                              debugPrint(pickedImage);
                             });
                           }
                         },
@@ -227,7 +276,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                           updateUser();
                         },
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 66),
+                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 0),
                           child: Container(
                             height: 40,
                             width: 342,
@@ -251,13 +300,45 @@ class _AccountWidgetState extends State<AccountWidget> {
                             ),
                           ),
                         ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Container(
+                            height: 40,
+                            width: 342,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                              color: Color(0xffED4D86),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Logout',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color(0xffFFFFFC),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   ),
                 ),
               );
             } else {
-              return const Center(child: Text('nodata'));
+              return const Center(
+                child: Text('nodata'),
+              );
             }
           }),
     );
@@ -278,23 +359,29 @@ class _AccountWidgetState extends State<AccountWidget> {
   //     debugPrint('UPDATED');
   //   });
   // }
-  void updateUser() async {
-    final db = DatabaseHelper();
+  Future updateUser() async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
 
     String updatedName = _nameController.text;
     String updatedEmail = _emailController.text;
     String updatedPassword = _passwordController.text;
 
-    await db.updateUser(
-      Users(
-        userId: currentUserId,
-        userName: updatedName,
-        userEmail: updatedEmail,
-        userPassword: updatedPassword,
-        userImage: pickedImage,
-      ),
-    );
+    // await FirebaseAuth.instance.currentUser?.updateEmail(_emailController.text);
+    // await FirebaseAuth.instance.currentUser
+    //     ?.updatePassword(_passwordController.text);
 
-    debugPrint("$currentUserId to value $updatedName");
+    await docUser.update({
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+      'userName': _nameController.text,
+      'profileImage': pickedImage,
+      'password': _passwordController.text,
+      'email': _emailController.text
+    });
+    await changeCred(
+        oldEmail: email,
+        newEmail: _emailController.text,
+        newPassword: _passwordController.text,
+        oldPassword: password);
+    print("updated user");
   }
 }

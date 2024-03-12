@@ -67,3 +67,35 @@ class Posts {
         "postPlatform": postPlatform,
       };
 }
+
+class UserFire {
+  final String userId;
+  final String userName;
+  final String profileImage;
+  final String password;
+  final String email;
+
+  UserFire({
+    required this.userId,
+    required this.userName,
+    required this.profileImage,
+    required this.password,
+    required this.email,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId,
+        'userName': userName,
+        'profileImage': profileImage,
+        'password': password,
+        'email': email,
+      };
+
+  static UserFire fromJson(Map<String, dynamic> json) => UserFire(
+        userId: json['userId'],
+        userName: json['userName'],
+        profileImage: json['profileImage'],
+        password: json['password'],
+        email: json['email'],
+      );
+}
