@@ -12,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class EditPost extends StatefulWidget {
   final String currentUser;
-  final Uint8List displayImage;
+  final String displayImage;
   final String postDate;
   final String postPlatform;
   final String postTime;
@@ -87,7 +87,7 @@ class _EditPostState extends State<EditPost> {
                         height: 342,
                         color: Colors.red,
                       )
-                    : Image.memory(widget.displayImage),
+                    : Text("widget.displayImage"),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
@@ -232,7 +232,7 @@ class _EditPostState extends State<EditPost> {
                 padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
                 child: GestureDetector(
                   onTap: () {
-                    updatePost();
+                    // updatePost();
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
@@ -288,25 +288,25 @@ class _EditPostState extends State<EditPost> {
   //   });
   // }
 
-  updatePost() async {
-    final db = DatabaseHelper();
-    String? updatedDate = widget.updatedDate;
-    String? updatedTime = widget.updatedTime;
-    String? updatedPlatform = widget.updatedPlatform;
+  // updatePost() async {
+  //   final db = DatabaseHelper();
+  //   String? updatedDate = widget.updatedDate;
+  //   String? updatedTime = widget.updatedTime;
+  //   String? updatedPlatform = widget.updatedPlatform;
 
-    await db.updatePost(
-      Posts(
-        userId: currentUserId,
-        post: widget.displayImage,
-        postId: widget.postId,
-        postDate: updatedDate!,
-        postTime: updatedTime!,
-        postPlatform: updatedPlatform!,
-      ),
-    );
+  //   await db.updatePost(
+  //     Posts(
+  //       userId: currentUserId,
+  //       post: pickedImage,
+  //       postId: widget.postId,
+  //       postDate: updatedDate!,
+  //       postTime: updatedTime!,
+  //       postPlatform: updatedPlatform!,
+  //     ),
+  //   );
 
-    debugPrint("${widget.postId}");
-  }
+  //   debugPrint("${widget.postId}");
+  // }
 
   Future<String?> _navigateAndDisplayDate(BuildContext context) async {
     final result = await Navigator.push(
