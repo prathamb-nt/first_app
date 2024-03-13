@@ -1,11 +1,16 @@
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ShareScreen extends StatefulWidget {
   static int postIdCounter = 0;
@@ -56,6 +61,7 @@ class _ShareScreenState extends State<ShareScreen> {
   );
 
   Uint8List? bytes;
+  String? downloadUrl;
 
   // @override
   // void initState() {
@@ -288,16 +294,20 @@ class _ShareScreenState extends State<ShareScreen> {
                 child: GestureDetector(
                   onTap: () {
                     savePost();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(
-                          currentUser: widget.currentUser,
-                          displayImage: widget.displayImage,
-                          imageText: widget.imageText,
-                        ),
-                      ),
-                    );
+
+                    // await uploadImage();
+                    // Save the post and navigate to the HomeScreen or show a success message
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => HomeScreen(
+                    //       currentUser: widget.currentUser,
+                    //       displayImage: widget.displayImage,
+                    //       imageText: widget.imageText,
+                    //     ),
+                    //   ),
+                    // );
                     debugPrint("go to home pushed");
                   },
                   child: Container(
@@ -331,35 +341,134 @@ class _ShareScreenState extends State<ShareScreen> {
     );
   }
 
+  Future<String> uploadImage() async {
+    final int postId = ShareScreen.postIdCounter++;
+
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File imageFile = File('$tempPath/post_$postId.png');
+
+    await imageFile.writeAsBytes(widget.postBytes);
+
+    Reference ref =
+        FirebaseStorage.instance.ref().child("posts").child("$postId.png");
+    UploadTask uploadTask = ref.putFile(imageFile);
+
+    try {
+      await uploadTask;
+      String downloadUrl = await ref.getDownloadURL();
+      return downloadUrl;
+    } on FirebaseException catch (e) {
+      print("Error uploading image: $e");
+      return "";
+    }
+  }
+
+  void savePost() async {
+    String downloadUrl = await uploadImage();
+
+    if (downloadUrl.isEmpty) {
+      print("Failed to upload image");
+      return;
+    }
+
+    final docPost = FirebaseFirestore.instance.collection('posts').doc();
+
+    final post = PostFire(
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      post: downloadUrl,
+      postDate: widget.selectedDate,
+      postTime: widget.selectedTime,
+      postPlatform: widget.currentUser,
+      postId: ShareScreen.postIdCounter,
+    );
+
+    final json = post.toJson();
+    await docPost.set(json);
+    print("created post");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(
+          currentUser: widget.currentUser,
+          displayImage: widget.displayImage,
+          imageText: widget.imageText,
+        ),
+      ),
+    );
+  }
+
   // void savePost() async {
-  //   // Save the post to the database
+  //   final docPost = FirebaseFirestore.instance.collection('posts').doc();
+  //   final int postId = ShareScreen.postIdCounter++;
+
+  //   final post = PostFire(
+  //     userId: FirebaseAuth.instance.currentUser!.uid,
+  //     post: widget.postBytes,
+  //     postDate: widget.selectedDate,
+  //     postTime: widget.selectedTime,
+  //     postPlatform: widget.selectedPlatform,
+  //     postId: postId,
+  //   );
+  //   final json = post.toJson();
+  //   await docPost.set(json);
+  //   print("created post");
+  // }
+
+  // void savePost() async {
   //   final db = DatabaseHelper();
-  //   static int postIdCounter = 0; // Add this line
-  //   final int postId = await db.savePost(
+  //   final int postId = ShareScreen.postIdCounter++;
+
+  //   await db.savePost(
   //     Posts(
   //       userId: currentUserId,
   //       post: widget.postBytes,
   //       postDate: widget.selectedDate,
   //       postTime: widget.selectedTime,
   //       postPlatform: widget.selectedPlatform,
-  //       postId: 1,
+  //       postId: postId,
   //     ),
   //   );
   // }
 
-  void savePost() async {
-    final db = DatabaseHelper();
-    final int postId = ShareScreen.postIdCounter++;
+  // Future uploadImage() async {
+  //   final int postId = ShareScreen.postIdCounter++;
 
-    await db.savePost(
-      Posts(
-        userId: currentUserId,
-        post: widget.postBytes,
-        postDate: widget.selectedDate,
-        postTime: widget.selectedTime,
-        postPlatform: widget.selectedPlatform,
-        postId: postId,
-      ),
-    );
-  }
+  //   Uint8List imageInUnit8List = widget.postBytes;
+  //   final tempDir = await getTemporaryDirectory();
+  //   File file = await File('${tempDir.path}/$postId.png').create();
+  //   file.writeAsBytesSync(imageInUnit8List);
+  //   print('1');
+
+  //   Reference ref = FirebaseStorage.instance.ref().child("images");
+  //   await ref.putFile(file);
+  //   downloadUrl = await ref.getDownloadURL();
+  //   print(downloadUrl);
+  // }
+  // Future<void> uploadImage() async {
+  //   final int postId = ShareScreen.postIdCounter++;
+
+  //   File file = await imageConvert(postId);
+
+  //   Reference ref =
+  //       FirebaseStorage.instance.ref().child("images").child("$postId.png");
+  //   UploadTask uploadTask = ref.putFile(file);
+
+  //   try {
+  //     await uploadTask;
+  //     String downloadUrl = await ref.getDownloadURL();
+  //     print(downloadUrl);
+  //   } on FirebaseException catch (e) {
+  //     print("Error uploading image: $e");
+  //   }
+  // }
+
+  // Future<File> imageConvert(int postId) async {
+  //   Uint8List imageInUnit8List = widget.postBytes;
+  //   final tempDir = await getTemporaryDirectory();
+  //   final file = File('${tempDir.path}/$postId.png');
+  //   await file.writeAsBytes(imageInUnit8List);
+  //   return file;
+  // }
 }
