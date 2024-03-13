@@ -99,3 +99,39 @@ class UserFire {
         email: json['email'],
       );
 }
+
+class PostFire {
+  final String userId;
+  final String post;
+  final String postDate;
+  final String postTime;
+  final String postPlatform;
+  final int postId;
+
+  PostFire({
+    required this.userId,
+    required this.post,
+    required this.postId,
+    required this.postDate,
+    required this.postTime,
+    required this.postPlatform,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'postId': postId,
+        'userId': userId,
+        'post': post,
+        'postDate': postDate,
+        'postTime': postTime,
+        'postPlatform': postPlatform,
+      };
+
+  static PostFire fromJson(Map<String, dynamic> json) => PostFire(
+        postId: json['postId'],
+        userId: json['userId'],
+        post: json['post'],
+        postDate: json['postDate'],
+        postTime: json['postTime'],
+        postPlatform: json['postPlatform'],
+      );
+}

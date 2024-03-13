@@ -138,9 +138,7 @@ class _NextButtonState extends State<NextButton> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomeScreen(
-                    currentUser: widget.currentUser,
-                    displayImage: '',
-                    imageText: '',
+                    currentUser: widget.currentUser!,
                   ),
                 ),
               );

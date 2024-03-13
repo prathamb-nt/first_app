@@ -58,7 +58,7 @@ class _AccountWidgetState extends State<AccountWidget> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
@@ -79,7 +79,7 @@ class _AccountWidgetState extends State<AccountWidget> {
         .then((value) {
       FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
     }).catchError((error) {
-      print(
+      debugPrint(
         error.toString(),
       );
     });
@@ -89,11 +89,11 @@ class _AccountWidgetState extends State<AccountWidget> {
         .then((value) {
       FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
     }).catchError((error) {
-      print(
+      debugPrint(
         error.toString(),
       );
     });
-    print("updated");
+    debugPrint("updated");
   }
 
   @override
@@ -362,10 +362,6 @@ class _AccountWidgetState extends State<AccountWidget> {
   Future updateUser() async {
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
 
-    String updatedName = _nameController.text;
-    String updatedEmail = _emailController.text;
-    String updatedPassword = _passwordController.text;
-
     // await FirebaseAuth.instance.currentUser?.updateEmail(_emailController.text);
     // await FirebaseAuth.instance.currentUser
     //     ?.updatePassword(_passwordController.text);
@@ -382,6 +378,6 @@ class _AccountWidgetState extends State<AccountWidget> {
         newEmail: _emailController.text,
         newPassword: _passwordController.text,
         oldPassword: password);
-    print("updated user");
+    debugPrint("updated user");
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
-import 'package:all_social_app/widgets/show_posts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +13,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'create_posts/step_1_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String displayImage;
-  final String imageText;
-  final String currentUser;
+  final String? displayImage;
+  final String? imageText;
+  final String? currentUser;
   final String? currentDocId;
   const HomeScreen(
       {super.key,
-      required this.currentUser,
-      required this.displayImage,
-      required this.imageText,
+      this.currentUser,
+      this.displayImage,
+      this.imageText,
       this.currentDocId});
 
   @override
@@ -31,14 +31,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       bottomNavigationBar: BottomAppBarWidget(
-        currentUser: widget.currentUser,
-        displayImage: widget.displayImage,
-        imageText: widget.imageText,
+        currentUser: "1",
+        displayImage:
+            "/data/user/0/com.example.all_social_app/cache/b224685d-6deb-42b2-9fb4-afeee7fbd4c5/IMG_20240308_115252.jpg",
+        imageText:
+            "/data/user/0/com.example.all_social_app/cache/b224685d-6deb-42b2-9fb4-afeee7fbd4c5/IMG_20240308_115252.jpg",
       ),
       body: HomeWidget(
-        currentUser: widget.currentUser,
+        currentUser: "1",
       ),
     );
   }
@@ -65,6 +67,13 @@ class _HomeWidgetState extends State<HomeWidget> {
     DatabaseHelper().fetchData();
     _postsFuture = DatabaseHelper().getPosts(currentUserId);
     readUser();
+    fetchPosts().then((posts) {
+      if (posts.isNotEmpty) {
+        setState(() {
+          isFabVisible = true;
+        });
+      }
+    });
     _postsFuture.then((posts) {
       if (posts.isNotEmpty) {
         setState(() {
@@ -80,7 +89,12 @@ class _HomeWidgetState extends State<HomeWidget> {
   late String name;
 
   bool isFabVisible = false;
-
+  TextStyle textstyle = GoogleFonts.montserrat(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+    ),
+  );
   int hours = DateTime.now().hour;
   late String docId = "docSnapshot.id";
   Future<UserFire?> readUser() async {
@@ -103,6 +117,93 @@ class _HomeWidgetState extends State<HomeWidget> {
 
     if (snapshot.exists) {
       return UserFire.fromJson(snapshot.data()!);
+    }
+  }
+
+  Future<List<PostFire>> fetchPosts() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('posts')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return PostFire.fromJson(data);
+    }).toList();
+  }
+
+  Future<Widget> _buildPosts() async {
+    final posts = await fetchPosts();
+    if (posts.isEmpty) {
+      return NoPosts(widget: widget);
+    } else {
+      return Column(
+        children: posts.map((post) {
+          return ListTile(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Container(
+                height: 390,
+                width: 342,
+                color: const Color(0xffFCE6EE),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 322,
+                        width: 322,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4.0),
+                            child: Image.network(
+                              post.post,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Schedule: ${post.postDate}",
+                                  style: textstyle,
+                                ),
+                                Text(
+                                  post.postPlatform,
+                                  style: textstyle,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              post.postTime,
+                              style: textstyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
     }
   }
 
@@ -177,35 +278,52 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ),
                     ),
-                    FutureBuilder<List<Posts>>(
-                      future: _postsFuture,
+                    FutureBuilder(
+                      future: _buildPosts(),
                       builder: (BuildContext context,
-                          AsyncSnapshot<List<Posts>> snapshot) {
+                          AsyncSnapshot<Widget> snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+                              child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
-                            child: Text('Error: ${snapshot.error}'),
-                          );
-                        } else if (snapshot.hasData) {
-                          final List<Posts>? posts = snapshot.data;
-                          if (posts!.isEmpty) {
-                            return NoPosts(widget: widget);
-                          } else {
-                            return ShowPosts(posts: posts);
-                          }
+                              child: Text('Error: ${snapshot.error}'));
                         } else {
-                          return Container(
-                            color: Colors.red,
-                            height: 550,
-                            width: 500,
-                          );
+                          return snapshot.data!;
                         }
                       },
                     ),
+                    // FutureBuilder<List<Posts>>(
+                    //   future: _postsFuture,
+                    //   builder: (BuildContext context,
+                    //       AsyncSnapshot<List<Posts>> snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(),
+                    //       );
+                    //     } else if (snapshot.hasError) {
+                    //       return Center(
+                    //         child: Text('Error: ${snapshot.error}'),
+                    //       );
+                    //     } else if (snapshot.hasData) {
+                    //       final List<Posts>? posts = snapshot.data;
+                    //       if (posts!.isEmpty) {
+                    //         return NoPosts(widget: widget);
+                    //       } else {
+                    //         return
+                    //          ShowPosts(posts: posts);
+                    //       }
+                    //     } else {
+                    //       return Container(
+                    //         color: Colors.red,
+                    //         height: 550,
+                    //         width: 500,
+                    //       );
+                    //     }
+                    //   },
+                    // ),
                   ],
                 );
               } else {
