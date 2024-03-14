@@ -1,5 +1,3 @@
-
-
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +11,6 @@ class OnBoardingScreen extends StatefulWidget {
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
-
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late PageController _pageController;
@@ -31,8 +28,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
     _pageController.dispose();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
