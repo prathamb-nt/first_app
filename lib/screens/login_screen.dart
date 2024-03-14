@@ -32,6 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final db = DatabaseHelper();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(

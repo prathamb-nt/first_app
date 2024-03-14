@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
@@ -350,8 +349,10 @@ class _ShareScreenState extends State<ShareScreen> {
 
     await imageFile.writeAsBytes(widget.postBytes);
 
-    Reference ref =
-        FirebaseStorage.instance.ref().child("posts").child("$postId.png");
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("$postId.png");
     UploadTask uploadTask = ref.putFile(imageFile);
 
     try {
@@ -379,7 +380,7 @@ class _ShareScreenState extends State<ShareScreen> {
       post: downloadUrl,
       postDate: widget.selectedDate,
       postTime: widget.selectedTime,
-      postPlatform: widget.currentUser,
+      postPlatform: widget.selectedPlatform,
       postId: ShareScreen.postIdCounter,
     );
 

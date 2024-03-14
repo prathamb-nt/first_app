@@ -1,11 +1,10 @@
-import 'dart:typed_data';
-
-import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/widgets/edit_date_widget.dart';
 import 'package:all_social_app/widgets/edit_platform_widget.dart';
 import 'package:all_social_app/widgets/edit_time_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,6 +40,7 @@ class EditPost extends StatefulWidget {
 class _EditPostState extends State<EditPost> {
   @override
   void initState() {
+    fetchPosts();
     super.initState();
   }
 
@@ -87,7 +87,7 @@ class _EditPostState extends State<EditPost> {
                         height: 342,
                         color: Colors.red,
                       )
-                    : Text("widget.displayImage"),
+                    : Image.network(widget.displayImage),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
@@ -232,7 +232,14 @@ class _EditPostState extends State<EditPost> {
                 padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
                 child: GestureDetector(
                   onTap: () {
-                    // updatePost();
+                    // debugPrint(widget.postId.toString());
+                    // debugPrint("${FirebaseAuth.instance.currentUser?.uid}");
+                    // debugPrint(widget.displayImage);
+                    // debugPrint(widget.updatedDate!);
+                    // debugPrint("${widget.updatedTime}");
+                    // debugPrint("${widget.updatedPlatform}");
+
+                    fetchPosts();
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
@@ -287,26 +294,78 @@ class _EditPostState extends State<EditPost> {
   //     debugPrint('UPDATED');
   //   });
   // }
+  late String docId = "docSnapshot.id";
+  fetchPosts() async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('postId', isEqualTo: widget.postId)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+    setState(() {});
+    updatePost();
+  }
 
-  // updatePost() async {
-  //   final db = DatabaseHelper();
-  //   String? updatedDate = widget.updatedDate;
-  //   String? updatedTime = widget.updatedTime;
-  //   String? updatedPlatform = widget.updatedPlatform;
+  // Future<List<PostFire>> fetchPosts() async {
+  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //       .collection('posts')
+  //       .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+  //       .where('postId', isEqualTo: widget.postId)
+  //       .get();
 
-  //   await db.updatePost(
-  //     Posts(
-  //       userId: currentUserId,
-  //       post: pickedImage,
-  //       postId: widget.postId,
-  //       postDate: updatedDate!,
-  //       postTime: updatedTime!,
-  //       postPlatform: updatedPlatform!,
-  //     ),
-  //   );
+  //   return querySnapshot.docs.map((doc) {
+  //     final data = doc.data() as Map<String, dynamic>;
+  //     final postFire = PostFire.fromJson(data);
+  //     docId = doc.id; // Set the docId property here
+  //     print("id is $docId");
+  //     return postFire;
+  //   }).toList();
 
-  //   debugPrint("${widget.postId}");
   // }
+
+  updatePost() async {
+    String? updatedDate = widget.updatedDate;
+    String? updatedTime = widget.updatedTime;
+    String? updatedPlatform = widget.updatedPlatform;
+
+    // await FirebaseFirestore.instance
+    //     .collection("posts")
+    //     .where("postId", isEqualTo: widget.postId.toString())
+    //     // .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    //     .get();
+    print(widget.postId);
+    print(FirebaseAuth.instance.currentUser!.uid);
+
+    print(" doc is: $docId");
+    final docPost = FirebaseFirestore.instance.collection('posts').doc(docId);
+
+    await docPost.update({
+      'postDate': updatedDate!,
+      'postTime': updatedTime!,
+      'postPlatform': updatedPlatform!,
+    });
+
+    // final post = PostFire(
+    //   userId: FirebaseAuth.instance.currentUser!.uid,
+    //   post: widget.displayImage,
+    //   postDate: updatedDate!,
+    //   postTime: updatedTime!,
+    //   postPlatform: updatedPlatform!,
+    //   postId: widget.postId,
+    // );
+    //
+    // final json = post.toJson();
+    // await docPost.update(json);
+
+    debugPrint("completed");
+  }
 
   Future<String?> _navigateAndDisplayDate(BuildContext context) async {
     final result = await Navigator.push(

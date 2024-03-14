@@ -78,6 +78,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
               return ListTile(
                 title: GestureDetector(
                   onTap: () {
+                    print(post.postId);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
