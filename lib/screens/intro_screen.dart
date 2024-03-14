@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
