@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class CreatePostScreenStep2 extends StatefulWidget {
-  final String currentUser;
-  const CreatePostScreenStep2({super.key, required this.currentUser});
+  const CreatePostScreenStep2({
+    super.key,
+  });
 
   @override
   State<CreatePostScreenStep2> createState() => _CreatePostScreenStep2State();
@@ -137,7 +138,6 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                     MaterialPageRoute(
                       builder: (context) => CreatePostScreenStep3(
                         displayImage: nextImageUrl,
-                        currentUser: widget.currentUser,
                       ),
                     ),
                   );

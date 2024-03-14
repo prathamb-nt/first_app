@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,7 +15,6 @@ class ShareScreen extends StatefulWidget {
   static int postIdCounter = 0;
   final String selectedDate, selectedTime, selectedPlatform;
   late Uint8List postBytes;
-  final String currentUser;
 
   final String displayImage;
   final String imageText;
@@ -27,7 +25,6 @@ class ShareScreen extends StatefulWidget {
     required this.selectedTime,
     required this.selectedPlatform,
     required this.postBytes,
-    required this.currentUser,
     required this.displayImage,
     required this.imageText,
   });
@@ -42,8 +39,6 @@ class _ShareScreenState extends State<ShareScreen> {
   bool isDateSelected = true;
 
   bool isTimeSelected = false;
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   bool isAMSelected = true;
   bool isInstagramSelected = true;
@@ -350,8 +345,10 @@ class _ShareScreenState extends State<ShareScreen> {
 
     await imageFile.writeAsBytes(widget.postBytes);
 
-    Reference ref =
-        FirebaseStorage.instance.ref().child("posts").child("$postId.png");
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("$postId.png");
     UploadTask uploadTask = ref.putFile(imageFile);
 
     try {
@@ -379,7 +376,7 @@ class _ShareScreenState extends State<ShareScreen> {
       post: downloadUrl,
       postDate: widget.selectedDate,
       postTime: widget.selectedTime,
-      postPlatform: widget.currentUser,
+      postPlatform: widget.selectedPlatform,
       postId: ShareScreen.postIdCounter,
     );
 
@@ -390,11 +387,7 @@ class _ShareScreenState extends State<ShareScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(
-          currentUser: widget.currentUser,
-          displayImage: widget.displayImage,
-          imageText: widget.imageText,
-        ),
+        builder: (context) => HomeScreen(),
       ),
     );
   }

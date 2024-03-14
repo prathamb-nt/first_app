@@ -11,10 +11,8 @@ import 'package:screenshot/screenshot.dart';
 
 class CreatePostScreenStep3 extends StatefulWidget {
   final String displayImage;
-  final String currentUser;
 
-  const CreatePostScreenStep3(
-      {super.key, required this.displayImage, required this.currentUser});
+  const CreatePostScreenStep3({super.key, required this.displayImage});
 
   @override
   _CreatePostScreenStep3State createState() => _CreatePostScreenStep3State();
@@ -192,7 +190,6 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                       MaterialPageRoute(
                         builder: (context) => CreatePostScreenStep4(
                           postBytes: bytes,
-                          currentUser: widget.currentUser,
                           displayImage: widget.displayImage,
                           imageText: _textController.text,
                         ),

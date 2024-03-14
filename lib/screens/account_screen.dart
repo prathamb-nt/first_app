@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:all_social_app/app.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,11 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AccountWidget extends StatefulWidget {
-  final String currentUser;
-
   const AccountWidget({
     super.key,
-    required this.currentUser,
   });
 
   @override
@@ -25,8 +23,6 @@ class _AccountWidgetState extends State<AccountWidget> {
   void initState() {
     super.initState();
   }
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   late String pickedImage = image;
 
@@ -103,7 +99,7 @@ class _AccountWidgetState extends State<AccountWidget> {
           future: readUser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
@@ -304,6 +300,11 @@ class _AccountWidgetState extends State<AccountWidget> {
                       GestureDetector(
                         onTap: () {
                           FirebaseAuth.instance.signOut();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyApp()),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -314,7 +315,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6),
                               ),
-                              color: Color(0xffED4D86),
+                              color: Color(0xffFFFFFC),
                             ),
                             child: Center(
                               child: Text(
@@ -323,7 +324,7 @@ class _AccountWidgetState extends State<AccountWidget> {
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,
-                                    color: Color(0xffFFFFFC),
+                                    color: Color(0xffED4D86),
                                   ),
                                 ),
                               ),
@@ -371,7 +372,7 @@ class _AccountWidgetState extends State<AccountWidget> {
       'userName': _nameController.text,
       'profileImage': pickedImage,
       'password': _passwordController.text,
-      'email': _emailController.text
+      'email': email
     });
     await changeCred(
         oldEmail: email,

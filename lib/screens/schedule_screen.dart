@@ -1,4 +1,3 @@
-import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/edit_post_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,15 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleWidget extends StatefulWidget {
-  final String displayImage;
-  final String imageText;
-  final String currentUser;
-
   const ScheduleWidget({
     super.key,
-    required this.currentUser,
-    required this.displayImage,
-    required this.imageText,
   });
 
   @override
@@ -23,13 +15,10 @@ class ScheduleWidget extends StatefulWidget {
 }
 
 class _ScheduleWidgetState extends State<ScheduleWidget> {
-  late Future<List<Posts>> _postsFuture;
-
   @override
   void initState() {
     super.initState();
-    DatabaseHelper().fetchData();
-    _postsFuture = DatabaseHelper().getPosts(currentUserId);
+
     fetchPosts();
   }
 
@@ -39,7 +28,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
       fontSize: 14,
     ),
   );
-  late int currentUserId = int.parse(widget.currentUser);
 
   Future<List<PostFire>> fetchPosts() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -78,11 +66,11 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
               return ListTile(
                 title: GestureDetector(
                   onTap: () {
+                    print(post.postId);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => EditPost(
-                          currentUser: widget.currentUser,
                           postTime: post.postTime,
                           displayImage: post.post,
                           postDate: post.postDate,
