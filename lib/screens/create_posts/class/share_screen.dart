@@ -15,7 +15,6 @@ class ShareScreen extends StatefulWidget {
   static int postIdCounter = 0;
   final String selectedDate, selectedTime, selectedPlatform;
   late Uint8List postBytes;
-  final String currentUser;
 
   final String displayImage;
   final String imageText;
@@ -26,7 +25,6 @@ class ShareScreen extends StatefulWidget {
     required this.selectedTime,
     required this.selectedPlatform,
     required this.postBytes,
-    required this.currentUser,
     required this.displayImage,
     required this.imageText,
   });
@@ -41,8 +39,6 @@ class _ShareScreenState extends State<ShareScreen> {
   bool isDateSelected = true;
 
   bool isTimeSelected = false;
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   bool isAMSelected = true;
   bool isInstagramSelected = true;
@@ -391,11 +387,7 @@ class _ShareScreenState extends State<ShareScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(
-          currentUser: widget.currentUser,
-          displayImage: widget.displayImage,
-          imageText: widget.imageText,
-        ),
+        builder: (context) => HomeScreen(),
       ),
     );
   }

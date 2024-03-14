@@ -45,9 +45,7 @@ class NoPosts extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreatePostScreenStep1(
-                    currentUser: widget.currentUser,
-                  ),
+                  builder: (context) => CreatePostScreenStep1(),
                 ),
               );
             },

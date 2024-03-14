@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:all_social_app/SQLLite/database_helper.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,16 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'create_posts/step_1_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String? displayImage;
-  final String? imageText;
-  final String? currentUser;
   final String? currentDocId;
-  const HomeScreen(
-      {super.key,
-      this.currentUser,
-      this.displayImage,
-      this.imageText,
-      this.currentDocId});
+  const HomeScreen({super.key, this.currentDocId});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,26 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      bottomNavigationBar: BottomAppBarWidget(
-        currentUser: "1",
-        displayImage:
-            "/data/user/0/com.example.all_social_app/cache/b224685d-6deb-42b2-9fb4-afeee7fbd4c5/IMG_20240308_115252.jpg",
-        imageText:
-            "/data/user/0/com.example.all_social_app/cache/b224685d-6deb-42b2-9fb4-afeee7fbd4c5/IMG_20240308_115252.jpg",
-      ),
-      body: HomeWidget(
-        currentUser: "1",
-      ),
+      bottomNavigationBar: BottomAppBarWidget(),
+      body: HomeWidget(),
     );
   }
 }
 
 class HomeWidget extends StatefulWidget {
-  final String currentUser;
-
   const HomeWidget({
     super.key,
-    required this.currentUser,
   });
 
   @override
@@ -59,13 +38,10 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  late Future<List<Posts>> _postsFuture;
-
   @override
   void initState() {
     super.initState();
-    DatabaseHelper().fetchData();
-    _postsFuture = DatabaseHelper().getPosts(currentUserId);
+
     readUser();
     fetchPosts().then((posts) {
       if (posts.isNotEmpty) {
@@ -74,16 +50,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         });
       }
     });
-    _postsFuture.then((posts) {
-      if (posts.isNotEmpty) {
-        setState(() {
-          isFabVisible = true;
-        });
-      }
-    });
   }
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   Users? users;
   late String name;
@@ -346,9 +313,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreatePostScreenStep1(
-                          currentUser: widget.currentUser,
-                        ),
+                        builder: (context) => CreatePostScreenStep1(),
                       ),
                     );
                   },
@@ -406,9 +371,7 @@ class NoPosts extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreatePostScreenStep1(
-                    currentUser: widget.currentUser,
-                  ),
+                  builder: (context) => CreatePostScreenStep1(),
                 ),
               );
             },

@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditPost extends StatefulWidget {
-  final String currentUser;
   final String displayImage;
   final String postDate;
   final String postPlatform;
@@ -22,7 +21,6 @@ class EditPost extends StatefulWidget {
 
   EditPost({
     super.key,
-    required this.currentUser,
     required this.displayImage,
     required this.postDate,
     required this.postPlatform,
@@ -43,8 +41,6 @@ class _EditPostState extends State<EditPost> {
     fetchPosts();
     super.initState();
   }
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   Users? users;
   late String name;

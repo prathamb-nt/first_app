@@ -1,11 +1,8 @@
-import 'package:all_social_app/SQLLite/database_helper.dart';
-import 'package:all_social_app/models/users.dart';
+import 'package:all_social_app/screens/home_screen.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'intro_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -28,8 +25,6 @@ TextStyle textStyle = GoogleFonts.montserrat(
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoginTrue = false;
-
-  final db = DatabaseHelper();
 
   @override
   void dispose() {
@@ -222,43 +217,9 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const OnBoardingScreen(
-            currentUser: "1",
-          ),
+          builder: (context) => const HomeScreen(),
         ),
       );
-    }
-  }
-
-  login() async {
-    var response = await db.login(
-      Users(
-        userPassword: _passwordController.text,
-        userEmail: _emailController.text,
-        userImage: '',
-      ),
-    );
-    if (response is String) {
-      String currentUser = response;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OnBoardingScreen(
-            currentUser: currentUser,
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid Login!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      setState(() {
-        debugPrint("invalid login");
-        isLoginTrue = true;
-      });
     }
   }
 }

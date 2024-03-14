@@ -10,11 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AccountWidget extends StatefulWidget {
-  final String currentUser;
-
   const AccountWidget({
     super.key,
-    required this.currentUser,
   });
 
   @override
@@ -26,8 +23,6 @@ class _AccountWidgetState extends State<AccountWidget> {
   void initState() {
     super.initState();
   }
-
-  late int currentUserId = int.parse(widget.currentUser);
 
   late String pickedImage = image;
 

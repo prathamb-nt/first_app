@@ -357,15 +357,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text, password: _passwordController.text);
 
     if (newUser != null) {
-      String? uId = newUser.user?.uid;
       createUser();
-      print(uId);
+
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => OnBoardingScreen(
-            currentUser: "1",
-          ),
+          builder: (context) => const OnBoardingScreen(),
         ),
       );
     }
@@ -382,6 +379,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text);
     final json = user.toJson();
     await docUser.set(json);
-    print("created user");
   }
 }

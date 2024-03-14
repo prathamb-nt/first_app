@@ -1,15 +1,19 @@
+import 'dart:html';
+
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  final String currentUser;
-  const OnBoardingScreen({super.key, required this.currentUser});
+  const OnBoardingScreen({
+    super.key,
+  });
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
+
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late PageController _pageController;
@@ -27,6 +31,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
     _pageController.dispose();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +102,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             NextButton(
               pageController: _pageController,
               pageIndex: _pageIndex,
-              currentUser: widget.currentUser,
             ),
             BackButton(
               pageIndex: _pageIndex,
@@ -110,14 +115,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 }
 
 class NextButton extends StatefulWidget {
-  final String currentUser;
   final int pageIndex;
 
   const NextButton({
     super.key,
     required PageController pageController,
     required this.pageIndex,
-    required this.currentUser,
   }) : _pageController = pageController;
 
   final PageController _pageController;
@@ -137,9 +140,7 @@ class _NextButtonState extends State<NextButton> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(
-                    currentUser: widget.currentUser!,
-                  ),
+                  builder: (context) => HomeScreen(),
                 ),
               );
             },

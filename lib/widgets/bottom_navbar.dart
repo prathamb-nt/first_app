@@ -14,15 +14,9 @@ TextStyle labelText = GoogleFonts.montserrat(
 );
 
 class BottomAppBarWidget extends StatefulWidget {
-  final String displayImage;
-  final String imageText;
-  final String currentUser;
-
-  const BottomAppBarWidget(
-      {super.key,
-      required this.currentUser,
-      required this.displayImage,
-      required this.imageText});
+  const BottomAppBarWidget({
+    super.key,
+  });
 
   @override
   State<BottomAppBarWidget> createState() => _BottomAppBarWidgetState();
@@ -32,13 +26,9 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   int _index = 0;
   late PageController _pageController;
   late List<Widget> widgets = [
-    HomeWidget(currentUser: widget.currentUser),
-    ScheduleWidget(
-      currentUser: widget.currentUser,
-      displayImage: widget.displayImage,
-      imageText: widget.imageText,
-    ),
-    AccountWidget(currentUser: widget.currentUser),
+    const HomeWidget(),
+    const ScheduleWidget(),
+    const AccountWidget(),
   ];
 
   @override
@@ -125,7 +115,9 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 97, 205, 255),
-      body: Center(child: Text('Settings')),
+      body: Center(
+        child: Text('Settings'),
+      ),
     );
   }
 }
