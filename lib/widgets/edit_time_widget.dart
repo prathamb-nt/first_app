@@ -164,9 +164,11 @@ class _EditTimeWidgetState extends State<EditTimeWidget> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        isAMSelected = !isAMSelected;
-                        selectedTime =
-                            '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                        if (isAMSelected == false) {
+                          isAMSelected = !isAMSelected;
+                          selectedTime =
+                              '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                        }
                       });
                     },
                     child: Padding(
@@ -204,9 +206,11 @@ class _EditTimeWidgetState extends State<EditTimeWidget> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        isAMSelected = !isAMSelected;
-                        selectedTime =
-                            '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                        if (isAMSelected == true) {
+                          isAMSelected = !isAMSelected;
+                          selectedTime =
+                              '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                        }
                       });
                     },
                     child: Container(

@@ -1,6 +1,7 @@
-import 'package:all_social_app/screens/home_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,13 +26,6 @@ TextStyle textStyle = GoogleFonts.montserrat(
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoginTrue = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,26 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormField(
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
+                    child: CustomTextField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        focusColor: const Color(0xffED4D86),
-                        contentPadding: const EdgeInsetsDirectional.all(10),
-                        isDense: true,
-                        hintText: 'Enter Your Email',
-                        hintStyle: textStyle,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffED4D86),
-                          ),
-                        ),
-                      ),
+                      hintText: 'Enter Email',
+                      obscureText: false,
                     ),
                   ),
                   Padding(
@@ -102,28 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormField(
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        focusColor: const Color(0xffED4D86),
-                        isDense: true,
-                        contentPadding: const EdgeInsetsDirectional.all(10),
-                        hintText: 'Enter Your Password',
-                        hintStyle: textStyle,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffED4D86),
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: CustomTextField(
+                        controller: _passwordController,
+                        hintText: 'Enter Password',
+                        obscureText: true),
                   ),
                 ],
               ),
@@ -139,31 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  signIn();
+                  loginService(
+                      _emailController.text, _passwordController.text, context);
                 },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 90, 0, 95),
-                  child: Container(
-                    height: 40,
-                    width: 342,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                      color: Color(0xffED4D86),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Login',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC),
-                          ),
-                        ),
-                      ),
-                    ),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 90, 0, 95),
+                  child: CustomPrimaryBtn(
+                    label: 'Login',
                   ),
                 ),
               ),
@@ -208,18 +150,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  Future signIn() async {
-    final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text, password: _passwordController.text);
-    if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
-    }
   }
 }

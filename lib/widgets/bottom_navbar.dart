@@ -1,5 +1,5 @@
-import 'package:all_social_app/screens/account_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
+import 'package:all_social_app/screens/profile_screen.dart';
 import 'package:all_social_app/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,7 +28,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   late List<Widget> widgets = [
     const HomeWidget(),
     const ScheduleWidget(),
-    const AccountWidget(),
+    const ProfileWidget(),
   ];
 
   @override

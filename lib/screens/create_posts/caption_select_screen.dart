@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:all_social_app/screens/create_posts/step_4_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/screens/create_posts/post_schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,16 +10,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:screenshot/screenshot.dart';
 
-class CreatePostScreenStep3 extends StatefulWidget {
+class CaptionSelectScreen extends StatefulWidget {
   final String displayImage;
 
-  const CreatePostScreenStep3({super.key, required this.displayImage});
+  const CaptionSelectScreen({super.key, required this.displayImage});
 
   @override
-  _CreatePostScreenStep3State createState() => _CreatePostScreenStep3State();
+  _CaptionSelectScreenState createState() => _CaptionSelectScreenState();
 }
 
-class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
+class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
   int selectedIndex = 0;
 
   TextAlign? alignText;
@@ -146,7 +147,7 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
+                          padding: const EdgeInsets.only(bottom: 14.0),
                           child: Text(
                             'Select text alignment',
                             style: GoogleFonts.montserrat(
@@ -171,53 +172,31 @@ class _CreatePostScreenStep3State extends State<CreatePostScreenStep3> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: GestureDetector(
-                  onTap: () async {
-                    final controller = ScreenshotController();
-                    final bytes = await controller.captureFromWidget(
-                      Material(
-                        child: buildPostImage(),
-                      ),
-                    );
-
-                    setState(() => this.bytes = bytes);
-                    saveImage(bytes);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreatePostScreenStep4(
-                          postBytes: bytes,
-                          displayImage: widget.displayImage,
-                          imageText: _textController.text,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 342,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                      color: Color(0xffED4D86),
+              GestureDetector(
+                onTap: () async {
+                  final controller = ScreenshotController();
+                  final bytes = await controller.captureFromWidget(
+                    Material(
+                      child: buildPostImage(),
                     ),
-                    child: Center(
-                      child: Text(
-                        'Next',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC),
-                          ),
-                        ),
+                  );
+
+                  setState(() => this.bytes = bytes);
+                  saveImage(bytes);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostScheduleScreen(
+                        postBytes: bytes,
+                        displayImage: widget.displayImage,
+                        imageText: _textController.text,
                       ),
                     ),
-                  ),
+                  );
+                },
+                child: const CustomPrimaryBtn(
+                  label: 'Next',
                 ),
               ),
             ],

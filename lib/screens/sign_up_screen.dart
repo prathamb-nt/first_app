@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:all_social_app/models/users.dart';
-import 'package:all_social_app/screens/intro_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/screens/login_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,22 +26,15 @@ bool passwordVisible = true;
 final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 final _nameController = TextEditingController();
-TextStyle textstyle = GoogleFonts.montserrat(
-  textStyle: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: 16,
-      color: isIncorrect ? const Color(0xff353535) : Colors.red),
+
+TextStyle textStyle = GoogleFonts.montserrat(
+  textStyle: const TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+  ),
 );
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,31 +114,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormField(
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Name is required";
-                        }
-                        return null;
-                      },
+                    child: CustomTextField(
+                      hintText: 'Enter Name',
+                      obscureText: false,
                       controller: _nameController,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsetsDirectional.all(10),
-                        isDense: true,
-                        hintText: 'Enter Your Name',
-                        hintStyle: textstyle,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffED4D86),
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                   Padding(
@@ -162,31 +133,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormField(
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Email is required";
-                        }
-                        return null;
-                      },
+                    child: CustomTextField(
+                      obscureText: false,
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsetsDirectional.all(10),
-                        isDense: true,
-                        hintText: 'Enter Your Email',
-                        hintStyle: textstyle,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffED4D86),
-                          ),
-                        ),
-                      ),
+                      hintText: 'Enter Email',
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ),
                   Padding(
@@ -202,47 +153,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     height: 40,
-                    child: TextFormField(
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Password is required";
-                        }
-                        return null;
-                      },
-                      obscureText: passwordVisible,
+                    child: CustomPasswordTextField(
                       controller: _passwordController,
-                      decoration: InputDecoration(
-                        suffixIconColor: passwordVisible
-                            ? Colors.grey
-                            : const Color(0xffED4D86),
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () {
-                            setState(
-                              () {
-                                passwordVisible = !passwordVisible;
-                              },
-                            );
-                          },
-                        ),
-                        isDense: true,
-                        contentPadding: const EdgeInsetsDirectional.all(10),
-                        hintText: 'Enter Your Password',
-                        hintStyle: textstyle,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffED4D86),
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -251,61 +163,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
-                    // signUp();
-
-                    signUp();
-                    // if (_nameController.text.isEmpty) {
-                    //   setState(() {
-                    //     isIncorrect = !isIncorrect;
-                    //   });
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Name is Empty!'),
-                    //       duration: Duration(seconds: 2),
-                    //     ),
-                    //   );
-                    // } else if (_emailController.text.isEmpty) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Email is Empty!'),
-                    //       duration: Duration(seconds: 2
-                    //     ),
-                    //   );
-                    // } else if (_passwordController.text.isEmpty) {
-                    //   setState(() {
-                    //     isIncorrect = !isIncorrect;
-                    //   });
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Password is Empty!'),
-                    //       duration: Duration(seconds: 2),
-                    //     ),
-                    //   );
-                    // } else {
-                    //   SignUp(context);
-                    // }
+                    signupService(
+                        _emailController.text,
+                        _passwordController.text,
+                        _nameController.text,
+                        context);
                   },
-                  child: Container(
-                    height: 40,
-                    width: 342,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                      color: Color(0xffED4D86),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Sign Up',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC),
-                          ),
-                        ),
-                      ),
-                    ),
+                  child: const CustomPrimaryBtn(
+                    label: 'Signup',
                   ),
                 ),
               ),
@@ -350,34 +215,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
-  }
-
-  Future signUp() async {
-    final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text, password: _passwordController.text);
-
-    if (newUser != null) {
-      createUser();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OnBoardingScreen(),
-        ),
-      );
-    }
-  }
-
-  Future createUser() async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-
-    final user = UserFire(
-        userId: FirebaseAuth.instance.currentUser!.uid,
-        userName: _nameController.text,
-        profileImage: pickedImage!.path,
-        password: _passwordController.text,
-        email: _emailController.text);
-    final json = user.toJson();
-    await docUser.set(json);
   }
 }

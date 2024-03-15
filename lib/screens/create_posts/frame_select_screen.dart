@@ -1,19 +1,20 @@
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/screens/create_posts/class/frame_class.dart';
-import 'package:all_social_app/screens/create_posts/step_2_screen.dart';
+import 'package:all_social_app/screens/create_posts/image_select_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class CreatePostScreenStep1 extends StatefulWidget {
-  const CreatePostScreenStep1({
+class FrameSelectScreen extends StatefulWidget {
+  const FrameSelectScreen({
     super.key,
   });
 
   @override
-  State<CreatePostScreenStep1> createState() => _CreatePostScreenStep1State();
+  State<FrameSelectScreen> createState() => _FrameSelectScreenState();
 }
 
-class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
+class _FrameSelectScreenState extends State<FrameSelectScreen> {
   late PageController _pageController = PageController(viewportFraction: 1.1);
   int _pageIndex = 0;
   @override
@@ -157,31 +158,12 @@ class _CreatePostScreenStep1State extends State<CreatePostScreenStep1> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CreatePostScreenStep2(),
+                      builder: (context) => const ImageSelectScreen(),
                     ),
                   );
                 },
-                child: Container(
-                  height: 40,
-                  width: 342,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6),
-                    ),
-                    color: Color(0xffED4D86),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Next',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Color(0xffFFFFFC),
-                        ),
-                      ),
-                    ),
-                  ),
+                child: const CustomPrimaryBtn(
+                  label: 'Next',
                 ),
               ),
             ),
