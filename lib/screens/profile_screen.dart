@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:all_social_app/app.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,16 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AccountWidget extends StatefulWidget {
-  const AccountWidget({
+class ProfileWidget extends StatefulWidget {
+  const ProfileWidget({
     super.key,
   });
 
   @override
-  State<AccountWidget> createState() => _AccountWidgetState();
+  State<ProfileWidget> createState() => _ProfileWidgetState();
 }
 
-class _AccountWidgetState extends State<AccountWidget> {
+class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   void initState() {
     super.initState();
@@ -175,25 +177,10 @@ class _AccountWidgetState extends State<AccountWidget> {
                           ),
                           SizedBox(
                             height: 40,
-                            child: TextFormField(
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Name is required";
-                                }
-                                return null;
-                              },
+                            child: CustomTextField(
+                              obscureText: false,
                               controller: _nameController,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsetsDirectional.all(10),
-                                isDense: true,
-                                labelText: 'Enter Your Name',
-                                labelStyle: textstyle,
-                                border: const OutlineInputBorder(),
-                              ),
+                              keyboardType: TextInputType.name,
                             ),
                           ),
                           Padding(
@@ -209,60 +196,10 @@ class _AccountWidgetState extends State<AccountWidget> {
                           ),
                           SizedBox(
                             height: 40,
-                            child: TextFormField(
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Email is required";
-                                }
-                                return null;
-                              },
+                            child: CustomTextField(
                               controller: _emailController,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsetsDirectional.all(10),
-                                isDense: true,
-                                labelText: 'Enter Your Email',
-                                labelStyle: textstyle,
-                                border: const OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
-                            child: Text(
-                              "Password",
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: TextFormField(
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Password is required";
-                                }
-                                return null;
-                              },
-                              controller: _passwordController,
-                              decoration: InputDecoration(
-                                alignLabelWithHint: false,
-                                isDense: true,
-                                contentPadding:
-                                    const EdgeInsetsDirectional.all(10),
-                                labelText: 'Enter Your Password',
-                                labelStyle: textstyle,
-                                border: const OutlineInputBorder(),
-                              ),
+                              obscureText: false,
+                              keyboardType: TextInputType.emailAddress,
                             ),
                           ),
                         ],
@@ -271,29 +208,10 @@ class _AccountWidgetState extends State<AccountWidget> {
                         onTap: () {
                           updateUser();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 46, 0, 0),
-                          child: Container(
-                            height: 40,
-                            width: 342,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                              color: Color(0xffED4D86),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Update',
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    color: Color(0xffFFFFFC),
-                                  ),
-                                ),
-                              ),
-                            ),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
+                          child: CustomPrimaryBtn(
+                            label: 'Update',
                           ),
                         ),
                       ),
@@ -303,32 +221,14 @@ class _AccountWidgetState extends State<AccountWidget> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MyApp()),
+                              builder: (context) => const MyApp(),
+                            ),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Container(
-                            height: 40,
-                            width: 342,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                              color: Color(0xffFFFFFC),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Logout',
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    color: Color(0xffED4D86),
-                                  ),
-                                ),
-                              ),
-                            ),
+                        child: const Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: CustomSecondaryBtn(
+                            label: 'Logout',
                           ),
                         ),
                       )

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -305,27 +306,8 @@ class _ShareScreenState extends State<ShareScreen> {
                     // );
                     debugPrint("go to home pushed");
                   },
-                  child: Container(
-                    height: 40,
-                    width: 342,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                      color: Color(0xffED4D86),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Go to home',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC),
-                          ),
-                        ),
-                      ),
-                    ),
+                  child: const CustomPrimaryBtn(
+                    label: 'Go to home',
                   ),
                 ),
               )
@@ -387,7 +369,7 @@ class _ShareScreenState extends State<ShareScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => const HomeScreen(),
       ),
     );
   }

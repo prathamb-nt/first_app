@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:all_social_app/screens/create_posts/class/share_screen.dart';
+import 'package:all_social_app/screens/create_posts/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,22 +8,22 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class CreatePostScreenStep4 extends StatefulWidget {
+class PostScheduleScreen extends StatefulWidget {
   Uint8List? postBytes;
 
   final String displayImage;
   final String imageText;
-  CreatePostScreenStep4(
+  PostScheduleScreen(
       {super.key,
       required this.postBytes,
       required this.displayImage,
       required this.imageText});
 
   @override
-  State<CreatePostScreenStep4> createState() => _CreatePostScreenStep4State();
+  State<PostScheduleScreen> createState() => _PostScheduleScreenState();
 }
 
-class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
+class _PostScheduleScreenState extends State<PostScheduleScreen> {
   DateTime now = DateTime.now();
 
   // late String hour = now.hour.toString();
@@ -34,13 +34,11 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
 
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
-  String selectedPlatform = 'Facebook';
+  String selectedPlatform = 'Instagram';
 
   bool isTimeSelectionVisible = false;
 
   bool isDateSelected = true;
-
-  bool isTimeSelected = false;
 
   bool isAMSelected = true;
   bool isInstagramSelected = true;
@@ -503,9 +501,11 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    isAMSelected = !isAMSelected;
-                    selectedTime =
-                        '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                    if (isAMSelected == false) {
+                      isAMSelected = !isAMSelected;
+                      selectedTime =
+                          '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                    }
                   });
                 },
                 child: Padding(
@@ -542,9 +542,11 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    isAMSelected = !isAMSelected;
-                    selectedTime =
-                        '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                    if (isAMSelected == true) {
+                      isAMSelected = !isAMSelected;
+                      selectedTime =
+                          '${_hourController.text} : ${_minuteController.text} ${isAMSelected ? 'AM' : 'PM'}';
+                    }
                   });
                 },
                 child: Container(
@@ -598,8 +600,10 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    isInstagramSelected = !isInstagramSelected;
-                    selectedPlatform = 'Instagram';
+                    if (isInstagramSelected == true) {
+                      isInstagramSelected = !isInstagramSelected;
+                      selectedPlatform = 'Instagram';
+                    }
                   });
                 },
                 child: Padding(
@@ -628,8 +632,10 @@ class _CreatePostScreenStep4State extends State<CreatePostScreenStep4> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    isInstagramSelected = !isInstagramSelected;
-                    selectedPlatform = 'Facebook';
+                    if (isInstagramSelected == false) {
+                      isInstagramSelected = !isInstagramSelected;
+                      selectedPlatform = 'Facebook';
+                    }
                   });
                 },
                 child: Container(

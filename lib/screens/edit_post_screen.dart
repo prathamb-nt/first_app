@@ -1,3 +1,4 @@
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/widgets/edit_date_widget.dart';
@@ -36,12 +37,6 @@ class EditPost extends StatefulWidget {
 }
 
 class _EditPostState extends State<EditPost> {
-  @override
-  void initState() {
-    fetchPosts();
-    super.initState();
-  }
-
   Users? users;
   late String name;
   late String email;
@@ -245,29 +240,11 @@ class _EditPostState extends State<EditPost> {
                         ),
                       );
                   },
-                  child: Container(
-                    height: 40,
-                    width: 342,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(6),
-                        ),
-                        color: Color(0xffED4D86)),
-                    child: Center(
-                      child: Text(
-                        'Save',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xffFFFFFC),
-                          ),
-                        ),
-                      ),
-                    ),
+                  child: const CustomPrimaryBtn(
+                    label: 'Save',
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

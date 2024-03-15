@@ -1,18 +1,19 @@
-import 'package:all_social_app/screens/create_posts/step_3_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/screens/create_posts/caption_select_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class CreatePostScreenStep2 extends StatefulWidget {
-  const CreatePostScreenStep2({
+class ImageSelectScreen extends StatefulWidget {
+  const ImageSelectScreen({
     super.key,
   });
 
   @override
-  State<CreatePostScreenStep2> createState() => _CreatePostScreenStep2State();
+  State<ImageSelectScreen> createState() => _ImageSelectScreenState();
 }
 
-class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
+class _ImageSelectScreenState extends State<ImageSelectScreen> {
   int selectedIndex = 0;
 
   late List<ListItem<String>> list;
@@ -99,17 +100,15 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
             SizedBox(
               height: 342,
               width: 342,
-              child: Container(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 342,
-                      width: 342,
-                      child: Image.asset(displayImageUrl),
-                    ),
-                    const Spacer()
-                  ],
-                ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 342,
+                    width: 342,
+                    child: Image.asset(displayImageUrl),
+                  ),
+                  const Spacer()
+                ],
               ),
             ),
             Padding(
@@ -136,33 +135,14 @@ class _CreatePostScreenStep2State extends State<CreatePostScreenStep2> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CreatePostScreenStep3(
+                      builder: (context) => CaptionSelectScreen(
                         displayImage: nextImageUrl,
                       ),
                     ),
                   );
                 },
-                child: Container(
-                  height: 40,
-                  width: 342,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6),
-                    ),
-                    color: Color(0xffED4D86),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Next',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Color(0xffFFFFFC),
-                        ),
-                      ),
-                    ),
-                  ),
+                child: const CustomPrimaryBtn(
+                  label: 'Next',
                 ),
               ),
             ),

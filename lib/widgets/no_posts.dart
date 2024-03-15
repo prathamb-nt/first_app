@@ -1,4 +1,5 @@
-import 'package:all_social_app/screens/create_posts/step_1_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +18,7 @@ class NoPosts extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 55, 0, 0),
+          padding: const EdgeInsets.fromLTRB(24, 55, 24, 0),
           child: SvgPicture.asset(
             "assets/no_posts_default_image.svg",
             height: 342,
@@ -45,31 +46,12 @@ class NoPosts extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreatePostScreenStep1(),
+                  builder: (context) => const FrameSelectScreen(),
                 ),
               );
             },
-            child: Container(
-              height: 40,
-              width: 342,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-                color: Color(0xffED4D86),
-              ),
-              child: Center(
-                child: Text(
-                  'Create Post',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xffFFFFFC),
-                    ),
-                  ),
-                ),
-              ),
+            child: const CustomPrimaryBtn(
+              label: 'Create Post',
             ),
           ),
         ),
