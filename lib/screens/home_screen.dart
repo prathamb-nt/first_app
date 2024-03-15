@@ -113,89 +113,90 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder(
-          future: readUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            } else if (snapshot.hasData) {
-              final userName = snapshot.data?.userName;
-              final image = snapshot.data?.profileImage;
+        SingleChildScrollView(
+          child: FutureBuilder(
+            future: readUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else if (snapshot.hasData) {
+                final userName = snapshot.data?.userName;
+                final image = snapshot.data?.profileImage;
 
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          hours >= 1 && hours <= 12
-                              ? 'Good Morning!\n$userName'
-                              : hours >= 12 && hours <= 16
-                                  ? 'Good Afternoon!\n$userName'
-                                  : hours >= 16 && hours <= 21
-                                      ? 'Good Evening!\n$userName'
-                                      : 'Good Night!\n$userName',
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 24,
-                              color: Color(0xff1C1C1C),
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            hours >= 1 && hours <= 12
+                                ? 'Good Morning!\n$userName'
+                                : hours >= 12 && hours <= 16
+                                    ? 'Good Afternoon!\n$userName'
+                                    : hours >= 16 && hours <= 21
+                                        ? 'Good Evening!\n$userName'
+                                        : 'Good Night!\n$userName',
+                            style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 24,
+                                color: Color(0xff1C1C1C),
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          height: 46,
-                          width: 46,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(300.0),
-                            child: Image.file(
-                              File(image!),
-                              fit: BoxFit.fill,
-                              height: 100,
-                              width: 100,
+                          Container(
+                            height: 46,
+                            width: 46,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(300.0),
+                              child: Image.file(
+                                File(image!),
+                                fit: BoxFit.fill,
+                                height: 100,
+                                width: 100,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  FutureBuilder(
-                    future: _buildPosts(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: Text(''),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else {
-                        return snapshot.data!;
-                      }
-                    },
-                  ),
-                ],
-              );
-            } else {
-              return const Center(
-                child: Text('no data'),
-              );
-            }
-          },
+                    FutureBuilder(
+                      future: _buildPosts(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<Widget> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text('');
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        } else {
+                          return snapshot.data!;
+                        }
+                      },
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: Text('no data'),
+                );
+              }
+            },
+          ),
         ),
         Positioned(
           bottom: 6,
@@ -220,7 +221,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               : Container(
                   color: Colors.transparent,
                 ),
-        )
+        ),
       ],
     );
   }

@@ -319,7 +319,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
