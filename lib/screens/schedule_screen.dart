@@ -24,14 +24,30 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
-      fontSize: 14,
+      fontSize: 16,
     ),
   );
 
   Future<List<PostFire>> fetchPosts() async {
+    late String docId = "docSnapshot.id";
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
         .collection('posts')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
     return querySnapshot.docs.map((doc) {
@@ -52,21 +68,23 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _buildPosts(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else {
-          return snapshot.data!;
-        }
-      },
+    return Center(
+      child: FutureBuilder(
+        future: _buildPosts(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return snapshot.data!;
+          }
+        },
+      ),
     );
   }
 }

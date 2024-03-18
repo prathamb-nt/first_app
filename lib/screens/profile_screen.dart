@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:all_social_app/app.dart';
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
@@ -142,8 +140,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(300.0),
-                            child: Image.file(
-                              File(pickedImage),
+                            child: Image.network(
+                              pickedImage,
                               fit: BoxFit.fill,
                               height: 100,
                               width: 100,

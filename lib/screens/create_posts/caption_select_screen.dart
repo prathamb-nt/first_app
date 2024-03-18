@@ -12,8 +12,10 @@ import 'package:screenshot/screenshot.dart';
 
 class CaptionSelectScreen extends StatefulWidget {
   final String displayImage;
+  final Widget? frame;
 
-  const CaptionSelectScreen({super.key, required this.displayImage});
+  const CaptionSelectScreen(
+      {super.key, required this.displayImage, this.frame});
 
   @override
   _CaptionSelectScreenState createState() => _CaptionSelectScreenState();
@@ -217,7 +219,19 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
             width: 342,
             child: Stack(
               children: [
-                Image.asset(widget.displayImage),
+                Container(
+                  child: widget.frame,
+                ),
+                Center(
+                  child: Container(
+                    height: 322,
+                    width: 322,
+                    child: Image.asset(
+                      widget.displayImage,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
                 Center(
                   child: SizedBox(
                     height: 220,

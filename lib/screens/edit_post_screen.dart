@@ -267,12 +267,12 @@ class _EditPostState extends State<EditPost> {
   //     debugPrint('UPDATED');
   //   });
   // }
-  late String docId = "docSnapshot.id";
+  late String docId = "userId";
+  late String postDocId = "docSnapshot.id";
   fetchPosts() async {
     await FirebaseFirestore.instance
-        .collection('posts')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .where('postId', isEqualTo: widget.postId)
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then(
       (querySnapshot) {
@@ -280,9 +280,24 @@ class _EditPostState extends State<EditPost> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => debugPrint("Error completing: $e"),
+      onError: (e) => print("Error completing: $e"),
     );
     setState(() {});
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
+        .collection('posts')
+        .where('postId', isEqualTo: widget.postId)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          postDocId = docSnapshot.id;
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+
     updatePost();
   }
 
@@ -316,26 +331,19 @@ class _EditPostState extends State<EditPost> {
     print(widget.postId);
     print(FirebaseAuth.instance.currentUser!.uid);
 
-    print(" doc is: $docId");
-    final docPost = FirebaseFirestore.instance.collection('posts').doc(docId);
+    print("post doc is: $postDocId");
+    print("user doc is: $docId");
+    final docPost = FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
+        .collection('posts')
+        .doc(postDocId);
 
     await docPost.update({
       'postDate': updatedDate!,
       'postTime': updatedTime!,
       'postPlatform': updatedPlatform!,
     });
-
-    // final post = PostFire(
-    //   userId: FirebaseAuth.instance.currentUser!.uid,
-    //   post: widget.displayImage,
-    //   postDate: updatedDate!,
-    //   postTime: updatedTime!,
-    //   postPlatform: updatedPlatform!,
-    //   postId: widget.postId,
-    // );
-    //
-    // final json = post.toJson();
-    // await docPost.update(json);
 
     debugPrint("completed");
   }

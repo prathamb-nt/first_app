@@ -54,17 +54,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () async {
-                  final ImagePicker picker = ImagePicker();
-                  final XFile? image =
-                      await picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    pickedImage = File(image.path);
-                    setState(() {
-                      isPicked = true;
-                      debugPrint("$pickedImage");
-                    });
-                  }
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 200,
+                        width: 400,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                'Choose photo from',
+                                style: textStyle,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  final ImagePicker picker = ImagePicker();
+                                  final XFile? image = await picker.pickImage(
+                                      source: ImageSource.gallery);
+                                  if (image != null) {
+                                    pickedImage = File(image.path);
+                                    setState(() {
+                                      isPicked = true;
+                                      debugPrint("$pickedImage");
+                                    });
+                                  }
+                                },
+                                child: const CustomPrimaryBtn(
+                                  label: 'Gallery',
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  final ImagePicker picker = ImagePicker();
+                                  final XFile? image = await picker.pickImage(
+                                      source: ImageSource.camera);
+                                  if (image != null) {
+                                    pickedImage = File(image.path);
+                                    setState(() {
+                                      isPicked = true;
+                                      debugPrint("$pickedImage");
+                                    });
+                                  }
+                                },
+                                child: const CustomSecondaryBtn(
+                                  label: 'Camera',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -123,7 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
                     child: Text(
-                      "Email",
+                      'Email',
                       style: GoogleFonts.montserrat(
                         textStyle: const TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16),
@@ -143,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
                     child: Text(
-                      "Password",
+                      'Password',
                       style: GoogleFonts.montserrat(
                         textStyle: const TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16),
@@ -163,6 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
+                    uploadImage();
                     signupService(
                         _emailController.text,
                         _passwordController.text,

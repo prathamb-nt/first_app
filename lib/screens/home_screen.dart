@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
@@ -44,19 +42,13 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
 
     readUser();
-    fetchPosts().then((posts) {
-      if (posts.isNotEmpty) {
-        setState(() {
-          isFabVisible = true;
-        });
-      }
-    });
+    fetchPosts();
   }
 
   Users? users;
   late String name;
 
-  bool isFabVisible = false;
+  bool isFabVisible = true;
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
@@ -90,8 +82,9 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Future<List<PostFire>> fetchPosts() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
         .collection('posts')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
     return querySnapshot.docs.map((doc) {
@@ -118,9 +111,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             future: readUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Text('waitigs');
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -161,8 +152,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(300.0),
-                              child: Image.file(
-                                File(image!),
+                              child: Image.network(
+                                image!,
                                 fit: BoxFit.fill,
                                 height: 100,
                                 width: 100,
@@ -172,21 +163,23 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ),
                     ),
-                    FutureBuilder(
-                      future: _buildPosts(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<Widget> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text('');
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text('Error: ${snapshot.error}'),
-                          );
-                        } else {
-                          return snapshot.data!;
-                        }
-                      },
+                    Center(
+                      child: FutureBuilder(
+                        future: _buildPosts(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          } else {
+                            return snapshot.data!;
+                          }
+                        },
+                      ),
                     ),
                   ],
                 );
@@ -201,7 +194,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         Positioned(
           bottom: 6,
           right: 24,
-          child: isFabVisible == true
+          child: isFabVisible == false
               ? FloatingActionButton(
                   heroTag: null,
                   backgroundColor: const Color(0xffED4D86),
@@ -220,6 +213,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 )
               : Container(
                   color: Colors.transparent,
+                  height: 50,
+                  width: 50,
                 ),
         ),
       ],

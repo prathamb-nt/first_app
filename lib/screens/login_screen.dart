@@ -35,16 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 120, 0, 80),
-                child: Text(
-                  "Login",
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 32),
-                  ),
+              SizedBox(height: 120),
+              Text(
+                "Login",
+                style: GoogleFonts.montserrat(
+                  textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 32),
                 ),
               ),
+              SizedBox(height: 80),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: CustomTextField(
                       controller: _emailController,
                       hintText: 'Enter Email',
+                      keyboardType: TextInputType.emailAddress,
                       obscureText: false,
                     ),
                   ),
@@ -88,12 +88,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(212, 12, 0, 0),
-                child: Text(
-                  'Forgot Password?',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400, fontSize: 14),
+                padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Forgot Password?',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 14),
+                    ),
                   ),
                 ),
               ),
