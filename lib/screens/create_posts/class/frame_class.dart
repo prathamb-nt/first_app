@@ -9,44 +9,121 @@ class Frame {
 
 final List<Frame> frames = [
   Frame(
-    frameType: 'Square',
+    frameType: 'Frame 1',
     frameContainer: Container(
       height: 342,
       width: 342,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2,
-          color: const Color(0xffE6E6E6),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xff33F2F2),
+            Color(0xffE47CE7),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Container(
+          height: 322,
+          width: 322,
+          color: const Color(0xffFFFFFC),
         ),
       ),
     ),
   ),
   Frame(
-    frameType: 'Vertical',
-    frameContainer: SizedBox(
-      height: 420,
+    frameType: 'Frame 2',
+    frameContainer: Container(
+      height: 342,
       width: 342,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: const Color(0xffE6E6E6),
-          ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xffF2C833),
+            Color(0xff7CE7A0),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Container(
+          height: 322,
+          width: 322,
+          color: const Color(0xffFFFFFC),
         ),
       ),
     ),
   ),
   Frame(
-    frameType: 'Horizontal',
-    frameContainer: SizedBox(
-      height: 200,
+    frameType: 'Frame 3',
+    frameContainer: Container(
+      height: 342,
       width: 342,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: const Color(0xffE6E6E6),
-          ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xffF23333),
+            Color(0xffE7BC7C),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Container(
+          height: 322,
+          width: 322,
+          color: const Color(0xffFFFFFC),
+        ),
+      ),
+    ),
+  ),
+  Frame(
+    frameType: 'Frame 4',
+    frameContainer: Container(
+      height: 342,
+      width: 342,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xffD833F2),
+            Color(0xffE7967C),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Container(
+          height: 322,
+          width: 322,
+          color: const Color(0xffFFFFFC),
+        ),
+      ),
+    ),
+  ),
+  Frame(
+    frameType: 'Frame 5',
+    frameContainer: Container(
+      height: 342,
+      width: 342,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xffF23361),
+            Color(0xff847CE7),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Container(
+          height: 322,
+          width: 322,
+          color: const Color(0xffFFFFFC),
         ),
       ),
     ),

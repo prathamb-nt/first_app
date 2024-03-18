@@ -86,7 +86,7 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
               ),
             ),
             SizedBox(
-              height: 420,
+              height: 342,
               width: 342,
               child: PageView.builder(
                 itemCount: frames.length,
@@ -96,9 +96,6 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
                     _pageIndex = index;
                     debugPrint("$_pageIndex");
                     debugPrint(frames[index].frameType);
-                    debugPrint(
-                      frames[index].frameContainer.toString(),
-                    );
                   });
                 },
                 itemBuilder: (context, index) => FrameContent(
@@ -158,7 +155,11 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ImageSelectScreen(),
+                      builder: (context) => ImageSelectScreen(
+                        frame: FrameContent(
+                            frameType: 'frameType',
+                            frameContainer: frames[_pageIndex].frameContainer),
+                      ),
                     ),
                   );
                 },

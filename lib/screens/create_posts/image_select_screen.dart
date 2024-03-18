@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ImageSelectScreen extends StatefulWidget {
+  final Widget? frame;
   const ImageSelectScreen({
     super.key,
+    this.frame,
   });
 
   @override
@@ -102,10 +104,25 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
               width: 342,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 342,
-                    width: 342,
-                    child: Image.asset(displayImageUrl),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 342,
+                        width: 342,
+                        child: widget.frame,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          height: 322,
+                          width: 322,
+                          child: Image.asset(
+                            displayImageUrl,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const Spacer()
                 ],
@@ -137,6 +154,7 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                     MaterialPageRoute(
                       builder: (context) => CaptionSelectScreen(
                         displayImage: nextImageUrl,
+                        frame: widget.frame,
                       ),
                     ),
                   );
