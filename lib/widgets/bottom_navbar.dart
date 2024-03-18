@@ -40,11 +40,8 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   @override
   void dispose() {
     _pageController.dispose();
-
     super.dispose();
   }
-
-  int selectedIcon = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +60,19 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              icon: selectedIcon == 0
+              icon: _index == 0
                   ? SvgPicture.asset("assets/ic_home_selected.svg")
                   : SvgPicture.asset("assets/ic_home.svg"),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              icon: selectedIcon == 1
+              icon: _index == 1
                   ? SvgPicture.asset("assets/ic_schedule_selected.svg")
                   : SvgPicture.asset("assets/ic_schedule.svg"),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              icon: selectedIcon == 2
+              icon: _index == 2
                   ? SvgPicture.asset("assets/ic_profile_selected.svg")
                   : SvgPicture.asset("assets/ic_profile.svg"),
             ),
@@ -97,7 +94,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   void _itemTapped(int index) {
     setState(() {
       _index = index;
-      selectedIcon = index;
+
       _pageController.animateToPage(
         index,
         duration: const Duration(milliseconds: 250),
@@ -105,74 +102,5 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
       );
       debugPrint("${widgets[index]}");
     });
-  }
-}
-
-class Settings extends StatelessWidget {
-  const Settings({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 97, 205, 255),
-      body: Center(
-        child: Text('Settings'),
-      ),
-    );
-  }
-}
-
-class Account extends StatelessWidget {
-  const Account({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 139),
-      body: Center(
-        child: Text('Account'),
-      ),
-    );
-  }
-}
-
-class Login extends StatelessWidget {
-  const Login({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 236, 168),
-      body: Center(
-        child: Text('Messages'),
-      ),
-    );
-  }
-}
-
-class Modal extends StatelessWidget {
-  const Modal({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 600,
-      width: 400,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 1),
-            child: Container(
-              height: 5,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadiusDirectional.circular(20),
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

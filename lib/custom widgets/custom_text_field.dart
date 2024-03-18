@@ -19,25 +19,27 @@ class CustomTextField extends StatelessWidget {
     TextStyle textStyle = GoogleFonts.montserrat(
       textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
     );
-    return TextFormField(
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      controller: controller,
-      obscureText: obscureText!,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        focusColor: const Color(0xffED4D86),
-        contentPadding: const EdgeInsetsDirectional.all(10),
-        isDense: true,
-        hintText: hintText,
-        hintStyle: textStyle,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xffED4D86),
+    return Form(
+      child: TextFormField(
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        controller: controller,
+        obscureText: obscureText!,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          focusColor: const Color(0xffED4D86),
+          contentPadding: const EdgeInsetsDirectional.all(10),
+          isDense: true,
+          hintText: hintText,
+          hintStyle: textStyle,
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xffED4D86),
+            ),
           ),
         ),
       ),

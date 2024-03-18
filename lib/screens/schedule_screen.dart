@@ -24,7 +24,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
-      fontSize: 14,
+      fontSize: 16,
     ),
   );
 
@@ -68,21 +68,23 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _buildPosts(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else {
-          return snapshot.data!;
-        }
-      },
+    return Center(
+      child: FutureBuilder(
+        future: _buildPosts(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return snapshot.data!;
+          }
+        },
+      ),
     );
   }
 }

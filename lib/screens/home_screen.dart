@@ -113,9 +113,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             future: readUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Text('waitigs');
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -167,21 +165,23 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ),
                     ),
-                    FutureBuilder(
-                      future: _buildPosts(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<Widget> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text('');
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text('Error: ${snapshot.error}'),
-                          );
-                        } else {
-                          return snapshot.data!;
-                        }
-                      },
+                    Center(
+                      child: FutureBuilder(
+                        future: _buildPosts(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          } else {
+                            return snapshot.data!;
+                          }
+                        },
+                      ),
                     ),
                   ],
                 );

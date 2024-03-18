@@ -19,6 +19,7 @@ class ShowSchedulePosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 48, 24, 20),
@@ -34,6 +35,7 @@ class ShowSchedulePosts extends StatelessWidget {
           ),
         ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: posts.map((post) {
             return ListTile(
               title: GestureDetector(
@@ -84,28 +86,22 @@ class ShowSchedulePosts extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
+                            padding: const EdgeInsets.only(left: 10.0, top: 5),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Container(
-                                //   width: 206,
-                                //   child: Text(
-                                //     widget.imageText,
-                                //     softWrap: true,
-                                //     style: GoogleFonts.montserrat(
-                                //       textStyle: textstyle,
-                                //     ),
-                                //   ),
-                                // ),
                                 Text(
                                   post.postDate,
                                   style: textstyle,
                                 ),
-                                Text(
-                                  post.postPlatform,
-                                  style: textstyle,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    post.postPlatform,
+                                    style: textstyle,
+                                  ),
                                 ),
                                 Text(
                                   post.postTime,
