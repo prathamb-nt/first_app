@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
 import 'package:all_social_app/widgets/bottom_navbar.dart';
@@ -113,7 +111,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             future: readUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text('waitigs');
+                return const Text('waitigs');
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -154,8 +152,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(300.0),
-                              child: Image.file(
-                                File(image!),
+                              child: Image.network(
+                                image!,
                                 fit: BoxFit.fill,
                                 height: 100,
                                 width: 100,

@@ -208,6 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 46, 0, 60),
                 child: GestureDetector(
                   onTap: () {
+                    uploadImage();
                     signupService(
                         _emailController.text,
                         _passwordController.text,
