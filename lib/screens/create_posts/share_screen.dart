@@ -344,14 +344,26 @@ class _ShareScreenState extends State<ShareScreen> {
   }
 
   void savePost() async {
+    late String docId = "docSnapshot.id";
     String downloadUrl = await uploadImage();
-
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
     if (downloadUrl.isEmpty) {
       print("Failed to upload image");
       return;
     }
-
-    final docPost = FirebaseFirestore.instance.collection('posts').doc();
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    final docPost = users.doc(docId).collection('posts').doc();
 
     final post = PostFire(
       userId: FirebaseAuth.instance.currentUser!.uid,
@@ -373,77 +385,4 @@ class _ShareScreenState extends State<ShareScreen> {
       ),
     );
   }
-
-  // void savePost() async {
-  //   final docPost = FirebaseFirestore.instance.collection('posts').doc();
-  //   final int postId = ShareScreen.postIdCounter++;
-
-  //   final post = PostFire(
-  //     userId: FirebaseAuth.instance.currentUser!.uid,
-  //     post: widget.postBytes,
-  //     postDate: widget.selectedDate,
-  //     postTime: widget.selectedTime,
-  //     postPlatform: widget.selectedPlatform,
-  //     postId: postId,
-  //   );
-  //   final json = post.toJson();
-  //   await docPost.set(json);
-  //   print("created post");
-  // }
-
-  // void savePost() async {
-  //   final db = DatabaseHelper();
-  //   final int postId = ShareScreen.postIdCounter++;
-
-  //   await db.savePost(
-  //     Posts(
-  //       userId: currentUserId,
-  //       post: widget.postBytes,
-  //       postDate: widget.selectedDate,
-  //       postTime: widget.selectedTime,
-  //       postPlatform: widget.selectedPlatform,
-  //       postId: postId,
-  //     ),
-  //   );
-  // }
-
-  // Future uploadImage() async {
-  //   final int postId = ShareScreen.postIdCounter++;
-
-  //   Uint8List imageInUnit8List = widget.postBytes;
-  //   final tempDir = await getTemporaryDirectory();
-  //   File file = await File('${tempDir.path}/$postId.png').create();
-  //   file.writeAsBytesSync(imageInUnit8List);
-  //   print('1');
-
-  //   Reference ref = FirebaseStorage.instance.ref().child("images");
-  //   await ref.putFile(file);
-  //   downloadUrl = await ref.getDownloadURL();
-  //   print(downloadUrl);
-  // }
-  // Future<void> uploadImage() async {
-  //   final int postId = ShareScreen.postIdCounter++;
-
-  //   File file = await imageConvert(postId);
-
-  //   Reference ref =
-  //       FirebaseStorage.instance.ref().child("images").child("$postId.png");
-  //   UploadTask uploadTask = ref.putFile(file);
-
-  //   try {
-  //     await uploadTask;
-  //     String downloadUrl = await ref.getDownloadURL();
-  //     print(downloadUrl);
-  //   } on FirebaseException catch (e) {
-  //     print("Error uploading image: $e");
-  //   }
-  // }
-
-  // Future<File> imageConvert(int postId) async {
-  //   Uint8List imageInUnit8List = widget.postBytes;
-  //   final tempDir = await getTemporaryDirectory();
-  //   final file = File('${tempDir.path}/$postId.png');
-  //   await file.writeAsBytes(imageInUnit8List);
-  //   return file;
-  // }
 }

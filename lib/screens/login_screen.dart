@@ -64,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: CustomTextField(
                       controller: _emailController,
                       hintText: 'Enter Email',
+                      keyboardType: TextInputType.emailAddress,
                       obscureText: false,
                     ),
                   ),

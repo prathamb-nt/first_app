@@ -29,9 +29,25 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   );
 
   Future<List<PostFire>> fetchPosts() async {
+    late String docId = "docSnapshot.id";
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          docId = docSnapshot.id;
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
         .collection('posts')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
     return querySnapshot.docs.map((doc) {

@@ -44,19 +44,13 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
 
     readUser();
-    fetchPosts().then((posts) {
-      if (posts.isNotEmpty) {
-        setState(() {
-          isFabVisible = true;
-        });
-      }
-    });
+    fetchPosts();
   }
 
   Users? users;
   late String name;
 
-  bool isFabVisible = false;
+  bool isFabVisible = true;
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
@@ -90,8 +84,9 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Future<List<PostFire>> fetchPosts() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
         .collection('posts')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
     return querySnapshot.docs.map((doc) {
@@ -201,7 +196,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         Positioned(
           bottom: 6,
           right: 24,
-          child: isFabVisible == true
+          child: isFabVisible == false
               ? FloatingActionButton(
                   heroTag: null,
                   backgroundColor: const Color(0xffED4D86),
@@ -220,6 +215,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 )
               : Container(
                   color: Colors.transparent,
+                  height: 50,
+                  width: 50,
                 ),
         ),
       ],

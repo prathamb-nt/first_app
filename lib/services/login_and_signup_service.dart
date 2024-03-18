@@ -44,11 +44,12 @@ Future createUser(
   final docUser = FirebaseFirestore.instance.collection('users').doc();
 
   final user = UserFire(
-      userId: FirebaseAuth.instance.currentUser!.uid,
-      userName: name,
-      profileImage: pickedImage!.path,
-      password: password,
-      email: email);
+    userId: FirebaseAuth.instance.currentUser!.uid,
+    userName: name,
+    profileImage: pickedImage!.path,
+    password: password,
+    email: email,
+  );
   final json = user.toJson();
   await docUser.set(json);
 }
