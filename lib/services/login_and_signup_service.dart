@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:all_social_app/screens/onboard_screen.dart';
@@ -8,9 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../screens/create_posts/share_screen.dart';
 
 Future loginService(String email, String password, BuildContext context) async {
   final user = await FirebaseAuth.instance
@@ -26,12 +21,6 @@ Future loginService(String email, String password, BuildContext context) async {
 }
 
 Future<String> uploadImage() async {
-  final int postId = ShareScreen.postIdCounter++;
-
-  Directory tempDir = await getTemporaryDirectory();
-  String tempPath = tempDir.path;
-  Image imageFile = Image.file(pickedImage!);
-
   Reference ref = FirebaseStorage.instance
       .ref()
       .child(FirebaseAuth.instance.currentUser!.uid)
