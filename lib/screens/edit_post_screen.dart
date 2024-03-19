@@ -223,13 +223,6 @@ class _EditPostState extends State<EditPost> {
                 padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
                 child: GestureDetector(
                   onTap: () {
-                    // debugPrint(widget.postId.toString());
-                    // debugPrint("${FirebaseAuth.instance.currentUser?.uid}");
-                    // debugPrint(widget.displayImage);
-                    // debugPrint(widget.updatedDate!);
-                    // debugPrint("${widget.updatedTime}");
-                    // debugPrint("${widget.updatedPlatform}");
-
                     fetchPosts();
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context)
@@ -252,21 +245,6 @@ class _EditPostState extends State<EditPost> {
     );
   }
 
-  // void update(BuildContext context) {
-  //   debugPrint('pressed');
-  //   final db = DatabaseHelper();
-  //   db
-  //       .updateUser(
-  //     Users(
-  //       userEmail: _emailController.text,
-  //       userPassword: _passwordController.text,
-  //       userName: _nameController.text,
-  //     ),
-  //   )
-  //       .whenComplete(() {
-  //     debugPrint('UPDATED');
-  //   });
-  // }
   late String docId = "userId";
   late String postDocId = "docSnapshot.id";
   fetchPosts() async {
@@ -280,7 +258,7 @@ class _EditPostState extends State<EditPost> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     setState(() {});
     await FirebaseFirestore.instance
@@ -301,38 +279,16 @@ class _EditPostState extends State<EditPost> {
     updatePost();
   }
 
-  // Future<List<PostFire>> fetchPosts() async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection('posts')
-  //       .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-  //       .where('postId', isEqualTo: widget.postId)
-  //       .get();
-
-  //   return querySnapshot.docs.map((doc) {
-  //     final data = doc.data() as Map<String, dynamic>;
-  //     final postFire = PostFire.fromJson(data);
-  //     docId = doc.id; // Set the docId property here
-  //     print("id is $docId");
-  //     return postFire;
-  //   }).toList();
-
-  // }
-
   updatePost() async {
     String? updatedDate = widget.updatedDate;
     String? updatedTime = widget.updatedTime;
     String? updatedPlatform = widget.updatedPlatform;
 
-    // await FirebaseFirestore.instance
-    //     .collection("posts")
-    //     .where("postId", isEqualTo: widget.postId.toString())
-    //     // .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    //     .get();
-    print(widget.postId);
-    print(FirebaseAuth.instance.currentUser!.uid);
+    debugPrint("${widget.postId}");
+    debugPrint(FirebaseAuth.instance.currentUser!.uid);
 
-    print("post doc is: $postDocId");
-    print("user doc is: $docId");
+    debugPrint("post doc is: $postDocId");
+    debugPrint("user doc is: $docId");
     final docPost = FirebaseFirestore.instance
         .collection('users')
         .doc(docId)

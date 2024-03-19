@@ -26,8 +26,6 @@ class PostScheduleScreen extends StatefulWidget {
 class _PostScheduleScreenState extends State<PostScheduleScreen> {
   DateTime now = DateTime.now();
 
-  // late String hour = now.hour.toString();
-  // late String minute = now.minute.toString();
 
   late String paddedHour = now.hour.toString().padLeft(2, "0");
   late String paddedMinute = now.minute.toString().padLeft(2, "0");
@@ -262,25 +260,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child:
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     debugPrint(widget.postBytes);
-                    //     selectedDate != 'Select date' &&
-                    //             selectedTime != 'Select time'
-                    //         ? Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //               builder: (context) => ShareScreen(
-                    //                 selectedDate: selectedDate,
-                    //                 selectedTime: selectedTime,
-                    //                 selectedPlatform: selectedPlatform,
-                    //                 postBytes: widget.postBytes!,
-                    //                 currentUser: widget.currentUser,
-                    //               ),
-                    //             ),
-                    //           )
-                    //         : {};
-                    //   },
+                  
                     GestureDetector(
                   onTap: () {
                     selectedDate != 'Select date' &&
@@ -666,7 +646,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
   }
 
   void navigate() async {
-    // Navigate to the next screen with the new postId
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -682,51 +661,4 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
     );
   }
 
-//   void savePost() async {
-//   // Save the post to the database
-//   final db = DatabaseHelper();
-//   final int postId = await db.savePost(
-//     Posts(
-//       userId: currentUserId,
-//       post: widget.postBytes!,
-//       postDate: selectedDate,
-//       postTime: selectedTime,
-//       postPlatform: selectedPlatform,
-//       postId: ,
-//     ),
-//   );
-
-//   // Navigate to the next screen with the new postId
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//       builder: (_) => ShareScreen(
-//         selectedDate: selectedDate,
-//         selectedTime: selectedTime,
-//         selectedPlatform: selectedPlatform,
-//         postBytes: widget.postBytes!,
-//         currentUser: widget.currentUser,
-//         postId: postId,
-//       ),
-//     ),
-//   );
-// }
-
-  // void savePost() async {
-  //   // Save the post bytes, selected date, and selected time to the database
-  //    final db = DatabaseHelper();
-
-  //   final post = Posts(
-  //     userId: currentUserId,
-  //     post: widget.postBytes,
-  //     postDate: selectedDate,
-  //     postTime: selectedTime,
-  //     postPlatform: 'Instagram',
-  //     postId: null,
-  //   );
-  //   await DatabaseHelper.instance.savePost(post);
-
-  //   // Navigate to the next screen
-
-  // }
 }

@@ -37,11 +37,11 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
     _pageController = PageController(initialPage: _index);
   }
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _pageController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

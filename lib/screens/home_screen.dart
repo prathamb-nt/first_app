@@ -41,7 +41,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   Users? users;
   late String name;
 
-  bool isFabVisible = false;
+  bool isFabVisible = true;
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
@@ -62,7 +62,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
@@ -79,7 +79,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       isFabVisible = false;
       return NoPosts(widget: widget);
     } else {
-      isFabVisible = true;
+      isFabVisible = false;
       return ShowPosts(posts: posts, textstyle: textstyle);
     }
   }
@@ -90,8 +90,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         .doc(docId)
         .collection('posts')
         .get();
-    print('fetchPosts complete');
-    print(isFabVisible);
+    debugPrint('fetchPosts complete');
+    debugPrint("$isFabVisible");
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -174,7 +174,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                               child: Text('Error: ${snapshot.error}'),
                             );
                           } else {
-                            isFabVisible = true;
                             return snapshot.data!;
                           }
                         },
