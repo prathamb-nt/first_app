@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,37 +15,38 @@ class OnBoardingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 76.h),
         SvgPicture.asset(
           image,
-          height: 342,
-          width: 342,
+          height: 342.h,
+          width: 342.h,
         ),
-        const Spacer(),
+        SizedBox(height: 16.h),
         Text(
           title,
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 24,
+              fontSize: 24.sp,
               color: Color(0xff1C1C1C),
             ),
           ),
         ),
-        const SizedBox(
-          height: 16,
+        SizedBox(
+          height: 16.h,
         ),
         Text(
           description,
           textAlign: TextAlign.center,
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: 16,
+              fontSize: 16.sp,
               color: Color(0xff1C1C1C),
             ),
           ),
         ),
-        const Spacer(),
+        SizedBox(height: 32.h),
       ],
     );
   }

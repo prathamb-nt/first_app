@@ -243,27 +243,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
-  // void update(BuildContext context) {
-  //   debugPrint('pressed');
-  //   final db = DatabaseHelper();
-  //   db
-  //       .updateUser(
-  //     Users(
-  //       userEmail: _emailController.text,
-  //       userPassword: _passwordController.text,
-  //       userName: _nameController.text,
-  //     ),
-  //   )
-  //       .whenComplete(() {
-  //     debugPrint('UPDATED');
-  //   });
-  // }
   Future updateUser() async {
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
 
-    // await FirebaseAuth.instance.currentUser?.updateEmail(_emailController.text);
-    // await FirebaseAuth.instance.currentUser
-    //     ?.updatePassword(_passwordController.text);
 
     await docUser.update({
       'userId': FirebaseAuth.instance.currentUser!.uid,

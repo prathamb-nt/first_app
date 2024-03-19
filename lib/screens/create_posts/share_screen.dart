@@ -59,11 +59,6 @@ class _ShareScreenState extends State<ShareScreen> {
   Uint8List? bytes;
   String? downloadUrl;
 
-  // @override
-  // void initState() {
-  //   loadImage();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -291,19 +286,7 @@ class _ShareScreenState extends State<ShareScreen> {
                   onTap: () {
                     savePost();
 
-                    // await uploadImage();
-                    // Save the post and navigate to the HomeScreen or show a success message
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => HomeScreen(
-                    //       currentUser: widget.currentUser,
-                    //       displayImage: widget.displayImage,
-                    //       imageText: widget.imageText,
-                    //     ),
-                    //   ),
-                    // );
+                  
                     debugPrint("go to home pushed");
                   },
                   child: const CustomPrimaryBtn(
@@ -338,7 +321,7 @@ class _ShareScreenState extends State<ShareScreen> {
       String downloadUrl = await ref.getDownloadURL();
       return downloadUrl;
     } on FirebaseException catch (e) {
-      print("Error uploading image: $e");
+      debugPrint("Error uploading image: $e");
       return "";
     }
   }
@@ -356,10 +339,10 @@ class _ShareScreenState extends State<ShareScreen> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     if (downloadUrl.isEmpty) {
-      print("Failed to upload image");
+      debugPrint("Failed to upload image");
       return;
     }
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -376,9 +359,9 @@ class _ShareScreenState extends State<ShareScreen> {
 
     final json = post.toJson();
     await docPost.set(json);
-    print("created post");
+    debugPrint("created post");
 
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const HomeScreen(),

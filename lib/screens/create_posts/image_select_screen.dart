@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/screens/create_posts/caption_select_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ImageSelectScreen extends StatefulWidget {
@@ -42,6 +46,14 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
     }
   }
 
+  File? pickedImage;
+  bool isPicked = false;
+  TextStyle textStyle = GoogleFonts.montserrat(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+    ),
+  );
   String displayImageUrl = "assets/default_post_image.png";
   late String nextImageUrl;
   @override
@@ -117,10 +129,15 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                           child: SizedBox(
                             height: 322,
                             width: 322,
-                            child: Image.asset(
-                              displayImageUrl,
-                              fit: BoxFit.fill,
-                            ),
+                            child: isPicked
+                                ? Image.file(
+                                    pickedImage!,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Image.asset(
+                                    displayImageUrl,
+                                    fit: BoxFit.fill,
+                                  ),
                           ),
                         ),
                       ],
@@ -135,7 +152,7 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                   height: 100,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: imageUrl.length,
+                    itemCount: imageUrl.length + 1,
                     itemBuilder: _getListItemTile,
                   ),
                 ),
@@ -145,17 +162,17 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      nextImageUrl = displayImageUrl;
+                      nextImageUrl =
+                          isPicked ? pickedImage!.path : displayImageUrl;
                     });
-
                     debugPrint(nextImageUrl);
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CaptionSelectScreen(
                           displayImage: nextImageUrl,
                           frame: widget.frame,
+                          isPicked: isPicked,
                         ),
                       ),
                     );
@@ -173,12 +190,88 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
   }
 
   Widget _getListItemTile(BuildContext context, int index) {
+    if (index == 0) {
+      return GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return SizedBox(
+                height: 200,
+                width: 400,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        'Choose photo from',
+                        style: textStyle,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final ImagePicker picker = ImagePicker();
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (image != null) {
+                            pickedImage = File(image.path);
+                            setState(() {
+                              isPicked = true;
+                              debugPrint("$pickedImage");
+                            });
+                          }
+                        },
+                        child: const CustomPrimaryBtn(
+                          label: 'Gallery',
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final ImagePicker picker = ImagePicker();
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.camera);
+                          if (image != null) {
+                            pickedImage = File(image.path);
+                            setState(() {
+                              isPicked = true;
+                              debugPrint("$pickedImage");
+                            });
+                          }
+                        },
+                        child: const CustomSecondaryBtn(
+                          label: 'Camera',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: const BoxDecoration(
+              color: Color(0xffD9D9D9),
+            ),
+            child: Center(
+              child: SvgPicture.asset('assets/ic_add_posts.svg'),
+            ),
+          ),
+        ),
+      );
+    }
+    index -= 1;
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedIndex = index;
           displayImageUrl = imageUrl[index].toString();
           debugPrint(displayImageUrl);
+          isPicked = false;
         });
       },
       child: Padding(

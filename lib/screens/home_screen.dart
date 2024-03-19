@@ -6,6 +6,7 @@ import 'package:all_social_app/widgets/show_posts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,14 +38,6 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  @override
-  void initState() {
-    super.initState();
-
-    readUser();
-    fetchPosts();
-  }
-
   Users? users;
   late String name;
 
@@ -58,7 +51,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   int hours = DateTime.now().hour;
 
   late String docId = "docSnapshot.id";
-  Future<UserFire?> readUser() async {
+  Future readUser() async {
     await FirebaseFirestore.instance
         .collection("users")
         .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -69,7 +62,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
@@ -80,26 +73,30 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
   }
 
+  Future<Widget> _buildPosts() async {
+    final posts = await fetchPosts();
+    if (posts.isEmpty) {
+      isFabVisible = false;
+      return NoPosts(widget: widget);
+    } else {
+      isFabVisible = false;
+      return ShowPosts(posts: posts, textstyle: textstyle);
+    }
+  }
+
   Future<List<PostFire>> fetchPosts() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(docId)
         .collection('posts')
         .get();
+    debugPrint('fetchPosts complete');
+    debugPrint("$isFabVisible");
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
       return PostFire.fromJson(data);
     }).toList();
-  }
-
-  Future<Widget> _buildPosts() async {
-    final posts = await fetchPosts();
-    if (posts.isEmpty) {
-      return NoPosts(widget: widget);
-    } else {
-      return ShowPosts(posts: posts, textstyle: textstyle);
-    }
   }
 
   @override
@@ -111,7 +108,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             future: readUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text('waitigs');
+                return const Text('');
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -123,8 +120,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                 return Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    SizedBox(height: 40.h),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -194,7 +192,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         Positioned(
           bottom: 6,
           right: 24,
-          child: isFabVisible == false
+          child: isFabVisible
               ? FloatingActionButton(
                   heroTag: null,
                   backgroundColor: const Color(0xffED4D86),
@@ -212,7 +210,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 )
               : Container(
-                  color: Colors.transparent,
+                  color: Colors.red,
                   height: 50,
                   width: 50,
                 ),
