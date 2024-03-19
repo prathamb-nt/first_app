@@ -48,7 +48,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   Users? users;
   late String name;
 
-  bool isFabVisible = true;
+  bool isFabVisible = false;
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
@@ -58,7 +58,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   int hours = DateTime.now().hour;
 
   late String docId = "docSnapshot.id";
-  Future<UserFire?> readUser() async {
+  Future readUser() async {
     await FirebaseFirestore.instance
         .collection("users")
         .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -96,8 +96,14 @@ class _HomeWidgetState extends State<HomeWidget> {
   Future<Widget> _buildPosts() async {
     final posts = await fetchPosts();
     if (posts.isEmpty) {
+      // setState(() {
+      isFabVisible = false;
+      // });
       return NoPosts(widget: widget);
     } else {
+      // setState(() {
+      isFabVisible = true;
+      // });
       return ShowPosts(posts: posts, textstyle: textstyle);
     }
   }
@@ -194,7 +200,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         Positioned(
           bottom: 6,
           right: 24,
-          child: isFabVisible == false
+          child: isFabVisible
               ? FloatingActionButton(
                   heroTag: null,
                   backgroundColor: const Color(0xffED4D86),

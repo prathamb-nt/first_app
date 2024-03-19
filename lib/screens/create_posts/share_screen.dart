@@ -378,7 +378,7 @@ class _ShareScreenState extends State<ShareScreen> {
     await docPost.set(json);
     print("created post");
 
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const HomeScreen(),

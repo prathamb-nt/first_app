@@ -34,7 +34,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
 
   String selectedDate = 'Select date';
   String selectedTime = 'Select time';
-  String selectedPlatform = 'Instagram';
+  String selectedPlatform = 'Facebook';
 
   bool isTimeSelectionVisible = false;
 
