@@ -5,7 +5,9 @@ import 'package:all_social_app/widgets/no_posts.dart';
 import 'package:all_social_app/widgets/show_posts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +19,9 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
+
+
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -41,7 +46,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   Users? users;
   late String name;
 
-  bool isFabVisible = true;
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
@@ -73,13 +77,24 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
   }
 
+  bool isFabVisible = true;
+  // Future<Widget> _buildPosts() async {
+  //   final posts = await fetchPosts();
+  //   if (posts.isEmpty) {
+  //     isFabVisible = false;
+  //     return NoPosts(widget: widget);
+  //   } else {
+  //     isFabVisible = false;
+  //     return ShowPosts(posts: posts, textstyle: textstyle);
+  //   }
+  // }
   Future<Widget> _buildPosts() async {
     final posts = await fetchPosts();
     if (posts.isEmpty) {
       isFabVisible = false;
       return NoPosts(widget: widget);
     } else {
-      isFabVisible = false;
+      isFabVisible = true;
       return ShowPosts(posts: posts, textstyle: textstyle);
     }
   }
@@ -90,8 +105,6 @@ class _HomeWidgetState extends State<HomeWidget> {
         .doc(docId)
         .collection('posts')
         .get();
-    debugPrint('fetchPosts complete');
-    debugPrint("$isFabVisible");
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -114,6 +127,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               } else if (snapshot.hasData) {
+                print(isFabVisible);
                 final userName = snapshot.data?.userName;
                 final image = snapshot.data?.profileImage;
 
@@ -161,7 +175,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ),
                     ),
-                    Center(
+                    SingleChildScrollView(
                       child: FutureBuilder(
                         future: _buildPosts(),
                         builder: (BuildContext context,
@@ -170,6 +184,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                               ConnectionState.waiting) {
                             return const CircularProgressIndicator();
                           } else if (snapshot.hasError) {
+                            print(isFabVisible);
                             return Center(
                               child: Text('Error: ${snapshot.error}'),
                             );
@@ -192,28 +207,30 @@ class _HomeWidgetState extends State<HomeWidget> {
         Positioned(
           bottom: 6,
           right: 24,
-          child: isFabVisible
-              ? FloatingActionButton(
-                  heroTag: null,
-                  backgroundColor: const Color(0xffED4D86),
-                  shape: const CircleBorder(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FrameSelectScreen(),
-                      ),
-                    );
-                  },
-                  child: Center(
-                    child: SvgPicture.asset("assets/ic_plus.svg"),
+          child: Container(
+            child: isFabVisible
+                ? FloatingActionButton(
+                    heroTag: null,
+                    backgroundColor: const Color(0xffED4D86),
+                    shape: const CircleBorder(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FrameSelectScreen(),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: SvgPicture.asset("assets/ic_plus.svg"),
+                    ),
+                  )
+                : Container(
+                    height: 100,
+                    width: 100,
+                    color: Colors.red,
                   ),
-                )
-              : Container(
-                  color: Colors.red,
-                  height: 50,
-                  width: 50,
-                ),
+          ),
         ),
       ],
     );
