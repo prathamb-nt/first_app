@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:all_social_app/app.dart';
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
+import 'package:all_social_app/services/update_user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,9 @@ class ProfileWidget extends StatefulWidget {
 class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   void initState() {
+    isPicked = false;
+    readUser();
+
     super.initState();
   }
 
@@ -66,32 +72,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     }
   }
 
-  changeCred({oldEmail, newEmail, oldPassword, newPassword}) async {
-    var cred =
-        EmailAuthProvider.credential(email: oldEmail, password: oldPassword);
-
-    await FirebaseAuth.instance.currentUser
-        ?.reauthenticateWithCredential(cred)
-        .then((value) {
-      FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
-    }).catchError((error) {
-      debugPrint(
-        error.toString(),
-      );
-    });
-
-    await FirebaseAuth.instance.currentUser
-        ?.reauthenticateWithCredential(cred)
-        .then((value) {
-      FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
-    }).catchError((error) {
-      debugPrint(
-        error.toString(),
-      );
-    });
-    debugPrint("updated");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,16 +103,64 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          final ImagePicker picker = ImagePicker();
-                          final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery);
-                          if (image != null) {
-                            pickedImage = image.path;
-                            setState(() {
-                              isPicked = true;
-                            });
-                          }
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 200,
+                                width: 400,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      'Choose photo from',
+                                      style: textStyle,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final ImagePicker picker =
+                                            ImagePicker();
+                                        final XFile? image =
+                                            await picker.pickImage(
+                                                source: ImageSource.gallery);
+                                        if (image != null) {
+                                          pickedImage = image.path;
+                                          setState(() {
+                                            isPicked = true;
+                                            debugPrint(pickedImage);
+                                          });
+                                        }
+                                      },
+                                      child: const CustomPrimaryBtn(
+                                        label: 'Gallery',
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final ImagePicker picker =
+                                            ImagePicker();
+                                        final XFile? image =
+                                            await picker.pickImage(
+                                                source: ImageSource.camera);
+                                        if (image != null) {
+                                          pickedImage = image.path;
+                                          setState(() {
+                                            isPicked = true;
+                                            debugPrint(pickedImage);
+                                          });
+                                        }
+                                      },
+                                      child: const CustomSecondaryBtn(
+                                        label: 'Camera',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: Container(
                           decoration: const BoxDecoration(
@@ -140,12 +168,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(300.0),
-                            child: Image.network(
-                              pickedImage,
-                              fit: BoxFit.fill,
-                              height: 100,
-                              width: 100,
-                            ),
+                            child: isPicked
+                                ? Image.file(
+                                    File(pickedImage),
+                                    fit: BoxFit.fill,
+                                    height: 100,
+                                    width: 100,
+                                  )
+                                : Image.network(
+                                    image,
+                                    fit: BoxFit.fill,
+                                    height: 100,
+                                    width: 100,
+                                  ),
                           ),
                         ),
                       ),
@@ -204,7 +239,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          updateUser();
+                          updateUser(
+                              _nameController.text,
+                              _passwordController.text,
+                              email,
+                              docId,
+                              pickedImage,
+                              image);
                         },
                         child: const Padding(
                           padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
@@ -229,7 +270,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             label: 'Logout',
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -241,24 +282,5 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             }
           }),
     );
-  }
-
-  Future updateUser() async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
-
-
-    await docUser.update({
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-      'userName': _nameController.text,
-      'profileImage': pickedImage,
-      'password': _passwordController.text,
-      'email': email
-    });
-    await changeCred(
-        oldEmail: email,
-        newEmail: _emailController.text,
-        newPassword: _passwordController.text,
-        oldPassword: password);
-    debugPrint("updated user");
   }
 }

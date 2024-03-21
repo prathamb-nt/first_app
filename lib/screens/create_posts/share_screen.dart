@@ -59,7 +59,6 @@ class _ShareScreenState extends State<ShareScreen> {
   Uint8List? bytes;
   String? downloadUrl;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,7 +285,6 @@ class _ShareScreenState extends State<ShareScreen> {
                   onTap: () {
                     savePost();
 
-                  
                     debugPrint("go to home pushed");
                   },
                   child: const CustomPrimaryBtn(
