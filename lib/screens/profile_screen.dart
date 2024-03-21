@@ -5,9 +5,9 @@ import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
+import 'package:all_social_app/services/update_user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -72,32 +72,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     }
   }
 
-  changeCred({oldEmail, newEmail, oldPassword, newPassword}) async {
-    var cred =
-        EmailAuthProvider.credential(email: oldEmail, password: oldPassword);
-
-    await FirebaseAuth.instance.currentUser
-        ?.reauthenticateWithCredential(cred)
-        .then((value) {
-      FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
-    }).catchError((error) {
-      debugPrint(
-        error.toString(),
-      );
-    });
-
-    await FirebaseAuth.instance.currentUser
-        ?.reauthenticateWithCredential(cred)
-        .then((value) {
-      FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
-    }).catchError((error) {
-      debugPrint(
-        error.toString(),
-      );
-    });
-    debugPrint("updated");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +129,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                           pickedImage = image.path;
                                           setState(() {
                                             isPicked = true;
-                                            debugPrint("$pickedImage");
+                                            debugPrint(pickedImage);
                                           });
                                         }
                                       },
@@ -174,7 +148,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                           pickedImage = image.path;
                                           setState(() {
                                             isPicked = true;
-                                            debugPrint("$pickedImage");
+                                            debugPrint(pickedImage);
                                           });
                                         }
                                       },
@@ -210,34 +184,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                         ),
                       ),
-                      //------------
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //     final ImagePicker picker = ImagePicker();
-                      //     final XFile? image = await picker.pickImage(
-                      //         source: ImageSource.gallery);
-                      //     if (image != null) {
-                      //       pickedImage = image.path;
-                      //       setState(() {
-                      //         isPicked = true;
-                      //       });
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     decoration: const BoxDecoration(
-                      //       shape: BoxShape.circle,
-                      //     ),
-                      //     child: ClipRRect(
-                      //       borderRadius: BorderRadius.circular(300.0),
-                      //       child: Image.network(
-                      //         pickedImage,
-                      //         fit: BoxFit.fill,
-                      //         height: 100,
-                      //         width: 100,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                         child: Text(
@@ -293,7 +239,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          updateUser();
+                          updateUser(
+                              _nameController.text,
+                              _passwordController.text,
+                              email,
+                              docId,
+                              pickedImage,
+                              image);
                         },
                         child: const Padding(
                           padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
@@ -318,7 +270,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             label: 'Logout',
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -330,42 +282,5 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             }
           }),
     );
-  }
-
-  Future<String> uploadImage() async {
-    print(pickedImage);
-    Reference ref = FirebaseStorage.instance.refFromURL(image);
-
-    UploadTask uploadTask = ref.putFile(
-      File(pickedImage),
-    );
-
-    try {
-      await uploadTask;
-      String downloadUrl = await ref.getDownloadURL();
-      return downloadUrl;
-    } on FirebaseException catch (e) {
-      debugPrint("Error uploading image: $e");
-      return "";
-    }
-  }
-
-  Future updateUser() async {
-    final String imageUrl = await uploadImage();
-    final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
-    print(imageUrl);
-    await docUser.update({
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-      'userName': _nameController.text,
-      'profileImage': imageUrl,
-      'password': _passwordController.text,
-      'email': email
-    });
-    await changeCred(
-        oldEmail: email,
-        newEmail: _emailController.text,
-        newPassword: _passwordController.text,
-        oldPassword: password);
-    debugPrint("updated user");
   }
 }
