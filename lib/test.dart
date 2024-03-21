@@ -1,100 +1,257 @@
-import 'package:all_social_app/models/users.dart';
-import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
+import 'dart:io';
+
+import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
+import 'package:all_social_app/screens/login_screen.dart';
+import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-class HomeScreen extends StatefulWidget {
-  final String? currentDocId;
-  const HomeScreen({super.key, this.currentDocId});
+import 'package:image_picker/image_picker.dart';
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+bool isIncorrect = true;
 
-class _HomeScreenState extends State<HomeScreen> {
-  bool _showFab = false; // Add this line
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomAppBarWidget(),
-      body: HomeWidget(showFab: _showFab), // Pass _showFab as an argument
-    );
-  }
-}
-
-class HomeWidget extends StatefulWidget {
-  final bool showFab;
-
-  const HomeWidget({
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({
     super.key,
-    required this.showFab,
   });
 
   @override
-  _HomeWidgetState createState() => _HomeWidgetState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
-  Users? users;
-  late String name;
-  TextStyle textstyle = GoogleFonts.montserrat(
-    textStyle: const TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: 14,
-    ),
-  );
-  int hours = DateTime.now().hour;
-  late String docId = "docSnapshot.id";
-  bool _showFab = false;
+File? pickedImage;
+bool isPicked = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _showFab = widget.showFab; // Use the passed _showFab value
-  }
+bool passwordVisible = true;
+final _emailController = TextEditingController();
+final _passwordController = TextEditingController();
+final _nameController = TextEditingController();
 
-  // ... Rest of the code ...
+TextStyle textStyle = GoogleFonts.montserrat(
+  textStyle: TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16.sp,
+  ),
+);
 
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // ... Rest of the code ...
-
-        Positioned(
-          bottom: 6,
-          right: 24,
-          child: AnimatedOpacity(
-            opacity: _showFab ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300),
-            child: Container(
-              child: isShowPostVisible
-                  ? FloatingActionButton(
-                      heroTag: null,
-                      backgroundColor: const Color(0xffED4D86),
-                      shape: const CircleBorder(),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FrameSelectScreen(),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          child: Column(
+            children: [
+              SizedBox(height: 80.h),
+              Text(
+                "Sign up",
+                style: GoogleFonts.montserrat(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 32.sp),
+                ),
+              ),
+              SizedBox(height: 41.h),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 200,
+                        width: 400,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Choose photo from',
+                              style: textStyle,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final ImagePicker picker = ImagePicker();
+                                final XFile? image = await picker.pickImage(
+                                    source: ImageSource.gallery);
+                                if (image != null) {
+                                  pickedImage = File(image.path);
+                                  setState(() {
+                                    isPicked = true;
+                                    debugPrint("$pickedImage");
+                                  });
+                                }
+                              },
+                              child: const CustomPrimaryBtn(
+                                label: 'Gallery',
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final ImagePicker picker = ImagePicker();
+                                final XFile? image = await picker.pickImage(
+                                    source: ImageSource.camera);
+                                if (image != null) {
+                                  pickedImage = File(image.path);
+                                  setState(() {
+                                    isPicked = true;
+                                    debugPrint("$pickedImage");
+                                  });
+                                }
+                              },
+                              child: const CustomSecondaryBtn(
+                                label: 'Camera',
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: isPicked
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Image.file(
+                            pickedImage!,
+                            fit: BoxFit.fill,
+                            height: 100,
+                            width: 100,
                           ),
-                        );
-                      },
-                      child: const Center(
-                        child: SvgPicture.asset("assets/ic_plus.svg"),
-                      ),
-                    )
-                  : Container(
-                      height: 100,
-                      width: 100,
-                      color: Colors.red,
+                        )
+                      : Image.asset(
+                          "assets/profile_default.png",
+                          fit: BoxFit.fill,
+                          height: 100,
+                          width: 100,
+                        ),
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                "Add your photo",
+                style: GoogleFonts.montserrat(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 24.h),
+                  Text(
+                    "Name",
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 16.sp),
                     ),
-            ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 8.h),
+                  SizedBox(
+                    height: 40,
+                    child: CustomTextField(
+                      hintText: 'Enter Name',
+                      obscureText: false,
+                      controller: _nameController,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Email',
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 16.sp),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 8.h),
+                  SizedBox(
+                    height: 40,
+                    child: CustomTextField(
+                      obscureText: false,
+                      controller: _emailController,
+                      hintText: 'Enter Email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Password',
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 16.sp),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 8.h),
+                  SizedBox(
+                    height: 40,
+                    child: CustomPasswordTextField(
+                      controller: _passwordController,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 46.h),
+              GestureDetector(
+                onTap: () {
+                  uploadImage();
+                  signupService(_emailController.text, _passwordController.text,
+                      _nameController.text, context);
+                },
+                child: const CustomPrimaryBtn(
+                  label: 'Signup',
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(height: 100.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account?',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                            color: const Color(0xff1C1C1C),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          ' Login',
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: const Color(0xffED4D86),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
