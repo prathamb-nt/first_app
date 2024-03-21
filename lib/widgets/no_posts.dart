@@ -34,7 +34,7 @@ class NoPosts extends StatelessWidget {
             textStyle: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: Color(0xff1C1C1C),
+              color: const Color(0xff1C1C1C),
             ),
           ),
         ),

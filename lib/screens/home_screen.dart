@@ -5,25 +5,15 @@ import 'package:all_social_app/widgets/no_posts.dart';
 import 'package:all_social_app/widgets/show_posts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   final String? currentDocId;
   const HomeScreen({super.key, this.currentDocId});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-
-
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -55,6 +45,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   int hours = DateTime.now().hour;
 
   late String docId = "docSnapshot.id";
+  bool _showFab = false;
   Future readUser() async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -78,23 +69,18 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   bool isFabVisible = true;
-  // Future<Widget> _buildPosts() async {
-  //   final posts = await fetchPosts();
-  //   if (posts.isEmpty) {
-  //     isFabVisible = false;
-  //     return NoPosts(widget: widget);
-  //   } else {
-  //     isFabVisible = false;
-  //     return ShowPosts(posts: posts, textstyle: textstyle);
-  //   }
-  // }
+  bool isShowPostVisible = false;
+
   Future<Widget> _buildPosts() async {
     final posts = await fetchPosts();
     if (posts.isEmpty) {
       isFabVisible = false;
+      isShowPostVisible = false;
       return NoPosts(widget: widget);
     } else {
       isFabVisible = true;
+      isShowPostVisible = true;
+      _showFab = true; //
       return ShowPosts(posts: posts, textstyle: textstyle);
     }
   }
@@ -127,7 +113,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               } else if (snapshot.hasData) {
-                print(isFabVisible);
+                print('hi $isShowPostVisible');
                 final userName = snapshot.data?.userName;
                 final image = snapshot.data?.profileImage;
 
@@ -208,7 +194,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           bottom: 6,
           right: 24,
           child: Container(
-            child: isFabVisible
+            child: _showFab
                 ? FloatingActionButton(
                     heroTag: null,
                     backgroundColor: const Color(0xffED4D86),

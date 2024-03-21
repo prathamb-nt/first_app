@@ -1,50 +1,100 @@
-// General Aptitude	
-// 15%
+import 'package:all_social_app/models/users.dart';
+import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+class HomeScreen extends StatefulWidget {
+  final String? currentDocId;
+  const HomeScreen({super.key, this.currentDocId});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-// Programming & Data Structures	------------
-// 10-12%
-// Computer Organisation and Architecture(COA)	
-// 9-10%
-// Database Management System(DBMS)	
-// 8-10%
-// Theory Of Computation(TOC)	----------
-// 8-9%
-// Operating System	
-// 7-9%
-// Computer Networks	
-// 6-8%
-// Discrete Mathematics	
-// 6-7%
-// Engineering Mathematics	-------------
-// 6-7%
-// Algorithm	-------------------
-// 5-7%
-// Digital Logic	---------------
-// 4-5%
-// Compiler Design	----------
-// 2-4%
+class _HomeScreenState extends State<HomeScreen> {
+  bool _showFab = false; // Add this line
 
-// M coa
-// T cd*
-// W dbms  
-// T toc*
-// F os
-// S ds*
-// S eng math*
-// M cn
-// T algo*
-// W dm
-// T dl*
-// F GA
-// S ds*
-// S eng math*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomAppBarWidget(),
+      body: HomeWidget(showFab: _showFab), // Pass _showFab as an argument
+    );
+  }
+}
 
+class HomeWidget extends StatefulWidget {
+  final bool showFab;
 
-// mon-fri
-// 7-12 5hrs
+  const HomeWidget({
+    super.key,
+    required this.showFab,
+  });
 
-// sat-sun
-// 8-11 5hrs
-// 7-12 5hrs
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
 
+class _HomeWidgetState extends State<HomeWidget> {
+  Users? users;
+  late String name;
+  TextStyle textstyle = GoogleFonts.montserrat(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+    ),
+  );
+  int hours = DateTime.now().hour;
+  late String docId = "docSnapshot.id";
+  bool _showFab = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _showFab = widget.showFab; // Use the passed _showFab value
+  }
+
+  // ... Rest of the code ...
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // ... Rest of the code ...
+
+        Positioned(
+          bottom: 6,
+          right: 24,
+          child: AnimatedOpacity(
+            opacity: _showFab ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              child: isShowPostVisible
+                  ? FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: const Color(0xffED4D86),
+                      shape: const CircleBorder(),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FrameSelectScreen(),
+                          ),
+                        );
+                      },
+                      child: const Center(
+                        child: SvgPicture.asset("assets/ic_plus.svg"),
+                      ),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 100,
+                      color: Colors.red,
+                    ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
