@@ -296,9 +296,11 @@ class _EditPostState extends State<EditPost> {
         .doc(postDocId);
 
     await docPost.update({
-      'postDate': updatedDate!,
-      'postTime': updatedTime!,
-      'postPlatform': updatedPlatform!,
+      'postDate': updatedDate != null ? widget.updatedDate : widget.postDate,
+      'postTime': updatedTime != null ? widget.updatedTime : widget.postTime,
+      'postPlatform': updatedPlatform != null
+          ? widget.updatedPlatform
+          : widget.postPlatform,
     });
 
     debugPrint("completed");

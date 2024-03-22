@@ -244,11 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid Email format'),
-        ),
-      );
+      return 'Invalid Email format';
     }
     return null;
   }
@@ -258,13 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String pattern = "(?=.*[0-9a-zA-Z]).{6,}";
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(password)) {
-      // setState(() {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text('Password must be at least 6 characters'),
-      //     ),
-      //   );
-      // });
+      'Password must be at least 6 characters';
     }
     return null;
   }
