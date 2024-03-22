@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
-import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/screens/login_screen.dart';
 import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -158,11 +157,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      height: 40,
-                      child: CustomTextField(
-                        hintText: 'Enter Name',
-                        obscureText: false,
+                      // height: 40,
+                      child:
+                          // CustomTextField(
+                          //   hintText: 'Enter Name',
+                          //   obscureText: false,
+                          //   controller: _nameController,
+                          // ),
+                          TextFormField(
+                        onTapOutside: (event) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
                         controller: _nameController,
+                        validator: validateName,
+                        decoration: InputDecoration(
+                          focusColor: const Color(0xffED4D86),
+                          contentPadding: const EdgeInsetsDirectional.all(10),
+                          isDense: true,
+                          hintText: 'Enter Email',
+                          hintStyle: textStyle,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xffED4D86),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -176,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      height: 40,
+                      // height: 40,
                       child: TextFormField(
                         onTapOutside: (event) {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -213,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      height: 40,
+                      // height: 40,
                       child: TextFormField(
                         onTapOutside: (event) {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -259,6 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onTap: () async {
                     setState(() {});
                     if (_key.currentState!.validate() || pickedImage != null) {
+                      validateProfilePic(pickedImage!.path);
                       try {
                         uploadImage();
                         await signupService(
@@ -332,6 +355,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  String? validateName(String? name) {
+    if (name == null || name.isEmpty) return 'Name is required';
+
+    return null;
+  }
+
   String? validateEmail(String? email) {
     if (email == null || email.isEmpty) return 'Email is required';
     String pattern =
@@ -362,6 +391,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
       });
     }
+    return null;
+  }
+
+  String? validateProfilePic(String? profilePic) {
+    if (profilePic == null || profilePic.isEmpty) return 'Photo is required';
     return null;
   }
 }

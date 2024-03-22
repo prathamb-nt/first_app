@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:all_social_app/app.dart';
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
-import 'package:all_social_app/custom%20widgets/custom_text_field.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/services/update_user_service.dart';
@@ -72,215 +71,281 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     }
   }
 
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String errorMsg = 'Updated!';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-          future: readUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              name = snapshot.data!.userName;
-              email = snapshot.data!.email;
-              password = snapshot.data!.password;
-              image = snapshot.data!.profileImage;
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 41),
-                        child: Text(
-                          "Profile",
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 32),
+      body: Form(
+        key: _key,
+        child: FutureBuilder(
+            future: readUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                name = snapshot.data!.userName;
+                email = snapshot.data!.email;
+                password = snapshot.data!.password;
+                image = snapshot.data!.profileImage;
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 41),
+                          child: Text(
+                            "Profile",
+                            style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 32),
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 200,
-                                width: 400,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(
-                                      'Choose photo from',
-                                      style: textStyle,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        final ImagePicker picker =
-                                            ImagePicker();
-                                        final XFile? image =
-                                            await picker.pickImage(
-                                                source: ImageSource.gallery);
-                                        if (image != null) {
-                                          pickedImage = image.path;
-                                          setState(() {
-                                            isPicked = true;
-                                            debugPrint(pickedImage);
-                                          });
-                                        }
-                                      },
-                                      child: const CustomPrimaryBtn(
-                                        label: 'Gallery',
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 200,
+                                  width: 400,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        'Choose photo from',
+                                        style: textStyle,
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        final ImagePicker picker =
-                                            ImagePicker();
-                                        final XFile? image =
-                                            await picker.pickImage(
-                                                source: ImageSource.camera);
-                                        if (image != null) {
-                                          pickedImage = image.path;
-                                          setState(() {
-                                            isPicked = true;
-                                            debugPrint(pickedImage);
-                                          });
-                                        }
-                                      },
-                                      child: const CustomSecondaryBtn(
-                                        label: 'Camera',
+                                      GestureDetector(
+                                        onTap: () async {
+                                          final ImagePicker picker =
+                                              ImagePicker();
+                                          final XFile? image =
+                                              await picker.pickImage(
+                                                  source: ImageSource.gallery);
+                                          if (image != null) {
+                                            pickedImage = image.path;
+                                            setState(() {
+                                              isPicked = true;
+                                              debugPrint(pickedImage);
+                                            });
+                                          }
+                                        },
+                                        child: const CustomPrimaryBtn(
+                                          label: 'Gallery',
+                                        ),
                                       ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          final ImagePicker picker =
+                                              ImagePicker();
+                                          final XFile? image =
+                                              await picker.pickImage(
+                                                  source: ImageSource.camera);
+                                          if (image != null) {
+                                            pickedImage = image.path;
+                                            setState(() {
+                                              isPicked = true;
+                                              debugPrint(pickedImage);
+                                            });
+                                          }
+                                        },
+                                        child: const CustomSecondaryBtn(
+                                          label: 'Camera',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(300.0),
+                              child: isPicked
+                                  ? Image.file(
+                                      File(pickedImage),
+                                      fit: BoxFit.fill,
+                                      height: 100,
+                                      width: 100,
+                                    )
+                                  : Image.network(
+                                      image,
+                                      fit: BoxFit.fill,
+                                      height: 100,
+                                      width: 100,
                                     ),
-                                  ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+                          child: Text(
+                            "Change your photo",
+                            style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
+                              child: Text(
+                                "Name",
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            SizedBox(
+                              // height: 40,
+                              child: TextFormField(
+                                onTapOutside: (event) {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                },
+                                controller: _nameController,
+                                validator: validateName,
+                                decoration: InputDecoration(
+                                  focusColor: const Color(0xffED4D86),
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.all(10),
+                                  isDense: true,
+                                  hintText: 'Enter Name',
+                                  hintStyle: textStyle,
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xffED4D86),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
+                              child: Text(
+                                "Email",
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: TextFormField(
+                                onTapOutside: (event) {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                },
+                                controller: _emailController,
+                                obscureText: false,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  focusColor: const Color(0xffED4D86),
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.all(10),
+                                  isDense: true,
+                                  hintText: 'Enter Email',
+                                  hintStyle: textStyle,
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xffED4D86),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            if (_key.currentState!.validate() ||
+                                pickedImage != null) {
+                              try {
+                                await updateUser(
+                                    _nameController.text,
+                                    _passwordController.text,
+                                    email,
+                                    docId,
+                                    pickedImage,
+                                    image);
+                                errorMsg = 'Signed Up!';
+                              } on FirebaseAuthException catch (error) {
+                                errorMsg = error.message!;
+                              }
+                              setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(errorMsg),
                                 ),
                               );
-                            },
-                          );
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(300.0),
-                            child: isPicked
-                                ? Image.file(
-                                    File(pickedImage),
-                                    fit: BoxFit.fill,
-                                    height: 100,
-                                    width: 100,
-                                  )
-                                : Image.network(
-                                    image,
-                                    fit: BoxFit.fill,
-                                    height: 100,
-                                    width: 100,
-                                  ),
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
+                            child: CustomPrimaryBtn(
+                              label: 'Update',
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                        child: Text(
-                          "Change your photo",
-                          style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 16),
-                          ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
-                            child: Text(
-                              "Name",
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
+                        GestureDetector(
+                          onTap: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyApp(),
                               ),
-                              textAlign: TextAlign.left,
+                            );
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: CustomSecondaryBtn(
+                              label: 'Logout',
                             ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: CustomTextField(
-                              obscureText: false,
-                              controller: _nameController,
-                              keyboardType: TextInputType.name,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
-                            child: Text(
-                              "Email",
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: CustomTextField(
-                              controller: _emailController,
-                              obscureText: false,
-                              keyboardType: TextInputType.emailAddress,
-                            ),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          updateUser(
-                              _nameController.text,
-                              _passwordController.text,
-                              email,
-                              docId,
-                              pickedImage,
-                              image);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
-                          child: CustomPrimaryBtn(
-                            label: 'Update',
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          FirebaseAuth.instance.signOut();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyApp(),
-                            ),
-                          );
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: CustomSecondaryBtn(
-                            label: 'Logout',
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else {
-              return const Center(
-                child: Text('nodata'),
-              );
-            }
-          }),
+                );
+              } else {
+                return const Center(
+                  child: Text('no data'),
+                );
+              }
+            }),
+      ),
     );
+  }
+
+  String? validateName(String? name) {
+    if (name == null || name.isEmpty) return 'Name is required';
+    return null;
   }
 }

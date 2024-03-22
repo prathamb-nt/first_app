@@ -43,7 +43,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   int hours = DateTime.now().hour;
 
   late String docId = "docSnapshot.id";
-  bool _showFab = false;
+
   Future readUser() async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -108,55 +108,52 @@ class _HomeWidgetState extends State<HomeWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 SizedBox(height: 40.h),
-                Material(
-                  elevation: 2,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              hours >= 1 && hours <= 12
-                                  ? 'Good Morning!\n$userName'
-                                  : hours >= 12 && hours <= 16
-                                      ? 'Good Afternoon!\n$userName'
-                                      : hours >= 16 && hours <= 21
-                                          ? 'Good Evening!\n$userName'
-                                          : 'Good Night!\n$userName',
-                              style: GoogleFonts.montserrat(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 24,
-                                  color: Color(0xff1C1C1C),
-                                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            hours >= 1 && hours <= 12
+                                ? 'Good Morning!\n$userName'
+                                : hours >= 12 && hours <= 16
+                                    ? 'Good Afternoon!\n$userName'
+                                    : hours >= 16 && hours <= 21
+                                        ? 'Good Evening!\n$userName'
+                                        : 'Good Night!\n$userName',
+                            style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 24,
+                                color: Color(0xff1C1C1C),
                               ),
                             ),
-                            Container(
-                              height: 46,
-                              width: 46,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(300.0),
-                                child: Image.network(
-                                  image!,
-                                  fit: BoxFit.fill,
-                                  height: 100,
-                                  width: 100,
-                                ),
+                          ),
+                          Container(
+                            height: 46,
+                            width: 46,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(300.0),
+                              child: Image.network(
+                                image!,
+                                fit: BoxFit.fill,
+                                height: 100,
+                                width: 100,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                  ],
                 ),
                 SingleChildScrollView(
                   child: FutureBuilder(
