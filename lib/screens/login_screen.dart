@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      height: 40,
+                      // height: 40,
                       child:
                           // CustomTextField(
                           //   controller: _emailController,
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 8.h),
                     Container(
-                      height: 40,
+                      // height: 40,
                       child:
                           // CustomTextField(
                           //     controller: _passwordController,
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           isDense: true,
                           contentPadding: const EdgeInsetsDirectional.all(10),
-                          hintText: 'Enter Your Password',
+                          hintText: 'Enter Password',
                           hintStyle: textStyle,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(),
