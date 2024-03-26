@@ -11,6 +11,11 @@ Future loginService(String email, String password, BuildContext context) async {
   final user = await FirebaseAuth.instance
       .signInWithEmailAndPassword(email: email, password: password);
   if (user != null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Successfully logged in!'),
+      ),
+    );
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -44,7 +49,11 @@ Future signupService(
 
   if (newUser != null) {
     createUser(email, password, name);
-
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Successfully signed in!'),
+      ),
+    );
     Navigator.push(
       context,
       MaterialPageRoute(

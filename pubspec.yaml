@@ -61,6 +61,7 @@ dependencies:
   firebase_storage: ^11.6.10
   flutter_image_compress: ^2.1.0
   flutter_screenutil: ^5.9.0
+  shimmer: ^3.0.0
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

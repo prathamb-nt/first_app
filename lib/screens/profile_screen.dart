@@ -29,14 +29,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     super.initState();
   }
 
-  late String pickedImage = image;
+  late String? pickedImage;
 
   late final _emailController = TextEditingController(text: email);
   late final _passwordController = TextEditingController(text: password);
-  late final _nameController = TextEditingController(text: name);
+  late final _nameController = TextEditingController(text: name!);
 
   Users? users;
-  late String name;
+  late String? name;
   late String email;
   late String password;
   late String image;
@@ -176,7 +176,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               borderRadius: BorderRadius.circular(300.0),
                               child: isPicked
                                   ? Image.file(
-                                      File(pickedImage),
+                                      File(pickedImage!),
                                       fit: BoxFit.fill,
                                       height: 100,
                                       width: 100,
@@ -292,7 +292,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     _passwordController.text,
                                     email,
                                     docId,
-                                    pickedImage,
+                                    pickedImage!,
                                     image);
                                 errorMsg = 'Signed Up!';
                               } on FirebaseAuthException catch (error) {
@@ -316,6 +316,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         GestureDetector(
                           onTap: () {
                             FirebaseAuth.instance.signOut();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Successfully logged out!'),
+                              ),
+                            );
                             Navigator.push(
                               context,
                               MaterialPageRoute(

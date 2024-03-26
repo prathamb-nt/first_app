@@ -42,6 +42,12 @@ class _EditPostState extends State<EditPost> {
   late String email;
   late String password;
 
+  @override
+  void initState() {
+    fetchPosts();
+    super.initState();
+  }
+
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: TextStyle(
         fontWeight: FontWeight.w400,
@@ -72,13 +78,7 @@ class _EditPostState extends State<EditPost> {
               SizedBox(
                 width: 342,
                 height: 342,
-                child: widget.displayImage == null
-                    ? Container(
-                        width: 342,
-                        height: 342,
-                        color: Colors.red,
-                      )
-                    : Image.network(widget.displayImage),
+                child: Image.network(widget.displayImage),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
@@ -219,8 +219,28 @@ class _EditPostState extends State<EditPost> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 40,
+              ),
+              GestureDetector(
+                onTap: () {
+                  deletePost();
+                  fetchPosts();
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(
+                        content: Text('Post Deleted!'),
+                      ),
+                    );
+                },
+                child: const CustomDeleteBtn(
+                  label: 'Delete',
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: GestureDetector(
                   onTap: () {
                     fetchPosts();
@@ -275,7 +295,6 @@ class _EditPostState extends State<EditPost> {
       },
       onError: (e) => debugPrint("Error completing: $e"),
     );
-
     updatePost();
   }
 
@@ -314,7 +333,6 @@ class _EditPostState extends State<EditPost> {
       ),
     );
     String? updatedDate = result;
-
     return updatedDate;
   }
 
@@ -328,7 +346,6 @@ class _EditPostState extends State<EditPost> {
       ),
     );
     String? updatedTime = result;
-
     return updatedTime;
   }
 
@@ -342,7 +359,20 @@ class _EditPostState extends State<EditPost> {
       ),
     );
     String? updatedPlatform = result;
-
     return updatedPlatform;
+  }
+
+  deletePost() {
+    debugPrint("${widget.postId}");
+    debugPrint(FirebaseAuth.instance.currentUser!.uid);
+
+    debugPrint("post doc is: $postDocId");
+    debugPrint("user doc is: $docId");
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
+        .collection('posts')
+        .doc(postDocId)
+        .delete();
   }
 }
