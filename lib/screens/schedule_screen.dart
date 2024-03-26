@@ -41,6 +41,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
           docId = docSnapshot.id;
         }
       },
+      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance

@@ -55,6 +55,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           docId = docSnapshot.id;
         }
       },
+      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);

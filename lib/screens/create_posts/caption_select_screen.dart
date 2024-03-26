@@ -288,6 +288,8 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
         setState(() {
           selectedIndex = index;
           alignText = textAlignment[index];
+
+          debugPrint("$alignText");
         });
       },
       child: Padding(
@@ -317,5 +319,6 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
     final appStorage = await getApplicationDocumentsDirectory();
     final file = File('${appStorage.path}/image.png');
     file.writeAsBytes(bytes);
+    debugPrint("took screenshot of the image");
   }
 }

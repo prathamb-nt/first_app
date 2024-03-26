@@ -278,6 +278,7 @@ class _EditPostState extends State<EditPost> {
           docId = docSnapshot.id;
         }
       },
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     setState(() {});
     await FirebaseFirestore.instance
@@ -292,6 +293,7 @@ class _EditPostState extends State<EditPost> {
           postDocId = docSnapshot.id;
         }
       },
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     updatePost();
   }
@@ -301,6 +303,11 @@ class _EditPostState extends State<EditPost> {
     String? updatedTime = widget.updatedTime;
     String? updatedPlatform = widget.updatedPlatform;
 
+    debugPrint("${widget.postId}");
+    debugPrint(FirebaseAuth.instance.currentUser!.uid);
+
+    debugPrint("post doc is: $postDocId");
+    debugPrint("user doc is: $docId");
     final docPost = FirebaseFirestore.instance
         .collection('users')
         .doc(docId)
@@ -314,6 +321,8 @@ class _EditPostState extends State<EditPost> {
           ? widget.updatedPlatform
           : widget.postPlatform,
     });
+
+    debugPrint("completed");
   }
 
   Future<String?> _navigateAndDisplayDate(BuildContext context) async {
@@ -354,6 +363,11 @@ class _EditPostState extends State<EditPost> {
   }
 
   deletePost() {
+    debugPrint("${widget.postId}");
+    debugPrint(FirebaseAuth.instance.currentUser!.uid);
+
+    debugPrint("post doc is: $postDocId");
+    debugPrint("user doc is: $docId");
     FirebaseFirestore.instance
         .collection('users')
         .doc(docId)

@@ -100,6 +100,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
+      debugPrint("${widgets[index]}");
     });
   }
 }

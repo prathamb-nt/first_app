@@ -75,6 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   onPageChanged: (index) {
                     setState(() {
                       _pageIndex = index;
+                      debugPrint("$_pageIndex");
                     });
                   },
                   itemBuilder: (context, index) => OnBoardingContent(

@@ -284,6 +284,8 @@ class _ShareScreenState extends State<ShareScreen> {
                 child: GestureDetector(
                   onTap: () {
                     savePost();
+
+                    debugPrint("go to home pushed");
                   },
                   child: const CustomPrimaryBtn(
                     label: 'Go to home',
@@ -317,6 +319,7 @@ class _ShareScreenState extends State<ShareScreen> {
       String downloadUrl = await ref.getDownloadURL();
       return downloadUrl;
     } on FirebaseException catch (e) {
+      debugPrint("Error uploading image: $e");
       return "";
     }
   }
@@ -334,8 +337,10 @@ class _ShareScreenState extends State<ShareScreen> {
           docId = docSnapshot.id;
         }
       },
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     if (downloadUrl.isEmpty) {
+      debugPrint("Failed to upload image");
       return;
     }
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -352,6 +357,7 @@ class _ShareScreenState extends State<ShareScreen> {
 
     final json = post.toJson();
     await docPost.set(json);
+    debugPrint("created post");
 
     Navigator.pushReplacement(
       context,

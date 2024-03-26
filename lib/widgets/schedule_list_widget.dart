@@ -40,6 +40,7 @@ class ShowSchedulePosts extends StatelessWidget {
             return ListTile(
               title: GestureDetector(
                 onTap: () {
+                  debugPrint("${post.postId}");
                   Navigator.push(
                     context,
                     MaterialPageRoute(

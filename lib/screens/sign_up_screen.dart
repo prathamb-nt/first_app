@@ -82,6 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     pickedImage = File(image.path);
                                     setState(() {
                                       isPicked = true;
+                                      debugPrint("$pickedImage");
                                     });
                                   }
                                 },
@@ -98,6 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     pickedImage = File(image.path);
                                     setState(() {
                                       isPicked = true;
+                                      debugPrint("$pickedImage");
                                     });
                                   }
                                 },
@@ -298,6 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       );
                     }
+                    print(errorMsg);
                   },
                   child: const CustomPrimaryBtn(
                     label: 'Signup',

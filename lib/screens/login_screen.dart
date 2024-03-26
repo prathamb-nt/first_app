@@ -186,6 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     }
+                    print(errorMsg);
                   },
                   child: const CustomPrimaryBtn(
                     label: 'Login',
