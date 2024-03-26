@@ -95,8 +95,6 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
                   onPageChanged: (index) {
                     setState(() {
                       _pageIndex = index;
-                      debugPrint("$_pageIndex");
-                      debugPrint(frames[index].frameType);
                     });
                   },
                   itemBuilder: (context, index) => FrameContent(

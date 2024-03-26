@@ -59,7 +59,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           docId = docSnapshot.id;
         }
       },
-      onError: (e) => debugPrint("Error completing: $e"),
     );
 
     final docUser = FirebaseFirestore.instance.collection('users').doc(docId);
@@ -135,7 +134,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             pickedImage = image.path;
                                             setState(() {
                                               isPicked = true;
-                                              debugPrint(pickedImage);
                                             });
                                           }
                                         },
@@ -154,7 +152,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             pickedImage = image.path;
                                             setState(() {
                                               isPicked = true;
-                                              debugPrint(pickedImage);
                                             });
                                           }
                                         },

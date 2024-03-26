@@ -165,7 +165,6 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                       nextImageUrl =
                           isPicked ? pickedImage!.path : displayImageUrl;
                     });
-                    debugPrint(nextImageUrl);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -217,7 +216,6 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                             pickedImage = File(image.path);
                             setState(() {
                               isPicked = true;
-                              debugPrint("$pickedImage");
                             });
                           }
                         },
@@ -234,7 +232,6 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
                             pickedImage = File(image.path);
                             setState(() {
                               isPicked = true;
-                              debugPrint("$pickedImage");
                             });
                           }
                         },
@@ -270,7 +267,6 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
         setState(() {
           selectedIndex = index;
           displayImageUrl = imageUrl[index].toString();
-          debugPrint(displayImageUrl);
           isPicked = false;
         });
       },

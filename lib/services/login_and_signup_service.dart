@@ -37,7 +37,6 @@ Future<String> uploadImage() async {
     String downloadUrl = await ref.getDownloadURL();
     return downloadUrl;
   } on FirebaseException catch (e) {
-    debugPrint("Error uploading image: $e");
     return "";
   }
 }
