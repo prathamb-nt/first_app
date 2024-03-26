@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "841453522545",
+    "firebase_url": "https://post-craft-31ffc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "post-craft-31ffc",
+    "storage_bucket": "post-craft-31ffc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841453522545:android:fe70f5be6bc27b45f3d5d0",
+        "android_client_info": {
+          "package_name": "com.example.all_social_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbEQhLSu-T9ucEM5EvAXPdp9ODkYclKDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

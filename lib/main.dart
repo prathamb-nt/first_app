@@ -1,23 +1,33 @@
-import 'package:all_social_app/screens/create_posts/create_post_screen_step_1.dart';
-import 'package:all_social_app/screens/sign_up_screen.dart';
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:all_social_app/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
-  runApp(MaterialApp(home: CreatePostScreenStep1()));
-}
+import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      duration: 3000,
-      splash: Icons.home,
-      splashTransition: SplashTransition.fadeTransition,
-      backgroundColor: Colors.blue,
-      nextScreen: const SignUpScreen(),
-    );
+  User? user = FirebaseAuth.instance.currentUser;
+
+  Widget? home;
+  if (user != null) {
+    home = const HomeScreen();
+  } else {
+    home = const LoginScreen();
   }
+
+  runApp(
+    ScreenUtilInit(
+      designSize: const Size(390, 844),
+      builder: (context, child) => MaterialApp(
+        home: home,
+      ),
+    ),
+  );
 }
