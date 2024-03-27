@@ -157,14 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      // height: 40,
-                      child:
-                          // CustomTextField(
-                          //   hintText: 'Enter Name',
-                          //   obscureText: false,
-                          //   controller: _nameController,
-                          // ),
-                          TextFormField(
+                      child: TextFormField(
                         onTapOutside: (event) {
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
@@ -198,7 +191,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      // height: 40,
                       child: TextFormField(
                         onTapOutside: (event) {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -235,7 +227,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 8.h),
                     SizedBox(
-                      // height: 40,
                       child: TextFormField(
                         onTapOutside: (event) {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -379,7 +370,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   String? validatePassword(String? password) {
-    if (password == null || password.isEmpty) return 'Password is required';
+    if (password == null || password.isEmpty) return 'Password is required!';
     String pattern = "(?=.*[0-9a-zA-Z]).{6,}";
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(password)) {
@@ -395,7 +386,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   String? validateProfilePic(String? profilePic) {
-    if (profilePic == null || profilePic.isEmpty) return 'Photo is required';
+    if (profilePic == null || profilePic.isEmpty) return 'Photo is required!';
     return null;
   }
 }

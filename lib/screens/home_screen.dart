@@ -140,31 +140,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(300.0),
                               child:
-                                  // Image.network(
-                                  //   image!,
-                                  //   frameBuilder: (context, child, frame,
-                                  //       wasSynchronouslyLoaded) {
-                                  //     return child;
-                                  //   },
-                                  //   loadingBuilder:
-                                  //       (context, child, loadingProgress) {
-                                  //     if (loadingProgress == null) {
-                                  //       return child;
-                                  //     } else {
-                                  //       return Shimmer.fromColors(
-                                  //         baseColor: Colors.grey,
-                                  //         highlightColor: Colors.white30,
-                                  //         child: Container(
-                                  //           height: 46,
-                                  //           width: 46,
-                                  //           decoration: const BoxDecoration(
-                                  //             shape: BoxShape.circle,
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     }
-                                  //   },
-                                  // )
+                                 
                                   Image.network(
                                 image!,
                                 fit: BoxFit.fill,

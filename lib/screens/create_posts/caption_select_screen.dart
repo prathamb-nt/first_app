@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/screens/create_posts/post_schedule_screen.dart';
+import 'package:all_social_app/widgets/progress_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:screenshot/screenshot.dart';
 
 class CaptionSelectScreen extends StatefulWidget {
@@ -58,25 +58,7 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
           padding: const EdgeInsets.fromLTRB(24, 40, 24, 15),
           child: Column(
             children: [
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                tween: Tween<double>(
-                  begin: 0.50,
-                  end: 0.75,
-                ),
-                builder: (context, value, _) => LinearPercentIndicator(
-                  animation: true,
-                  animationDuration: 300,
-                  animateFromLastPercent: true,
-                  width: 342.0,
-                  lineHeight: 8.0,
-                  percent: 0.75,
-                  barRadius: const Radius.circular(20),
-                  progressColor: const Color(0xffED4D86),
-                  backgroundColor: const Color(0xffE6E6E6),
-                ),
-              ),
+              buildTweenAnimationBuilder(0.75, 0.75),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
                 child: Text(

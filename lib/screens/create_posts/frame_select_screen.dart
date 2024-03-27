@@ -1,9 +1,10 @@
 import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
 import 'package:all_social_app/screens/create_posts/class/frame_class.dart';
 import 'package:all_social_app/screens/create_posts/image_select_screen.dart';
+import 'package:all_social_app/widgets/progress_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class FrameSelectScreen extends StatefulWidget {
   const FrameSelectScreen({
@@ -35,28 +36,13 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           child: Column(
             children: [
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                tween: Tween<double>(
-                  begin: 0.0,
-                  end: 0.25,
-                ),
-                builder: (context, value, _) => LinearPercentIndicator(
-                  animation: true,
-                  animationDuration: 300,
-                  animateFromLastPercent: true,
-                  width: 342.0,
-                  lineHeight: 8.0,
-                  percent: 0.25,
-                  barRadius: const Radius.circular(20),
-                  progressColor: const Color(0xffED4D86),
-                  backgroundColor: const Color(0xffE6E6E6),
-                ),
+              SizedBox(
+                height: 40.h,
               ),
+              buildTweenAnimationBuilder(0.25, 0.25),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
                 child: Text(

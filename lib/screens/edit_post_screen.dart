@@ -363,11 +363,6 @@ class _EditPostState extends State<EditPost> {
   }
 
   deletePost() {
-    debugPrint("${widget.postId}");
-    debugPrint(FirebaseAuth.instance.currentUser!.uid);
-
-    debugPrint("post doc is: $postDocId");
-    debugPrint("user doc is: $docId");
     FirebaseFirestore.instance
         .collection('users')
         .doc(docId)

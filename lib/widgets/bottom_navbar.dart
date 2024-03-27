@@ -2,13 +2,14 @@ import 'package:all_social_app/screens/home_screen.dart';
 import 'package:all_social_app/screens/profile_screen.dart';
 import 'package:all_social_app/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 TextStyle labelText = GoogleFonts.montserrat(
-  textStyle: const TextStyle(
+  textStyle: TextStyle(
     fontWeight: FontWeight.w500,
-    fontSize: 14,
+    fontSize: 14.sp,
     color: Color(0xff1C1C1C),
   ),
 );
