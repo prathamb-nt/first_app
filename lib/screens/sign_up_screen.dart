@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/screens/login_screen.dart';
 import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   }
                                 },
-                                child: const CustomPrimaryBtn(
+                                child: const CustomPrimaryButton(
                                   label: 'Gallery',
                                 ),
                               ),
@@ -103,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   }
                                 },
-                                child: const CustomSecondaryBtn(
+                                child: const CustomSecondaryButton(
                                   label: 'Camera',
                                 ),
                               ),
@@ -293,7 +293,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                     print(errorMsg);
                   },
-                  child: const CustomPrimaryBtn(
+                  child: const CustomPrimaryButton(
                     label: 'Signup',
                   ),
                 ),

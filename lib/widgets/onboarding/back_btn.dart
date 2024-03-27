@@ -1,4 +1,4 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomBackButton extends StatelessWidget {
@@ -25,7 +25,7 @@ class CustomBackButton extends StatelessWidget {
                   curve: Curves.ease,
                 );
               },
-              child: const CustomSecondaryBtn(
+              child: const CustomSecondaryButton(
                 label: 'Back',
               ),
             ),

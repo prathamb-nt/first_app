@@ -68,7 +68,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ],
               ),
               SizedBox(
-                height: 593.h,
+                height: 600.h,
                 child: PageView.builder(
                   itemCount: demoData.length,
                   controller: _pageController,

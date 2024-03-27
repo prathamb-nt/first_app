@@ -32,7 +32,7 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   Users? users;
-  late String name;
+  String? name;
 
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: const TextStyle(
@@ -42,7 +42,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   );
   int hours = DateTime.now().hour;
 
-  late String docId = "docSnapshot.id";
+  String? docId;
 
   Future readUser() async {
     await FirebaseFirestore.instance
@@ -139,9 +139,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(300.0),
-                              child:
-                                 
-                                  Image.network(
+                              child: Image.network(
                                 image!,
                                 fit: BoxFit.fill,
                                 height: 100,

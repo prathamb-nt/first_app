@@ -30,7 +30,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   );
 
   Future<List<PostFire>> fetchPosts() async {
-    late String docId = "docSnapshot.id";
+    String? docId;
 
     await FirebaseFirestore.instance
         .collection("users")

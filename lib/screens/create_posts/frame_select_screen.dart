@@ -1,4 +1,4 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/screens/create_posts/class/frame_class.dart';
 import 'package:all_social_app/screens/create_posts/image_select_screen.dart';
 import 'package:all_social_app/widgets/progress_bar_widget.dart';
@@ -36,7 +36,7 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Column(
             children: [
               SizedBox(
@@ -44,7 +44,7 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
               ),
               buildTweenAnimationBuilder(0.25, 0.25),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Text(
                   'Step 1',
                   style: GoogleFonts.montserrat(
@@ -151,7 +151,7 @@ class _FrameSelectScreenState extends State<FrameSelectScreen> {
                       ),
                     );
                   },
-                  child: const CustomPrimaryBtn(
+                  child: const CustomPrimaryButton(
                     label: 'Next',
                   ),
                 ),

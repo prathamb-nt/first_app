@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomPrimaryBtn extends StatelessWidget {
+class CustomPrimaryButton extends StatelessWidget {
   final String? label;
-  const CustomPrimaryBtn({super.key, this.label});
+  const CustomPrimaryButton({super.key, this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      width: 342,
+      width: 342.w,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(6),
@@ -20,10 +21,10 @@ class CustomPrimaryBtn extends StatelessWidget {
         child: Text(
           label!,
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 16,
-              color: Color(0xffFFFFFC),
+              fontSize: 16.sp,
+              color: const Color(0xffFFFFFC),
             ),
           ),
         ),
@@ -32,15 +33,15 @@ class CustomPrimaryBtn extends StatelessWidget {
   }
 }
 
-class CustomSecondaryBtn extends StatelessWidget {
+class CustomSecondaryButton extends StatelessWidget {
   final String? label;
-  const CustomSecondaryBtn({super.key, this.label});
+  const CustomSecondaryButton({super.key, this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      width: 342,
+      width: 342.w,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(6),
@@ -51,10 +52,10 @@ class CustomSecondaryBtn extends StatelessWidget {
         child: Text(
           label!,
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 16,
-              color: Color(0xffED4D86),
+              fontSize: 16.sp,
+              color: const Color(0xffED4D86),
             ),
           ),
         ),
@@ -63,15 +64,15 @@ class CustomSecondaryBtn extends StatelessWidget {
   }
 }
 
-class CustomDeleteBtn extends StatelessWidget {
+class CustomDeleteButton extends StatelessWidget {
   final String? label;
-  const CustomDeleteBtn({super.key, this.label});
+  const CustomDeleteButton({super.key, this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      width: 342,
+      width: 342.w,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(6),
@@ -82,10 +83,10 @@ class CustomDeleteBtn extends StatelessWidget {
         child: Text(
           label!,
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 16,
-              color: Color(0xffFFFFFC),
+              fontSize: 16.sp,
+              color: const Color(0xffFFFFFC),
             ),
           ),
         ),

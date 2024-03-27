@@ -1,4 +1,4 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/services/login_and_signup_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     print(errorMsg);
                   },
-                  child: const CustomPrimaryBtn(
+                  child: const CustomPrimaryButton(
                     label: 'Login',
                   ),
                 ),

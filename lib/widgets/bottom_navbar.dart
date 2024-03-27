@@ -10,7 +10,7 @@ TextStyle labelText = GoogleFonts.montserrat(
   textStyle: TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 14.sp,
-    color: Color(0xff1C1C1C),
+    color: const Color(0xff1C1C1C),
   ),
 );
 
@@ -48,7 +48,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SizedBox(
-        height: 78,
+        height: 80.h,
         child: BottomNavigationBar(
           selectedLabelStyle: labelText,
           unselectedLabelStyle: labelText,
@@ -61,21 +61,36 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              icon: _index == 0
-                  ? SvgPicture.asset("assets/ic_home_selected.svg")
-                  : SvgPicture.asset("assets/ic_home.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_home_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_home.svg")),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              icon: _index == 1
-                  ? SvgPicture.asset("assets/ic_schedule_selected.svg")
-                  : SvgPicture.asset("assets/ic_schedule.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_schedule_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_schedule.svg")),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              icon: _index == 2
-                  ? SvgPicture.asset("assets/ic_profile_selected.svg")
-                  : SvgPicture.asset("assets/ic_profile.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_profile_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_profile.svg")),
             ),
           ],
         ),

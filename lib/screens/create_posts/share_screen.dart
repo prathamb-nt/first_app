@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -287,7 +287,7 @@ class _ShareScreenState extends State<ShareScreen> {
 
                     debugPrint("go to home pushed");
                   },
-                  child: const CustomPrimaryBtn(
+                  child: const CustomPrimaryButton(
                     label: 'Go to home',
                   ),
                 ),

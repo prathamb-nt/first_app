@@ -13,41 +13,45 @@ class OnBoardingContent extends StatelessWidget {
   final String image, title, description;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 76.h),
-        SvgPicture.asset(
-          image,
-          height: 342.h,
-          width: 342.h,
-        ),
-        SizedBox(height: 16.h),
-        Text(
-          title,
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 24.sp,
-              color: Color(0xff1C1C1C),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 76.h),
+          Container(
+            height: 342.h,
+            width: 342.w,
+            child: SvgPicture.asset(
+              image,
             ),
           ),
-        ),
-        SizedBox(
-          height: 16.h,
-        ),
-        Text(
-          description,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 16.sp,
-              color: Color(0xff1C1C1C),
+          SizedBox(height: 16.h),
+          Text(
+            title,
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 24.sp,
+                color: Color(0xff1C1C1C),
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 32.h),
-      ],
+          SizedBox(
+            height: 16.h,
+          ),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 16.sp,
+                color: Color(0xff1C1C1C),
+              ),
+            ),
+          ),
+          SizedBox(height: 32.h),
+        ],
+      ),
     );
   }
 }
@@ -67,15 +71,15 @@ final List<Onboard> demoData = [
       image: 'assets/intro_create_posts_image.svg',
       title: 'Create Posts',
       description:
-          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
+          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet.'),
   Onboard(
       image: 'assets/intro_schedule_posts_image.svg',
       title: 'Schedule Posts',
       description:
-          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
+          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet.'),
   Onboard(
       image: 'assets/intro_share_posts_image.svg',
       title: 'Share Posts',
       description:
-          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet. Nisl nam ut lobortis quam.'),
+          'Lorem ipsum dolor sit amet consectetur. Purus tempor in in rhoncus quisque viverra amet.'),
 ];

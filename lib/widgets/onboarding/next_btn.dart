@@ -1,5 +1,5 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
-import 'package:all_social_app/screens/home_screen.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
+import 'package:all_social_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomNextButton extends StatefulWidget {
@@ -27,11 +27,11 @@ class _CustomNextButtonState extends State<CustomNextButton> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const LoginScreen(),
               ),
             );
           },
-          child: const CustomPrimaryBtn(
+          child: const CustomPrimaryButton(
             label: 'Finished',
           ),
         );
@@ -43,7 +43,7 @@ class _CustomNextButtonState extends State<CustomNextButton> {
             curve: Curves.ease,
           );
         },
-        child: const CustomPrimaryBtn(
+        child: const CustomPrimaryButton(
           label: 'Next',
         ),
       );

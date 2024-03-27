@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:all_social_app/app.dart';
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/services/update_user_service.dart';
@@ -143,7 +143,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             });
                                           }
                                         },
-                                        child: const CustomPrimaryBtn(
+                                        child: const CustomPrimaryButton(
                                           label: 'Gallery',
                                         ),
                                       ),
@@ -162,7 +162,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             });
                                           }
                                         },
-                                        child: const CustomSecondaryBtn(
+                                        child: const CustomSecondaryButton(
                                           label: 'Camera',
                                         ),
                                       ),
@@ -322,7 +322,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               );
                             }
                           },
-                          child: const CustomPrimaryBtn(
+                          child: const CustomPrimaryButton(
                             label: 'Update',
                           ),
                         ),
@@ -344,7 +344,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               ),
                             );
                           },
-                          child: const CustomSecondaryBtn(
+                          child: const CustomSecondaryButton(
                             label: 'Logout',
                           ),
                         ),

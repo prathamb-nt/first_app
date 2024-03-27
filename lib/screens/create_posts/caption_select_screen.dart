@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/screens/create_posts/post_schedule_screen.dart';
 import 'package:all_social_app/widgets/progress_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,9 +56,12 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 40, 24, 15),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
           child: Column(
             children: [
+              SizedBox(
+                height: 40.h,
+              ),
               buildTweenAnimationBuilder(0.75, 0.75),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
@@ -180,7 +184,7 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
                     ),
                   );
                 },
-                child: const CustomPrimaryBtn(
+                child: const CustomPrimaryButton(
                   label: 'Next',
                 ),
               ),
