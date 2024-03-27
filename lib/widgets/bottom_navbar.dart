@@ -2,14 +2,15 @@ import 'package:all_social_app/screens/home_screen.dart';
 import 'package:all_social_app/screens/profile_screen.dart';
 import 'package:all_social_app/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 TextStyle labelText = GoogleFonts.montserrat(
-  textStyle: const TextStyle(
+  textStyle: TextStyle(
     fontWeight: FontWeight.w500,
-    fontSize: 14,
-    color: Color(0xff1C1C1C),
+    fontSize: 14.sp,
+    color: const Color(0xff1C1C1C),
   ),
 );
 
@@ -47,7 +48,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SizedBox(
-        height: 78,
+        height: 80.h,
         child: BottomNavigationBar(
           selectedLabelStyle: labelText,
           unselectedLabelStyle: labelText,
@@ -60,21 +61,36 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              icon: _index == 0
-                  ? SvgPicture.asset("assets/ic_home_selected.svg")
-                  : SvgPicture.asset("assets/ic_home.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_home_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_home.svg")),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              icon: _index == 1
-                  ? SvgPicture.asset("assets/ic_schedule_selected.svg")
-                  : SvgPicture.asset("assets/ic_schedule.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_schedule_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_schedule.svg")),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              icon: _index == 2
-                  ? SvgPicture.asset("assets/ic_profile_selected.svg")
-                  : SvgPicture.asset("assets/ic_profile.svg"),
+              activeIcon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_profile_selected.svg")),
+              icon: SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: SvgPicture.asset("assets/ic_profile.svg")),
             ),
           ],
         ),

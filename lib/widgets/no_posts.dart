@@ -1,4 +1,4 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/screens/create_posts/frame_select_screen.dart';
 import 'package:all_social_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class NoPosts extends StatelessWidget {
               ),
             );
           },
-          child: const CustomPrimaryBtn(
+          child: const CustomPrimaryButton(
             label: 'Create Post',
           ),
         ),

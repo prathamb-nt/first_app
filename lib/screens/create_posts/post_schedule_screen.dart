@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:all_social_app/screens/create_posts/share_screen.dart';
+import 'package:all_social_app/widgets/progress_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class PostScheduleScreen extends StatefulWidget {
@@ -25,7 +25,6 @@ class PostScheduleScreen extends StatefulWidget {
 
 class _PostScheduleScreenState extends State<PostScheduleScreen> {
   DateTime now = DateTime.now();
-
 
   late String paddedHour = now.hour.toString().padLeft(2, "0");
   late String paddedMinute = now.minute.toString().padLeft(2, "0");
@@ -73,25 +72,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           padding: const EdgeInsets.fromLTRB(24, 40, 24, 15),
           child: Column(
             children: [
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                tween: Tween<double>(
-                  begin: 0.50,
-                  end: 1,
-                ),
-                builder: (context, value, _) => LinearPercentIndicator(
-                  animation: true,
-                  animationDuration: 300,
-                  animateFromLastPercent: true,
-                  width: 342.0,
-                  lineHeight: 8.0,
-                  percent: 1,
-                  barRadius: const Radius.circular(20),
-                  progressColor: const Color(0xffED4D86),
-                  backgroundColor: const Color(0xffE6E6E6),
-                ),
-              ),
+              buildTweenAnimationBuilder(1, 1),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
                 child: Text(
@@ -259,9 +240,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child:
-                  
-                    GestureDetector(
+                child: GestureDetector(
                   onTap: () {
                     selectedDate != 'Select date' &&
                             selectedTime != 'Select time'
@@ -660,5 +639,4 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
       ),
     );
   }
-
 }

@@ -1,4 +1,4 @@
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/widgets/edit_date_widget.dart';
@@ -7,6 +7,7 @@ import 'package:all_social_app/widgets/edit_time_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,9 +39,9 @@ class EditPost extends StatefulWidget {
 
 class _EditPostState extends State<EditPost> {
   Users? users;
-  late String name;
-  late String email;
-  late String password;
+  String? name;
+  String? email;
+  String? password;
 
   @override
   void initState() {
@@ -105,8 +106,8 @@ class _EditPostState extends State<EditPost> {
                   });
                 },
                 child: Container(
-                  height: 40,
-                  width: 342,
+                  height: 40.h,
+                  width: 342.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
@@ -123,9 +124,9 @@ class _EditPostState extends State<EditPost> {
                         Text(
                           widget.updatedDate ?? widget.postDate,
                           style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
+                            textStyle: TextStyle(
                               fontWeight: FontWeight.w400,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               color: Color(0xff1C1C1C),
                             ),
                           ),
@@ -147,8 +148,8 @@ class _EditPostState extends State<EditPost> {
                     });
                   },
                   child: Container(
-                    height: 40,
-                    width: 342,
+                    height: 40.h,
+                    width: 342.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
@@ -165,9 +166,9 @@ class _EditPostState extends State<EditPost> {
                           Text(
                             widget.updatedTime ?? widget.postTime,
                             style: GoogleFonts.montserrat(
-                              textStyle: const TextStyle(
+                              textStyle: TextStyle(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 color: Color(0xff1C1C1C),
                               ),
                             ),
@@ -188,8 +189,8 @@ class _EditPostState extends State<EditPost> {
                   });
                 },
                 child: Container(
-                  height: 40,
-                  width: 342,
+                  height: 40.h,
+                  width: 342.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
@@ -206,9 +207,9 @@ class _EditPostState extends State<EditPost> {
                         Text(
                           widget.updatedPlatform ?? widget.postPlatform,
                           style: GoogleFonts.montserrat(
-                            textStyle: const TextStyle(
+                            textStyle: TextStyle(
                               fontWeight: FontWeight.w400,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               color: Color(0xff1C1C1C),
                             ),
                           ),
@@ -235,7 +236,7 @@ class _EditPostState extends State<EditPost> {
                       ),
                     );
                 },
-                child: const CustomDeleteBtn(
+                child: const CustomDeleteButton(
                   label: 'Delete',
                 ),
               ),
@@ -253,7 +254,7 @@ class _EditPostState extends State<EditPost> {
                         ),
                       );
                   },
-                  child: const CustomPrimaryBtn(
+                  child: const CustomPrimaryButton(
                     label: 'Save',
                   ),
                 ),
@@ -363,11 +364,6 @@ class _EditPostState extends State<EditPost> {
   }
 
   deletePost() {
-    debugPrint("${widget.postId}");
-    debugPrint(FirebaseAuth.instance.currentUser!.uid);
-
-    debugPrint("post doc is: $postDocId");
-    debugPrint("user doc is: $docId");
     FirebaseFirestore.instance
         .collection('users')
         .doc(docId)

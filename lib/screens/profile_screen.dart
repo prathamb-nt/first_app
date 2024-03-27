@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:all_social_app/app.dart';
-import 'package:all_social_app/custom%20widgets/custom_primary_btn.dart';
+import 'package:all_social_app/custom%20widgets/custom_primary_button.dart';
 import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/sign_up_screen.dart';
 import 'package:all_social_app/services/update_user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -44,7 +45,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   TextStyle textstyle = GoogleFonts.montserrat(
     textStyle: TextStyle(
         fontWeight: FontWeight.w400,
-        fontSize: 16,
+        fontSize: 16.sp,
         color: isIncorrect ? const Color(0xff353535) : Colors.red),
   );
   late String docId = "docSnapshot.id";
@@ -95,18 +96,21 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 image = snapshot.data!.profileImage;
                 return SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 41),
-                          child: Text(
-                            "Profile",
-                            style: GoogleFonts.montserrat(
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 32),
-                            ),
+                        SizedBox(
+                          height: 48.h,
+                        ),
+                        Text(
+                          "Profile",
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 32.sp),
                           ),
+                        ),
+                        SizedBox(
+                          height: 41.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -139,7 +143,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             });
                                           }
                                         },
-                                        child: const CustomPrimaryBtn(
+                                        child: const CustomPrimaryButton(
                                           label: 'Gallery',
                                         ),
                                       ),
@@ -158,7 +162,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             });
                                           }
                                         },
-                                        child: const CustomSecondaryBtn(
+                                        child: const CustomSecondaryButton(
                                           label: 'Camera',
                                         ),
                                       ),
@@ -190,30 +194,36 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                          child: Text(
-                            "Change your photo",
-                            style: GoogleFonts.montserrat(
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 16),
-                            ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        Text(
+                          "Change your photo",
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16.sp),
                           ),
+                        ),
+                        SizedBox(
+                          height: 24.h,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
-                              child: Text(
-                                "Name",
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
-                                ),
-                                textAlign: TextAlign.left,
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            Text(
+                              "Name",
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.sp),
                               ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 8.h,
                             ),
                             SizedBox(
                               // height: 40,
@@ -241,17 +251,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 24, 8),
-                              child: Text(
-                                "Email",
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
-                                ),
-                                textAlign: TextAlign.left,
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            Text(
+                              "Email",
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.sp),
                               ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 8.h,
                             ),
                             SizedBox(
                               height: 40,
@@ -282,6 +295,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: 130.h,
+                        ),
                         GestureDetector(
                           onTap: () async {
                             if (_key.currentState!.validate() ||
@@ -306,12 +322,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               );
                             }
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
-                            child: CustomPrimaryBtn(
-                              label: 'Update',
-                            ),
+                          child: const CustomPrimaryButton(
+                            label: 'Update',
                           ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -328,11 +344,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               ),
                             );
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: CustomSecondaryBtn(
-                              label: 'Logout',
-                            ),
+                          child: const CustomSecondaryButton(
+                            label: 'Logout',
                           ),
                         ),
                       ],

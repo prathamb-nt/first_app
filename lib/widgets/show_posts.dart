@@ -19,7 +19,7 @@ class ShowPosts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           height: 640.h,
           child: SingleChildScrollView(
             child: Column(
@@ -118,8 +118,11 @@ class ShowPosts extends StatelessWidget {
           ),
         ),
         Positioned(
-            bottom: 6,
-            right: 24,
+          bottom: 6.h,
+          right: 24.w,
+          child: Container(
+            height: 60.h,
+            width: 60.w,
             child: FloatingActionButton(
               heroTag: null,
               backgroundColor: const Color(0xffED4D86),
@@ -133,9 +136,14 @@ class ShowPosts extends StatelessWidget {
                 );
               },
               child: Center(
-                child: SvgPicture.asset("assets/ic_plus.svg"),
+                child: SizedBox(
+                    height: 21.h,
+                    width: 21.w,
+                    child: SvgPicture.asset("assets/ic_plus.svg")),
               ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }

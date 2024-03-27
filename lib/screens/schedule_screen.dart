@@ -3,6 +3,7 @@ import 'package:all_social_app/widgets/schedule_list_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleWidget extends StatefulWidget {
@@ -22,14 +23,14 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   TextStyle textstyle = GoogleFonts.montserrat(
-    textStyle: const TextStyle(
+    textStyle: TextStyle(
       fontWeight: FontWeight.w400,
-      fontSize: 16,
+      fontSize: 16.sp,
     ),
   );
 
   Future<List<PostFire>> fetchPosts() async {
-    late String docId = "docSnapshot.id";
+    String? docId;
 
     await FirebaseFirestore.instance
         .collection("users")

@@ -2,6 +2,7 @@ import 'package:all_social_app/models/users.dart';
 import 'package:all_social_app/screens/edit_post_screen.dart';
 import 'package:all_social_app/screens/schedule_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ShowSchedulePosts extends StatelessWidget {
@@ -21,8 +22,11 @@ class ShowSchedulePosts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(
+          height: 48.h,
+        ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 48, 24, 20),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           child: Text(
             "Schedule List",
             style: GoogleFonts.montserrat(
@@ -33,6 +37,9 @@ class ShowSchedulePosts extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        SizedBox(
+          height: 20.h,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,14 +142,14 @@ class NoSchedulePosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 800,
+      height: 800.h,
       child: Center(
         child: Text(
           'No Posts Yet!',
           style: GoogleFonts.montserrat(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 16.sp,
             ),
           ),
         ),
