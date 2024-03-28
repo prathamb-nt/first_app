@@ -64,8 +64,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       context: context,
                       builder: (context) {
                         return SizedBox(
-                          height: 200,
-                          width: 400,
+                          height: 200.h,
+                          width: 400.w,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -123,15 +123,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Image.file(
                               pickedImage!,
                               fit: BoxFit.fill,
-                              height: 100,
-                              width: 100,
+                              height: 100.h,
+                              width: 100.h,
                             ),
                           )
                         : Image.asset(
                             "assets/profile_default.png",
                             fit: BoxFit.fill,
-                            height: 100,
-                            width: 100,
+                            height: 100.h,
+                            width: 100.h,
                           ),
                   ),
                 ),
@@ -271,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 GestureDetector(
                   onTap: () async {
                     setState(() {});
-                    if (_key.currentState!.validate() || pickedImage != null) {
+                    if (_key.currentState!.validate() && pickedImage != null) {
                       validateProfilePic(pickedImage!.path);
                       try {
                         uploadImage();
@@ -280,7 +280,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _passwordController.text,
                             _nameController.text,
                             context);
-                        errorMsg = 'Signed Up!';
+                        errorMsg = '';
                       } on FirebaseAuthException catch (error) {
                         errorMsg = error.message!;
                       }
@@ -288,6 +288,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(errorMsg),
+                        ),
+                      );
+                    }
+                    else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Add profile photo'),
                         ),
                       );
                     }

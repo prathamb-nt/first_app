@@ -50,6 +50,7 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
       bottomNavigationBar: SizedBox(
         height: 80.h,
         child: BottomNavigationBar(
+          iconSize: 24.h,
           selectedLabelStyle: labelText,
           unselectedLabelStyle: labelText,
           selectedItemColor: const Color(0xffED4D86),
@@ -61,36 +62,18 @@ class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
           items: [
             BottomNavigationBarItem(
               label: "Home",
-              activeIcon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_home_selected.svg")),
-              icon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_home.svg")),
+              activeIcon: SvgPicture.asset("assets/ic_home_selected.svg"),
+              icon: SvgPicture.asset("assets/ic_home.svg"),
             ),
             BottomNavigationBarItem(
               label: "Schedule",
-              activeIcon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_schedule_selected.svg")),
-              icon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_schedule.svg")),
+              activeIcon: SvgPicture.asset("assets/ic_schedule_selected.svg"),
+              icon: SvgPicture.asset("assets/ic_schedule.svg"),
             ),
             BottomNavigationBarItem(
               label: "Profile",
-              activeIcon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_profile_selected.svg")),
-              icon: SizedBox(
-                  height: 24.h,
-                  width: 24.w,
-                  child: SvgPicture.asset("assets/ic_profile.svg")),
+              activeIcon: SvgPicture.asset("assets/ic_profile_selected.svg"),
+              icon: SvgPicture.asset("assets/ic_profile.svg"),
             ),
           ],
         ),

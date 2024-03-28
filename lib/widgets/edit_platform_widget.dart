@@ -153,7 +153,7 @@ class _EditPlatformWidgetState extends State<EditPlatformWidget> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

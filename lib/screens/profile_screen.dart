@@ -118,8 +118,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               context: context,
                               builder: (context) {
                                 return SizedBox(
-                                  height: 200,
-                                  width: 400,
+                                  height: 200.h,
+                                  width: 400.w,
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -182,14 +182,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   ? Image.file(
                                       File(pickedImage!),
                                       fit: BoxFit.fill,
-                                      height: 100,
-                                      width: 100,
+                                      height: 100.r,
+                                      width: 100.r,
                                     )
                                   : Image.network(
                                       image,
                                       fit: BoxFit.fill,
-                                      height: 100,
-                                      width: 100,
+                                      height: 100.r,
+                                      width: 100.r,
                                     ),
                             ),
                           ),
@@ -226,7 +226,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               height: 8.h,
                             ),
                             SizedBox(
-                              // height: 40,
                               child: TextFormField(
                                 onTapOutside: (event) {
                                   FocusManager.instance.primaryFocus?.unfocus();
@@ -267,7 +266,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               height: 8.h,
                             ),
                             SizedBox(
-                              height: 40,
                               child: TextFormField(
                                 onTapOutside: (event) {
                                   FocusManager.instance.primaryFocus?.unfocus();
@@ -309,12 +307,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     email,
                                     docId,
                                     pickedImage!,
-                                    image);
+                                    image,
+                                );
                                 errorMsg = 'Signed Up!';
                               } on FirebaseAuthException catch (error) {
                                 errorMsg = error.message!;
                               }
-                              setState(() {});
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(errorMsg),
