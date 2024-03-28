@@ -258,7 +258,7 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -274,8 +274,6 @@ class _CaptionSelectScreenState extends State<CaptionSelectScreen> {
         setState(() {
           selectedIndex = index;
           alignText = textAlignment[index];
-
-          debugPrint("$alignText");
         });
       },
       child: Padding(
