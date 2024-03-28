@@ -118,8 +118,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               context: context,
                               builder: (context) {
                                 return SizedBox(
-                                  height: 200,
-                                  width: 400,
+                                  height: 200.h,
+                                  width: 400.w,
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
